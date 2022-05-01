@@ -2,14 +2,17 @@ import React, {createContext, useState} from 'react';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
-import Home from './components/Home';
+import {default as theme} from './theme.json';
 import BottomTabs from './components/BottomTabs';
 import Login from './components/Login';
+import Main from './components/Main';
 
 export type User = {
   username: string;
   password: string;
 };
+
+export type Tab = 'Home' | 'Notifications' | 'Messages' | 'Workouts';
 
 export const UserContext = createContext<{
   user: User | undefined;
@@ -21,6 +24,7 @@ export const UserContext = createContext<{
 
 export default function App() {
   const [user, setUser] = useState<User | undefined>();
+  const [currentTab, setCurrentTab] = useState<Tab>('Home');
 
   const userValue = {
     user: user,
@@ -30,12 +34,12 @@ export default function App() {
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider {...eva} theme={eva.dark}>
+      <ApplicationProvider {...eva} theme={{...eva.dark, ...theme}}>
         <UserContext.Provider value={userValue}>
           {user ? (
             <>
-              <Home />
-              <BottomTabs />
+              <Main currentTab={currentTab} />
+              <BottomTabs setCurrentTab={setCurrentTab} />
             </>
           ) : (
             <Login />

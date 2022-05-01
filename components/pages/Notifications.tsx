@@ -1,9 +1,9 @@
 import {Button, Icon, Layout} from '@ui-kitten/components';
 import React, {useContext} from 'react';
 import {Text} from 'react-native';
-import {UserContext} from '../App';
+import {UserContext} from '../../App';
 
-export default function Home() {
+export default function Notifications() {
   const {user, setUser} = useContext(UserContext);
 
   const LogoutButton = () => (
@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <LogoutButton />
-      <Text>HOME</Text>
+      <Text>Notifications</Text>
     </Layout>
   );
 }
