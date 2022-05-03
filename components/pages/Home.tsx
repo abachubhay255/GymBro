@@ -1,6 +1,5 @@
-import {Button, Icon, Layout} from '@ui-kitten/components';
+import {Button, Icon, Layout, Text} from '@ui-kitten/components';
 import React, {useContext} from 'react';
-import {Text} from 'react-native';
 import {UserContext} from '../../App';
 
 export default function Home() {

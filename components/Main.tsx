@@ -1,5 +1,6 @@
 import React from 'react';
 import {Tab} from '../App';
+import NavBar from './NavBar';
 import Home from './pages/Home';
 import Messages from './pages/Messages';
 import Notifications from './pages/Notifications';
@@ -10,14 +11,23 @@ type Props = {
 };
 
 export default function Main({currentTab}: Props) {
-  switch (currentTab) {
-    case 'Workouts':
-      return <Workouts />;
-    case 'Notifications':
-      return <Notifications />;
-    case 'Messages':
-      return <Messages />;
-    default:
-      return <Home />;
-  }
+  const Page = () => {
+    switch (currentTab) {
+      case 'Workouts':
+        return <Workouts />;
+      case 'Notifications':
+        return <Notifications />;
+      case 'Messages':
+        return <Messages />;
+      default:
+        return <Home />;
+    }
+  };
+
+  return (
+    <>
+      <NavBar />
+      <Page />
+    </>
+  );
 }
