@@ -12,10 +12,11 @@ import {StyleSheet} from 'react-native';
 import {UserContext} from '../App';
 import {LoginParamList} from './LoginNavigator';
 
-type Props = StackScreenProps<LoginParamList, 'Login'>;
+type Props = StackScreenProps<LoginParamList, 'SignUp'>;
 
-export default function Login({navigation}: Props) {
+export default function SignUp({navigation}: Props) {
   const {setUser} = useContext(UserContext);
+  const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [secureTextEntry, setSecureTextEntry] = useState(true);
@@ -38,6 +39,12 @@ export default function Login({navigation}: Props) {
       </Text>
       <Input
         style={styles.fields}
+        value={email}
+        placeholder="Email"
+        onChangeText={(text: string) => setEmail(text)}
+      />
+      <Input
+        style={styles.fields}
         value={username}
         placeholder="Username"
         onChangeText={(text: string) => setUsername(text)}
@@ -51,17 +58,17 @@ export default function Login({navigation}: Props) {
         onChangeText={(text: string) => setPassword(text)}
       />
       <Button
-        style={styles.login}
+        style={styles.signUp}
         status="primary"
-        disabled={username === '' || password === ''}
+        disabled={username === '' || password === '' || email === ''}
         onPress={() => setUser({username: username, password: password})}>
-        Log In
+        Sign Up
       </Button>
       <Divider />
       <Text appearance="hint">
-        Don't have an account?{' '}
-        <Text status="primary" onPress={() => navigation.navigate('SignUp')}>
-          Sign up.
+        Already have an account?{' '}
+        <Text status="primary" onPress={() => navigation.navigate('Login')}>
+          Log in.
         </Text>
       </Text>
     </Layout>
@@ -81,7 +88,7 @@ const styles = StyleSheet.create({
   title: {
     padding: 20,
   },
-  login: {
+  signUp: {
     width: '90%',
     margin: 10,
   },

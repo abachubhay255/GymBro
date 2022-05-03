@@ -6,6 +6,7 @@ import {default as theme} from './theme.json';
 import BottomTabs from './components/BottomTabs';
 import Login from './components/Login';
 import Main from './components/Main';
+import LoginNavigator from './components/LoginNavigator';
 
 export type User = {
   username: string;
@@ -42,7 +43,7 @@ export default function App() {
               <BottomTabs setCurrentTab={setCurrentTab} />
             </>
           ) : (
-            <Login />
+            <LoginNavigator />
           )}
         </UserContext.Provider>
       </ApplicationProvider>
