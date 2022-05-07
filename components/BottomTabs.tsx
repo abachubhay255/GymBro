@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
   BottomNavigation,
   BottomNavigationTab,
   Icon,
 } from '@ui-kitten/components';
-import {Tab} from '../App';
+import {Tab, TabContext} from './ProfileDrawer';
 
 const tabs: Tab[] = ['Home', 'Workouts', 'Notifications', 'Messages'];
 
@@ -23,11 +23,8 @@ const MessageIcon = (filled: boolean) => (
   <Icon name={`message-square${filled ? '' : '-outline'}`} />
 );
 
-type Props = {
-  setCurrentTab: React.Dispatch<React.SetStateAction<Tab>>;
-};
-
-export default function BottomTabs({setCurrentTab}: Props) {
+export default function BottomTabs() {
+  const {setCurrentTab} = useContext(TabContext);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   useEffect(() => {
@@ -36,7 +33,7 @@ export default function BottomTabs({setCurrentTab}: Props) {
 
   return (
     <BottomNavigation
-      style={{backgroundColor: "black", marginTop: 3}}
+      style={{backgroundColor: 'black', marginTop: 3}}
       appearance="noIndicator"
       selectedIndex={selectedIndex}
       onSelect={setSelectedIndex}>

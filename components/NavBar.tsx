@@ -1,13 +1,13 @@
-import React, {useRef} from 'react';
+import React, {useContext} from 'react';
 import {
   Avatar,
-  Drawer,
-  DrawerItem,
+  Divider,
   Icon,
-  Text,
   TopNavigation,
   TopNavigationAction,
 } from '@ui-kitten/components';
+import {DrawerHeaderProps} from '@react-navigation/drawer';
+import {TabContext} from './ProfileDrawer';
 
 const SettingsIcon = <Icon name="settings-outline" />;
 
@@ -15,22 +15,14 @@ const renderProfile = () => (
   <Avatar source={{uri: 'https://reactjs.org/logo-og.png'}} />
 );
 
-export default function NavBar() {
-  const drawer = useRef(null);
-
-  const renderDrawer = () => {
-    return (
-      <Drawer ref={drawer} header={<Text>Profile</Text>}>
-        <DrawerItem title="Users" />
-        <DrawerItem title="Orders" />
-        <DrawerItem title="Transactions" />
-        <DrawerItem title="Settings" />
-      </Drawer>
-    );
-  };
+export default function NavBar({navigation}: DrawerHeaderProps) {
+  const {currentTab} = useContext(TabContext);
 
   const renderProfileAction = () => (
-    <TopNavigationAction icon={renderProfile} /> // TODO: Drawer Navigation using React Navigation
+    <TopNavigationAction
+      icon={renderProfile}
+      onPress={() => navigation.openDrawer()}
+    />
   );
 
   const renderSettingsAction = () => (
@@ -38,11 +30,14 @@ export default function NavBar() {
   );
 
   return (
-    <TopNavigation
-      title="Notifications"
-      accessoryLeft={renderProfileAction}
-      accessoryRight={renderSettingsAction}
-      alignment="center"
-    />
+    <>
+      <TopNavigation
+        title={currentTab}
+        accessoryLeft={renderProfileAction}
+        accessoryRight={renderSettingsAction}
+        alignment="center"
+      />
+      <Divider />
+    </>
   );
 }
