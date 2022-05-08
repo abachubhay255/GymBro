@@ -3,7 +3,6 @@ import {StyleSheet, View} from 'react-native';
 import {Button, Input, Text, Icon} from '@ui-kitten/components';
 import {ImageOverlay} from './extra/image-overlay.component';
 import {PersonIcon} from './extra/icons';
-import {KeyboardAvoidingView} from './extra/3rd-party';
 import {UserContext} from '../../App';
 
 export default function SignIn({navigation}: any) {
@@ -37,63 +36,61 @@ export default function SignIn({navigation}: any) {
   );
 
   return (
-    <KeyboardAvoidingView>
-      <ImageOverlay
-        style={styles.container}
-        source={{
-          uri: 'https://images.unsplash.com/photo-1590487988256-9ed24133863e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=728&q=80',
-        }}>
-        <View style={styles.headerContainer}>
-          <Text category="h1" status="control">
-            GymBro
-          </Text>
-          <Text style={styles.signInLabel} category="s1" status="control">
-            Sign in to continue
-          </Text>
-        </View>
-        <View style={styles.formContainer}>
-          <Input
-            status="control"
-            placeholder="Username"
-            accessoryRight={PersonIcon as any}
-            value={username}
-            onChangeText={setUsername}
-          />
-          <Input
-            style={styles.passwordInput}
-            status="control"
-            placeholder="Password"
-            accessoryRight={renderPasswordIcon}
-            value={password}
-            secureTextEntry={!passwordVisible}
-            onChangeText={setPassword}
-          />
-          <View style={styles.forgotPasswordContainer}>
-            <Button
-              style={styles.forgotPasswordButton}
-              appearance="ghost"
-              status="control"
-              onPress={onForgotPasswordButtonPress}>
-              Forgot your password?
-            </Button>
-          </View>
-        </View>
-        <Button
-          style={styles.signInButton}
-          size="giant"
-          disabled={username === '' || password === ''}
-          onPress={onSignInButtonPress}>
-          SIGN IN
-        </Button>
-        <Button
-          style={styles.signUpButton}
-          appearance="ghost"
+    <ImageOverlay
+      style={styles.container}
+      source={{
+        uri: 'https://images.unsplash.com/photo-1590487988256-9ed24133863e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=728&q=80',
+      }}>
+      <View style={styles.headerContainer}>
+        <Text category="h1" status="control">
+          GymBro
+        </Text>
+        <Text style={styles.signInLabel} category="s1" status="control">
+          Sign in to continue
+        </Text>
+      </View>
+      <View style={styles.formContainer}>
+        <Input
           status="control"
-          onPress={onSignUpButtonPress}>
-          Don't have an account? Sign Up
-        </Button>
-      </ImageOverlay>
-    </KeyboardAvoidingView>
+          placeholder="Username"
+          accessoryRight={PersonIcon as any}
+          value={username}
+          onChangeText={setUsername}
+        />
+        <Input
+          style={styles.passwordInput}
+          status="control"
+          placeholder="Password"
+          accessoryRight={renderPasswordIcon}
+          value={password}
+          secureTextEntry={!passwordVisible}
+          onChangeText={setPassword}
+        />
+        <View style={styles.forgotPasswordContainer}>
+          <Button
+            style={styles.forgotPasswordButton}
+            appearance="ghost"
+            status="control"
+            onPress={onForgotPasswordButtonPress}>
+            Forgot your password?
+          </Button>
+        </View>
+      </View>
+      <Button
+        style={styles.signInButton}
+        size="giant"
+        disabled={username === '' || password === ''}
+        onPress={onSignInButtonPress}>
+        SIGN IN
+      </Button>
+      <Button
+        style={styles.signUpButton}
+        appearance="ghost"
+        status="control"
+        onPress={onSignUpButtonPress}>
+        Don't have an account? Sign Up
+      </Button>
+    </ImageOverlay>
   );
 }
 

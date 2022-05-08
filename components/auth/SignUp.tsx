@@ -1,5 +1,10 @@
 import React, {ReactElement, useCallback, useContext, useState} from 'react';
-import {View, TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import {
   Button,
   CheckBox,
@@ -11,7 +16,6 @@ import {
 } from '@ui-kitten/components';
 import {ImageOverlay} from './extra/image-overlay.component';
 import {EmailIcon, PersonIcon} from './extra/icons';
-import {KeyboardAvoidingView} from './extra/3rd-party';
 import {UserContext} from '../../App';
 
 export default function SignUp({navigation}: any) {
@@ -52,76 +56,74 @@ export default function SignUp({navigation}: any) {
   );
 
   return (
-    <KeyboardAvoidingView>
-      <ImageOverlay
-        style={styles.container as any}
-        source={{
-          uri: 'https://images.unsplash.com/photo-1590487988256-9ed24133863e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=728&q=80',
-        }}>
-        <View style={styles.headerContainer}>
-          <Text category="h1" status="control">
-            GymBro
-          </Text>
-          <Text style={styles.signInLabel} category="s1" status="control">
-            Sign up to continue
-          </Text>
-        </View>
-        <View style={styles.formContainer}>
-          <Input
-            status="control"
-            autoCapitalize="none"
-            placeholder="Email"
-            accessoryRight={EmailIcon as any}
-            value={email}
-            onChangeText={setEmail}
-          />
-          <Input
-            style={styles.formInput}
-            status="control"
-            autoCapitalize="none"
-            placeholder="Username"
-            accessoryRight={PersonIcon as any}
-            value={username}
-            onChangeText={setUsername}
-          />
-          <Input
-            style={styles.formInput}
-            status="control"
-            autoCapitalize="none"
-            secureTextEntry={!passwordVisible}
-            placeholder="Password"
-            accessoryRight={renderPasswordIcon}
-            value={password}
-            onChangeText={setPassword}
-          />
-          <CheckBox
-            style={styles.termsCheckBox}
-            checked={termsAccepted}
-            onChange={(checked: boolean) => setTermsAccepted(checked)}>
-            {renderCheckboxLabel}
-          </CheckBox>
-        </View>
-        <Button
-          style={styles.signUpButton}
-          size="giant"
-          disabled={
-            username === '' ||
-            password === '' ||
-            email === '' ||
-            termsAccepted === false
-          }
-          onPress={onSignUpButtonPress}>
-          SIGN UP
-        </Button>
-        <Button
-          style={styles.signInButton}
-          appearance="ghost"
+    <ImageOverlay
+      style={styles.container as any}
+      source={{
+        uri: 'https://images.unsplash.com/photo-1590487988256-9ed24133863e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=728&q=80',
+      }}>
+      <View style={styles.headerContainer}>
+        <Text category="h1" status="control">
+          GymBro
+        </Text>
+        <Text style={styles.signInLabel} category="s1" status="control">
+          Sign up to continue
+        </Text>
+      </View>
+      <View style={styles.formContainer}>
+        <Input
           status="control"
-          onPress={onSignInButtonPress}>
-          Already have an account? Sign In
-        </Button>
-      </ImageOverlay>
-    </KeyboardAvoidingView>
+          autoCapitalize="none"
+          placeholder="Email"
+          accessoryRight={EmailIcon as any}
+          value={email}
+          onChangeText={setEmail}
+        />
+        <Input
+          style={styles.formInput}
+          status="control"
+          autoCapitalize="none"
+          placeholder="Username"
+          accessoryRight={PersonIcon as any}
+          value={username}
+          onChangeText={setUsername}
+        />
+        <Input
+          style={styles.formInput}
+          status="control"
+          autoCapitalize="none"
+          secureTextEntry={!passwordVisible}
+          placeholder="Password"
+          accessoryRight={renderPasswordIcon}
+          value={password}
+          onChangeText={setPassword}
+        />
+        <CheckBox
+          style={styles.termsCheckBox}
+          checked={termsAccepted}
+          onChange={(checked: boolean) => setTermsAccepted(checked)}>
+          {renderCheckboxLabel}
+        </CheckBox>
+      </View>
+      <Button
+        style={styles.signUpButton}
+        size="giant"
+        disabled={
+          username === '' ||
+          password === '' ||
+          email === '' ||
+          termsAccepted === false
+        }
+        onPress={onSignUpButtonPress}>
+        SIGN UP
+      </Button>
+      <Button
+        style={styles.signInButton}
+        appearance="ghost"
+        status="control"
+        onPress={onSignInButtonPress}>
+        Already have an account? Sign In
+      </Button>
+    </ImageOverlay>
   );
 }
 
