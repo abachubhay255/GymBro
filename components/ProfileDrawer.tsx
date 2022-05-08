@@ -18,18 +18,7 @@ import Page from './pages/Page';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 
-export type Tab = 'Home' | 'Notifications' | 'Messages' | 'Workouts';
-
-export const TabContext = createContext<{
-  currentTab: Tab;
-  setCurrentTab: (tab: Tab) => void;
-}>({
-  currentTab: 'Home',
-  setCurrentTab: (tab: Tab) => {},
-});
-
 export default function ProfileDrawer() {
-  const [currentTab, setCurrentTab] = useState<Tab>('Home');
   const {user} = useContext(UserContext);
 
   const renderHeader = () => {
@@ -80,8 +69,6 @@ export default function ProfileDrawer() {
   const NavDrawer = createDrawerNavigator();
 
   return (
-    <TabContext.Provider
-      value={{currentTab: currentTab, setCurrentTab: setCurrentTab}}>
       <NavigationContainer>
         <NavDrawer.Navigator
           initialRouteName="Page"
@@ -100,7 +87,6 @@ export default function ProfileDrawer() {
           />
         </NavDrawer.Navigator>
       </NavigationContainer>
-    </TabContext.Provider>
   );
 }
 

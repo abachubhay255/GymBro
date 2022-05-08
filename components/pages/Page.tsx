@@ -1,30 +1,21 @@
-import React, {useContext} from 'react';
+import React, {createContext, useContext, useState} from 'react';
 import BottomTabs from '../BottomTabs';
-import {Tab, TabContext} from '../ProfileDrawer';
 import Home from './Home';
-import Messages from './Messages';
+import MessagesNavigator from './messages/MessagesNavigator';
 import Notifications from './Notifications';
 import Workouts from './Workouts';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
 
-export default function Page() {
-  const {currentTab} = useContext(TabContext);
-  const CurrentTab = () => {
-    switch (currentTab) {
-      case 'Workouts':
-        return <Workouts />;
-      case 'Notifications':
-        return <Notifications />;
-      case 'Messages':
-        return <Messages />;
-      default:
-        return <Home />;
-    }
-  };
+export default function Page({navigation}: any) {
+  const Tab = createBottomTabNavigator();
 
   return (
-    <>
-      <CurrentTab />
-      <BottomTabs />
-    </>
+    <Tab.Navigator tabBar={props => <BottomTabs {...props} />}>
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Workouts" component={Workouts} />
+      <Tab.Screen name="Notifications" component={Notifications} />
+      <Tab.Screen name="Messages" component={MessagesNavigator} />
+    </Tab.Navigator>
   );
 }

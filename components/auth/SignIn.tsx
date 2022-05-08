@@ -4,8 +4,12 @@ import {Button, Input, Text, Icon} from '@ui-kitten/components';
 import {ImageOverlay} from './extra/image-overlay.component';
 import {PersonIcon} from './extra/icons';
 import {UserContext} from '../../App';
+import {AuthParamList} from './AuthNavigator';
+import {StackScreenProps} from '@react-navigation/stack';
 
-export default function SignIn({navigation}: any) {
+type Props = StackScreenProps<AuthParamList, 'SignIn'>;
+
+export default function SignIn({navigation}: Props) {
   const {setUser} = useContext(UserContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

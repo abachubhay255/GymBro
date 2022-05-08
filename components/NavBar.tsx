@@ -8,7 +8,6 @@ import {
   TopNavigationAction,
 } from '@ui-kitten/components';
 import {DrawerHeaderProps} from '@react-navigation/drawer';
-import {TabContext} from './ProfileDrawer';
 
 const SettingsIcon = <Icon name="settings-outline" />;
 
@@ -30,8 +29,6 @@ const ProfileIcon = () => (
 );
 
 export default function NavBar({navigation}: DrawerHeaderProps) {
-  const {currentTab} = useContext(TabContext);
-
   const renderProfileAction = () => (
     <TopNavigationAction
       icon={ProfileIcon}
@@ -46,7 +43,7 @@ export default function NavBar({navigation}: DrawerHeaderProps) {
   return (
     <>
       <TopNavigation
-        title={currentTab}
+        title="GymBro"
         accessoryLeft={renderProfileAction}
         accessoryRight={renderSettingsAction}
         alignment="center"

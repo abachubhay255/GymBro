@@ -4,8 +4,10 @@ import {
   BottomNavigationTab,
   Icon,
 } from '@ui-kitten/components';
-import {Tab, TabContext} from './ProfileDrawer';
 
+import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
+
+type Tab = 'Home' | 'Workouts' | 'Notifications' | 'Messages';
 const tabs: Tab[] = ['Home', 'Workouts', 'Notifications', 'Messages'];
 
 const HomeIcon = (filled: boolean) => (
@@ -23,12 +25,11 @@ const MessageIcon = (filled: boolean) => (
   <Icon name={`message-square${filled ? '' : '-outline'}`} />
 );
 
-export default function BottomTabs() {
-  const {setCurrentTab} = useContext(TabContext);
+export default function BottomTabs({navigation}: BottomTabBarProps) {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   useEffect(() => {
-    setCurrentTab(tabs[selectedIndex]);
+    navigation.navigate(tabs[selectedIndex]);
   }, [selectedIndex]);
 
   return (

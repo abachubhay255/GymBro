@@ -1,4 +1,4 @@
-import React, {createContext, useState} from 'react';
+import React, {createContext, StrictMode, useState} from 'react';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
@@ -28,13 +28,13 @@ export default function App() {
   };
 
   return (
-    <>
+    <StrictMode>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={{...eva.dark, ...theme}}>
         <UserContext.Provider value={userValue}>
           {user ? <Main /> : <AuthNavigator />}
         </UserContext.Provider>
       </ApplicationProvider>
-    </>
+    </StrictMode>
   );
 }

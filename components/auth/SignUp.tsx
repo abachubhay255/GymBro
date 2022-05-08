@@ -17,8 +17,12 @@ import {
 import {ImageOverlay} from './extra/image-overlay.component';
 import {EmailIcon, PersonIcon} from './extra/icons';
 import {UserContext} from '../../App';
+import {StackScreenProps} from '@react-navigation/stack';
+import {AuthParamList} from './AuthNavigator';
 
-export default function SignUp({navigation}: any) {
+type Props = StackScreenProps<AuthParamList, 'SignUp'>;
+
+export default function SignUp({navigation}: Props) {
   const {setUser} = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
