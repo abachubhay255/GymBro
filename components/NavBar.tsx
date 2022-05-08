@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import {
   Avatar,
+  AvatarProps,
   Divider,
   Icon,
   TopNavigation,
@@ -11,8 +12,21 @@ import {TabContext} from './ProfileDrawer';
 
 const SettingsIcon = <Icon name="settings-outline" />;
 
-const renderProfile = () => (
-  <Avatar source={{uri: 'https://reactjs.org/logo-og.png'}} />
+export const ProfilePic = (props: any) => (
+  <Avatar
+    {...props}
+    source={{
+      uri: 'https://yt3.ggpht.com/uiFj7wHnDE-2Ezn93eQ8lNM8PFKK2_NJnkOIS4Q9lJ0IOId4INAmelmuqBUaU4SsWsBTSrrgoRU=s88-c-k-c0x00ffffff-no-rj',
+    }}
+  />
+);
+
+const ProfileIcon = () => (
+  <Avatar
+    source={{
+      uri: 'https://yt3.ggpht.com/uiFj7wHnDE-2Ezn93eQ8lNM8PFKK2_NJnkOIS4Q9lJ0IOId4INAmelmuqBUaU4SsWsBTSrrgoRU=s88-c-k-c0x00ffffff-no-rj',
+    }}
+  />
 );
 
 export default function NavBar({navigation}: DrawerHeaderProps) {
@@ -20,7 +34,7 @@ export default function NavBar({navigation}: DrawerHeaderProps) {
 
   const renderProfileAction = () => (
     <TopNavigationAction
-      icon={renderProfile}
+      icon={ProfileIcon}
       onPress={() => navigation.openDrawer()}
     />
   );
