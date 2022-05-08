@@ -4,9 +4,9 @@ import {Button, Input, Text, Icon} from '@ui-kitten/components';
 import {ImageOverlay} from './extra/image-overlay.component';
 import {PersonIcon} from './extra/icons';
 import {KeyboardAvoidingView} from './extra/3rd-party';
-import {UserContext} from '../../../App';
+import {UserContext} from '../../App';
 
-export default function Login({navigation}: any) {
+export default function SignIn({navigation}: any) {
   const {setUser} = useContext(UserContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

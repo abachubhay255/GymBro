@@ -1,10 +1,10 @@
 import React, {createContext, useState} from 'react';
-import {ApplicationProvider, IconRegistry, Layout} from '@ui-kitten/components';
+import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {default as theme} from './theme.json';
 import Main from './components/Main';
-import LoginNavigator from './components/LoginNavigator';
+import AuthNavigator from './components/auth/AuthNavigator';
 
 export type User = {
   username: string;
@@ -32,7 +32,7 @@ export default function App() {
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={{...eva.dark, ...theme}}>
         <UserContext.Provider value={userValue}>
-          {user ? <Main /> : <LoginNavigator />}
+          {user ? <Main /> : <AuthNavigator />}
         </UserContext.Provider>
       </ApplicationProvider>
     </>

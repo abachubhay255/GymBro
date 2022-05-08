@@ -1,11 +1,11 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import SignIn from './SignIn';
 import SignUp from './SignUp';
-import Login from './auth/login';
 
-export type LoginParamList = {
-  Login: undefined;
+export type AuthParamList = {
+  SignIn: undefined;
   SignUp: undefined;
 };
 
@@ -13,12 +13,12 @@ const {Navigator, Screen} = createStackNavigator();
 
 const InnerNavigator = () => (
   <Navigator screenOptions={{headerShown: false}}>
-    <Screen name="Login" component={Login} />
+    <Screen name="SignIn" component={SignIn} />
     <Screen name="SignUp" component={SignUp} />
   </Navigator>
 );
 
-export default function LoginNavigator() {
+export default function AuthNavigator() {
   return (
     <NavigationContainer>
       <InnerNavigator />
