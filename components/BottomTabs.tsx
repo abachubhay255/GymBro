@@ -25,23 +25,17 @@ const MessageIcon = (filled: boolean) => (
   <Icon name={`message-square${filled ? '' : '-outline'}`} />
 );
 
-export default function BottomTabs({navigation}: BottomTabBarProps) {
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-
-  useEffect(() => {
-    navigation.navigate(tabs[selectedIndex]);
-  }, [selectedIndex]);
-
+export default function BottomTabs({state, navigation}: BottomTabBarProps) {
   return (
     <BottomNavigation
       style={{backgroundColor: 'black', marginTop: 3}}
       appearance="noIndicator"
-      selectedIndex={selectedIndex}
-      onSelect={setSelectedIndex}>
-      <BottomNavigationTab icon={HomeIcon(selectedIndex === 0)} />
-      <BottomNavigationTab icon={WorkoutIcon(selectedIndex === 1)} />
-      <BottomNavigationTab icon={BellIcon(selectedIndex === 2)} />
-      <BottomNavigationTab icon={MessageIcon(selectedIndex === 3)} />
+      selectedIndex={state.index}
+      onSelect={index => navigation.navigate(tabs[index])}>
+      <BottomNavigationTab icon={HomeIcon(state.index === 0)} />
+      <BottomNavigationTab icon={WorkoutIcon(state.index === 1)} />
+      <BottomNavigationTab icon={BellIcon(state.index === 2)} />
+      <BottomNavigationTab icon={MessageIcon(state.index === 3)} />
     </BottomNavigation>
   );
 }

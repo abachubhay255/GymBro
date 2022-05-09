@@ -1,8 +1,9 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import MessageList from './MessageList';
 import Conversation from './conversation/Conversation';
+import NavBar from '../../NavBar';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 export type MessagesParamList = {
   MessageList: undefined;
@@ -12,10 +13,20 @@ export type MessagesParamList = {
 const {Navigator, Screen} = createStackNavigator();
 
 export default function MessagesNavigator() {
+  const navigation = useNavigation();
+  const route = useRoute();
   return (
-    <Navigator>
+    <Navigator
+      screenOptions={{
+        header: () => (
+          <NavBar
+            tabRoute={route}
+            drawerNavigation={navigation.getParent()}
+          />
+        ),
+      }}>
       <Screen name="MessageList" component={MessageList} />
-      <Screen name="Conversation" component={Conversation} />
+      <Screen options={{headerShown: false}} name="Conversation" component={Conversation} />
     </Navigator>
   );
 }

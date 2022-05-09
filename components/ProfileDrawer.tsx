@@ -69,24 +69,24 @@ export default function ProfileDrawer() {
   const NavDrawer = createDrawerNavigator();
 
   return (
-      <NavigationContainer>
-        <NavDrawer.Navigator
-          initialRouteName="Page"
-          drawerContent={renderDrawer}
-          screenOptions={{header: props => <NavBar {...props} />}}>
-          <NavDrawer.Screen name="Page" component={Page} />
-          <NavDrawer.Screen
-            name="Profile"
-            component={Profile}
-            options={{headerShown: false}}
-          />
-          <NavDrawer.Screen
-            name="Settings"
-            component={Settings}
-            options={{headerShown: false}}
-          />
-        </NavDrawer.Navigator>
-      </NavigationContainer>
+    <NavigationContainer>
+      <NavDrawer.Navigator
+        initialRouteName="Page"
+        drawerContent={renderDrawer}
+        screenOptions={{headerShown: false}}>
+        <NavDrawer.Screen name="Page" component={Page} />
+        <NavDrawer.Screen
+          name="Profile"
+          component={Profile}
+          options={{headerShown: false}}
+        />
+        <NavDrawer.Screen
+          name="Settings"
+          component={Settings}
+          options={{headerShown: false}}
+        />
+      </NavDrawer.Navigator>
+    </NavigationContainer>
   );
 }
 
