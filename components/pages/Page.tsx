@@ -3,15 +3,14 @@ import BottomTabs from '../BottomTabs';
 import Feed from './home/Feed';
 import MessagesNavigator from './messages/MessagesNavigator';
 import Notifications from './Notifications';
-import Workouts from './Workouts';
+import ExploreWorkouts from './workouts/ExploreWorkouts';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {getTabBar} from '../utils/getTabBar';
 import HomeNavigator from './home/HomeNavigator';
+import WorkoutsNavigator from './workouts/WorkoutsNavigator';
 
-export default function Page({navigation}: any) {
+export default function Page() {
   const Tab = createBottomTabNavigator();
-
-  //use context to pass in overriding navigators
 
   return (
     <Tab.Navigator
@@ -20,7 +19,7 @@ export default function Page({navigation}: any) {
         headerShown: false,
       }}>
       <Tab.Screen name="Home" component={HomeNavigator} />
-      <Tab.Screen name="Workouts" component={Workouts} />
+      <Tab.Screen name="Workouts" component={WorkoutsNavigator} />
       <Tab.Screen name="Notifications" component={Notifications} />
       <Tab.Screen name="Messages" component={MessagesNavigator} />
     </Tab.Navigator>

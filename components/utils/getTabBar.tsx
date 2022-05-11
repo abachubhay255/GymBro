@@ -19,6 +19,7 @@ export function getTabBar({
   switch (routeName) {
     case 'Home':
     case 'Feed':
+    case 'ExploreWorkouts':
     case 'MessageList':
       return <BottomTabs {...{state, navigation, ...restProps}} />;
     default:
