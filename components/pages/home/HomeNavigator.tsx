@@ -1,18 +1,18 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import MessageList from './MessageList';
-import Conversation from './conversation/Conversation';
 import NavBar from '../../NavBar';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import Feed from './Feed';
+import NewPost from './NewPost';
 
-export type MessagesParamList = {
-  MessageList: undefined;
-  Conversation: undefined;
+export type HomeParamList = {
+  Feed: undefined;
+  NewPost: undefined;
 };
 
 const {Navigator, Screen} = createStackNavigator();
 
-export default function MessagesNavigator() {
+export default function HomeNavigator() {
   const navigation = useNavigation();
   const route = useRoute();
   return (
@@ -26,10 +26,10 @@ export default function MessagesNavigator() {
             />
           ),
         }}
-        name="MessageList"
-        component={MessageList}
+        name="Feed"
+        component={Feed}
       />
-      <Screen name="Conversation" component={Conversation} />
+      <Screen name="NewPost" component={NewPost} />
     </Navigator>
   );
 }

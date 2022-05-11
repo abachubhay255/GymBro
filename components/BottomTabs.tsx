@@ -8,7 +8,7 @@ import {
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 
 type Tab = 'Home' | 'Workouts' | 'Notifications' | 'Messages';
-const tabs: Tab[] = ['Home', 'Workouts', 'Notifications', 'Messages'];
+export const TABS: Tab[] = ['Home', 'Workouts', 'Notifications', 'Messages'];
 
 const HomeIcon = (filled: boolean) => (
   <Icon name={`home${filled ? '' : '-outline'}`} />
@@ -31,7 +31,7 @@ export default function BottomTabs({state, navigation}: BottomTabBarProps) {
       style={{backgroundColor: 'black', marginTop: 3}}
       appearance="noIndicator"
       selectedIndex={state.index}
-      onSelect={index => navigation.navigate(tabs[index])}>
+      onSelect={index => navigation.navigate(TABS[index])}>
       <BottomNavigationTab icon={HomeIcon(state.index === 0)} />
       <BottomNavigationTab icon={WorkoutIcon(state.index === 1)} />
       <BottomNavigationTab icon={BellIcon(state.index === 2)} />
