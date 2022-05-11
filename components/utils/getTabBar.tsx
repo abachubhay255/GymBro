@@ -20,6 +20,7 @@ export function getTabBar({
     case 'Home':
     case 'Feed':
     case 'ExploreWorkouts':
+    case 'NotificationsList':
     case 'MessageList':
       return <BottomTabs {...{state, navigation, ...restProps}} />;
     default:
