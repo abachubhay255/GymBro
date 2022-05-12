@@ -28,7 +28,7 @@ const MessageIcon = (filled: boolean) => (
 export default function BottomTabs({state, navigation}: BottomTabBarProps) {
   return (
     <BottomNavigation
-      style={{backgroundColor: 'black', marginTop: 3}}
+      style={{marginTop: 3}}
       appearance="noIndicator"
       selectedIndex={state.index}
       onSelect={index => navigation.navigate(TABS[index])}>

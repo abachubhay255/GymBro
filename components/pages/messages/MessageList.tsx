@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {ListRenderItemInfo} from 'react-native';
 import {
   Input,
@@ -8,54 +8,79 @@ import {
   useStyleSheet,
 } from '@ui-kitten/components';
 import {MessageItem} from './extra/message-item.component';
-import {SearchIcon} from './extra/icons';
 import {Message} from './extra/data';
 import {StackScreenProps} from '@react-navigation/stack';
 import {MessagesParamList} from './MessagesNavigator';
+import NavBar from '../../NavBar';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {MessageType} from './Message';
+import MessageListItem from './MessageListItem';
 
-const initialMessages: Message[] = [
-  Message.howAreYou(),
-  Message.canYouSend(),
-  Message.noProblem(),
+const initialMessages: MessageType[] = [
+  {
+    text: 'If your nothing without the suit, then you dont deserve it',
+    username: 'Tony Stark',
+    timestamp: new Date(),
+  },
+  {
+    text: 'Do Avengers have to pay taxes?',
+    username: 'Ned Leeds',
+    timestamp: new Date(),
+  },
+  {
+    text: "Josiah is so much hotter than you, I'm leaving you",
+    username: 'MJ Watson',
+    timestamp: new Date(),
+  },
 ];
 
 type Props = StackScreenProps<MessagesParamList, 'MessageList'>;
 
 export default function MessageList({navigation}: Props) {
   const styles = useStyleSheet(themedStyles);
-  const [searchQuery, setSearchQuery] = React.useState<string>();
+  const drawerNav = useNavigation().getParent()?.getParent();
+  const tabRoute = useRoute();
+  const [searchQuery, setSearchQuery] = useState('');
 
   const onItemPress = (): void => {
     navigation && navigation.navigate('Conversation');
   };
 
   const renderItem = (
-    info: ListRenderItemInfo<Message>,
+    info: ListRenderItemInfo<MessageType>,
   ): React.ReactElement => (
-    <MessageItem
+    <MessageListItem
       style={styles.item}
       message={info.item}
       onPress={onItemPress}
     />
   );
 
-  const renderHeader = (): React.ReactElement => (
-    <Layout style={styles.header} level="1">
-      <Input
-        placeholder="Search"
-        value={searchQuery}
-        accessoryRight={SearchIcon as any}
-      />
-    </Layout>
-  );
-
   return (
-    <List
-      style={styles.list}
-      data={initialMessages}
-      renderItem={renderItem}
-      ListHeaderComponent={renderHeader}
-    />
+    <>
+      <NavBar
+        drawerNavigation={drawerNav}
+        tabRoute={tabRoute}
+        titleElement={
+          <Layout level="1">
+            <Input
+              style={styles.searchBar}
+              status="control"
+              size="small"
+              placeholder="Search"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+          </Layout>
+        }
+      />
+
+      <List
+        style={styles.list}
+        data={initialMessages}
+        renderItem={renderItem}
+      />
+    </>
   );
 }
 
@@ -63,10 +88,10 @@ const themedStyles = StyleService.create({
   list: {
     flex: 1,
   },
-  header: {
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 8,
+  searchBar: {
+    width: 290,
+    paddingLeft: 15,
+    borderRadius: 100,
   },
   item: {
     paddingVertical: 16,

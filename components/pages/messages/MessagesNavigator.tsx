@@ -13,19 +13,10 @@ export type MessagesParamList = {
 const {Navigator, Screen} = createStackNavigator();
 
 export default function MessagesNavigator() {
-  const navigation = useNavigation();
-  const route = useRoute();
   return (
     <Navigator>
       <Screen
-        options={{
-          header: () => (
-            <NavBar
-              tabRoute={route}
-              drawerNavigation={navigation.getParent()}
-            />
-          ),
-        }}
+        options={{headerShown: false}}
         name="MessageList"
         component={MessageList}
       />

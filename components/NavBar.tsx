@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {ReactElement, useContext} from 'react';
 import {
   Avatar,
   AvatarProps,
@@ -32,9 +32,14 @@ const ProfileIcon = () => (
 type Props = {
   drawerNavigation: any;
   tabRoute: any;
+  titleElement?: ReactElement;
 };
 
-export default function NavBar({drawerNavigation, tabRoute}: Props) {
+export default function NavBar({
+  drawerNavigation,
+  tabRoute,
+  titleElement,
+}: Props) {
   const renderProfileAction = () => (
     <TopNavigationAction
       icon={ProfileIcon}
@@ -49,7 +54,7 @@ export default function NavBar({drawerNavigation, tabRoute}: Props) {
   return (
     <>
       <TopNavigation
-        title={tabRoute.name}
+        title={titleElement ? titleElement : tabRoute.name}
         accessoryLeft={renderProfileAction}
         accessoryRight={renderSettingsAction}
         alignment="center"
