@@ -1,27 +1,18 @@
-import React from 'react';
-import {ImageSourcePropType, Keyboard, Platform} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {ImageSourcePropType, Keyboard, Platform, View} from 'react-native';
 import {
   Button,
   Input,
   StyleService,
   useStyleSheet,
 } from '@ui-kitten/components';
-import {KeyboardAvoidingView} from './extra/keyboard-avoiding-view.component';
-import {Chat} from './extra/chat.component';
 import {AttachmentsMenu} from './extra/attachments-menu.component';
 import {MicIcon, PaperPlaneIcon, PlusIcon} from './extra/icons';
 import {Message} from './extra/data';
-
-const initialMessages: Message[] = [
-  Message.howAreYou(),
-  Message.imFine(),
-  Message.imFineToo(),
-  Message.walkingWithDog(),
-  Message.imageAttachment1(),
-  Message.imageAttachment2(),
-  Message.canIJoin(),
-  Message.sure(),
-];
+import Chat from './Chat';
+import {initialMessages} from '../MessageList';
+import {MessageType} from './Message';
+import {User, UserContext} from '../../../../App';
 
 const galleryAttachments: ImageSourcePropType[] = [
   require('./assets/image-attachment-1.png'),
@@ -29,32 +20,25 @@ const galleryAttachments: ImageSourcePropType[] = [
   require('./assets/image-attachment-1.png'),
   require('./assets/image-attachment-2.jpg'),
 ];
-
-const keyboardOffset = (height: number): number =>
-  Platform.select({
-    android: 0,
-    ios: height,
-  });
-
 export default function Conversation() {
   const styles = useStyleSheet(themedStyles);
+  const {user} = useContext(UserContext) as {user: User};
 
-  const [messages, setMessages] = React.useState<Message[]>(initialMessages);
-  const [message, setMessage] = React.useState<string>(null);
+  const [messages, setMessages] = useState(initialMessages);
+  const [messageText, setMessageText] = useState('');
   const [attachmentsMenuVisible, setAttachmentsMenuVisible] =
     React.useState<boolean>(false);
-
-  const sendButtonEnabled = (): boolean => {
-    return message && message.length > 0;
-  };
 
   const toggleAttachmentsMenu = (): void => {
     setAttachmentsMenuVisible(!attachmentsMenuVisible);
   };
 
   const onSendButtonPress = (): void => {
-    setMessages([...messages, new Message(message, 'now', true, null)]);
-    setMessage(null);
+    setMessages([
+      ...messages,
+      {text: messageText, username: user.username, timestamp: new Date()},
+    ]);
+    setMessageText('');
     Keyboard.dismiss();
   };
 
@@ -79,29 +63,27 @@ export default function Conversation() {
         followEnd={true}
         data={messages}
       />
-      <KeyboardAvoidingView
-        style={styles.messageInputContainer}
-        offset={keyboardOffset}>
+      <View style={styles.messageInputContainer}>
         <Button
           style={[styles.iconButton, styles.attachButton]}
-          accessoryLeft={PlusIcon}
+          accessoryLeft={PlusIcon as any}
           onPress={toggleAttachmentsMenu}
         />
         <Input
           style={styles.messageInput}
           placeholder="Message..."
-          value={message}
-          onChangeText={setMessage}
-          accessoryRight={MicIcon}
+          value={messageText}
+          onChangeText={setMessageText}
+          accessoryRight={MicIcon as any}
         />
         <Button
           appearance="ghost"
           style={[styles.iconButton, styles.sendButton]}
-          accessoryLeft={PaperPlaneIcon}
-          disabled={!sendButtonEnabled()}
+          accessoryLeft={PaperPlaneIcon as any}
+          disabled={!(messageText && messageText.length > 0)}
           onPress={onSendButtonPress}
         />
-      </KeyboardAvoidingView>
+      </View>
       {attachmentsMenuVisible && renderAttachmentsMenu()}
     </React.Fragment>
   );

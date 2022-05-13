@@ -11,10 +11,10 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {MessagesParamList} from './MessagesNavigator';
 import NavBar from '../../NavBar';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {MessageType} from './Message';
+import {MessageType} from './conversation/Message';
 import MessageListItem from './MessageListItem';
 
-const initialMessages: MessageType[] = [
+export const initialMessages: MessageType[] = [
   {
     text: 'If your nothing without the suit, then you dont deserve it',
     username: 'Tony Stark',
