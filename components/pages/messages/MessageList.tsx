@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {ListRenderItemInfo} from 'react-native';
 import {
   Input,
@@ -7,8 +7,6 @@ import {
   StyleService,
   useStyleSheet,
 } from '@ui-kitten/components';
-import {MessageItem} from './extra/message-item.component';
-import {Message} from './extra/data';
 import {StackScreenProps} from '@react-navigation/stack';
 import {MessagesParamList} from './MessagesNavigator';
 import NavBar from '../../NavBar';
@@ -40,7 +38,17 @@ export default function MessageList({navigation}: Props) {
   const styles = useStyleSheet(themedStyles);
   const drawerNav = useNavigation().getParent()?.getParent();
   const tabRoute = useRoute();
+  const [searchedMessages, setSearchedMessages] = useState(initialMessages);
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const normalizedQuery = searchQuery.toLowerCase();
+    setSearchedMessages(
+      initialMessages.filter(message =>
+        message.username.toLowerCase().includes(normalizedQuery),
+      ),
+    );
+  }, [searchQuery]);
 
   const onItemPress = (): void => {
     navigation && navigation.navigate('Conversation');
@@ -77,7 +85,7 @@ export default function MessageList({navigation}: Props) {
 
       <List
         style={styles.list}
-        data={initialMessages}
+        data={searchedMessages}
         renderItem={renderItem}
       />
     </>
