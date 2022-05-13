@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Avatar, ListItem, ListItemProps, Text} from '@ui-kitten/components';
-import {MessageType} from './Message';
+import {MessageType} from './conversation/Message';
 
 const profilePics = new Map();
 profilePics.set(
