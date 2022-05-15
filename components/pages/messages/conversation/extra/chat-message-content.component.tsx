@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     minHeight: 48,
     minWidth: 48,
     maxWidth: 276,
-    borderRadius: 4,
+    borderRadius: 100,
   },
   text: {
     marginVertical: 12,
