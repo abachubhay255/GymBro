@@ -1,35 +1,23 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Avatar, ListItem, ListItemProps, Text} from '@ui-kitten/components';
-import {MessageType} from './conversation/Message';
+import {formattedDate, MessageType} from './conversation/Message';
+import {MessageDataItem, ProfilePics} from './data';
 
-const profilePics = new Map();
-profilePics.set(
-  'Tony Stark',
-  'https://i.ytimg.com/vi/Ddk9ci6geSs/maxresdefault.jpg',
-);
-profilePics.set(
-  'Ned Leeds',
-  'https://static1.srcdn.com/wordpress/wp-content/uploads/2022/04/Jacob-Batalon-as-Ned-Leeds-in-NWH.jpg',
-);
-profilePics.set(
-  'MJ Watson',
-  'https://upload.wikimedia.org/wikipedia/en/0/0a/Zendaya_as_MJ.jpeg',
-);
-
-export type MessageItemProps = ListItemProps & {
-  message: MessageType;
+type MessageItemProps = ListItemProps & {
+  message: MessageDataItem;
 };
 
 export default function MessageListItem(
   props: MessageItemProps,
 ): React.ReactElement {
   const {message, onPress, ...listItemProps} = props;
+  const mostRecentMessage = message.messages[message.messages.length - 1];
 
   const renderMessageDate = () => (
     <View style={styles.dateContainer}>
       <Text style={styles.dateText} appearance="hint" category="c1">
-        {`${message.timestamp.getMinutes()} minutes ago`}
+        {formattedDate(mostRecentMessage.timestamp)}
       </Text>
     </View>
   );
@@ -38,7 +26,7 @@ export default function MessageListItem(
     <Avatar
       style={styles.avatar as any}
       source={{
-        uri: profilePics.get(message.username),
+        uri: ProfilePics.get(message.username),
       }}
     />
   );
@@ -53,7 +41,7 @@ export default function MessageListItem(
       {...listItemProps}
       onPress={onPress}
       title={message.username}
-      description={getFormattedText(message.text ?? '')}
+      description={getFormattedText(mostRecentMessage.text ?? '')}
       accessoryLeft={renderProfileAvatar}
       accessoryRight={renderMessageDate}
     />

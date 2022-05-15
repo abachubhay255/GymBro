@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, StyleSheet, View, ViewProps} from 'react-native';
 import {Text} from '@ui-kitten/components';
 import {MessageType} from '../Message';
-
+// @ts-ignore
 export interface ChatMessageContentProps extends ViewProps {
   children: MessageType;
 }
@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
     minWidth: 48,
     maxWidth: 276,
     borderRadius: 4,
-    // padding: 8,
   },
   text: {
     marginVertical: 12,

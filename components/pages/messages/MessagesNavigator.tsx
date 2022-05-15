@@ -2,15 +2,14 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import MessageList from './MessageList';
 import Conversation from './conversation/Conversation';
-import NavBar from '../../NavBar';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import MessagesHeader from './MessagesHeader';
 
 export type MessagesParamList = {
   MessageList: undefined;
-  Conversation: undefined;
+  Conversation: {username: string};
 };
 
-const {Navigator, Screen} = createStackNavigator();
+const {Navigator, Screen} = createStackNavigator<MessagesParamList>();
 
 export default function MessagesNavigator() {
   return (
@@ -20,7 +19,11 @@ export default function MessagesNavigator() {
         name="MessageList"
         component={MessageList}
       />
-      <Screen name="Conversation" component={Conversation} />
+      <Screen
+        options={{header: props => <MessagesHeader {...props} />}}
+        name="Conversation"
+        component={Conversation}
+      />
     </Navigator>
   );
 }

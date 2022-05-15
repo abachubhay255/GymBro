@@ -16,18 +16,18 @@ export default function Chat(props: ChatProps): React.ReactElement {
   const {followEnd, contentContainerStyle, data, ...listProps} = props;
 
   const shouldShowMessageIndicator = (message: MessageType): boolean => {
-    return message.text && message.text.length > 0;
+    return !!message.text;
   };
 
-  const scrollToEnd = (params): void => {
+  const scrollToEnd = (params: any): void => {
     scrollToOffset({offset: contentHeight, ...params});
   };
 
-  const scrollToIndex = (params): void => {
+  const scrollToIndex = (params: any): void => {
     listRef.current.scrollToIndex(params);
   };
 
-  const scrollToOffset = (params): void => {
+  const scrollToOffset = (params: any): void => {
     listRef.current.scrollToOffset(params);
   };
 
@@ -50,10 +50,7 @@ export default function Chat(props: ChatProps): React.ReactElement {
   const renderMessage = (
     info: ListRenderItemInfo<MessageType>,
   ): React.ReactElement => (
-    <Message
-      style={styles.message}
-      message={info.item}
-      shouldShowIndicator={shouldShowMessageIndicator(info.item)}>
+    <Message style={styles.message} message={info.item}>
       {renderMessageContent}
     </Message>
   );
@@ -73,9 +70,6 @@ export default function Chat(props: ChatProps): React.ReactElement {
 const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: 'flex-end',
-  },
-  group: {
-    marginVertical: 8,
   },
   message: {
     marginVertical: 4,

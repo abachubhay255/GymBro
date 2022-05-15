@@ -10,9 +10,11 @@ import {AttachmentsMenu} from './extra/attachments-menu.component';
 import {MicIcon, PaperPlaneIcon, PlusIcon} from './extra/icons';
 import {Message} from './extra/data';
 import Chat from './Chat';
-import {initialMessages} from '../MessageList';
 import {MessageType} from './Message';
 import {User, UserContext} from '../../../../App';
+import {StackScreenProps} from '@react-navigation/stack';
+import {MessagesParamList} from '../MessagesNavigator';
+import {MessageData} from '../data';
 
 const galleryAttachments: ImageSourcePropType[] = [
   require('./assets/image-attachment-1.png'),
@@ -20,11 +22,17 @@ const galleryAttachments: ImageSourcePropType[] = [
   require('./assets/image-attachment-1.png'),
   require('./assets/image-attachment-2.jpg'),
 ];
-export default function Conversation() {
+
+type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
+export default function Conversation({route, navigation}: Props) {
   const styles = useStyleSheet(themedStyles);
   const {user} = useContext(UserContext) as {user: User};
 
-  const [messages, setMessages] = useState(initialMessages);
+  const loadedMessages =
+    MessageData.find(data => data.username === route.params.username)
+      ?.messages ?? [];
+
+  const [messages, setMessages] = useState(loadedMessages);
   const [messageText, setMessageText] = useState('');
   const [attachmentsMenuVisible, setAttachmentsMenuVisible] =
     React.useState<boolean>(false);

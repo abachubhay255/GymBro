@@ -7,8 +7,8 @@ import {
   TextElement,
   useStyleSheet,
 } from '@ui-kitten/components';
-import {ChatMessageIndicator} from './extra/chat-message-indicator.component';
 import {User, UserContext} from '../../../../App';
+import {format, isSameWeek, isSameDay, isYesterday} from 'date-fns';
 
 export type MessageType = {
   text?: string;
@@ -16,52 +16,56 @@ export type MessageType = {
   timestamp: Date;
   attachment?: string;
 };
+
+// @ts-ignore
 export interface ChatMessageProps extends ViewProps {
   message: MessageType;
-  shouldShowIndicator: boolean;
   children: (message: MessageType, style: StyleType) => React.ReactElement;
 }
+
+export const formattedDate = (date: Date): string => {
+  const now = new Date();
+  if (isSameDay(date, now)) {
+    return format(date, 'h:mm a');
+  }
+  if (isYesterday(date)) {
+    return 'Yesterday, ' + format(date, 'h:mm a');
+  }
+  if (isSameWeek(date, now)) {
+    return format(date, 'eeee, h:mm a');
+  }
+  return format(date, 'M/d/yy, h:mm a');
+};
 
 export type ChatMessageElement = React.ReactElement<ChatMessageProps>;
 export default function Message(props: ChatMessageProps) {
   const styles = useStyleSheet(themedStyles);
   const {user} = useContext(UserContext) as {user: User};
 
-  const {style, message, shouldShowIndicator, children, ...viewProps} = props;
+  const {style, message, children, ...viewProps} = props;
 
   const renderDateElement = (): TextElement => (
     <Text style={styles.date} appearance="hint" category="c2">
-      {message.timestamp.toDateString()}
+      {formattedDate(message.timestamp)}
     </Text>
   );
 
-  const isReply = message.username !== user.username;
+  const isMine = message.username === user.username;
 
   const renderContentElement = (): React.ReactElement => {
     return children(message, {
-      container: [isReply ? styles.contentOut : styles.contentIn],
+      container: [isMine ? styles.contentOut : styles.contentIn],
     });
   };
-
-  const renderIndicator = (): React.ReactElement => (
-    <ChatMessageIndicator
-      style={[
-        isReply ? styles.indicatorOut : styles.indicatorIn,
-        styles.indicator,
-      ]}
-      reverse={isReply}
-    />
-  );
 
   return (
     <View
       {...viewProps}
       style={[
-        isReply ? styles.containerOut : styles.containerIn,
+        isMine ? styles.containerOut : styles.containerIn,
         styles.container,
         style,
       ]}>
-      {shouldShowIndicator && renderIndicator()}
       {renderContentElement()}
       {renderDateElement()}
     </View>
@@ -86,17 +90,5 @@ const themedStyles = StyleService.create({
   },
   date: {
     marginHorizontal: 18,
-  },
-  indicator: {
-    width: 6,
-    height: 8,
-  },
-  indicatorIn: {
-    backgroundColor: 'color-basic-600',
-    transform: [{rotate: '-90deg'}, {translateY: 3}, {translateX: -12}],
-  },
-  indicatorOut: {
-    backgroundColor: 'color-primary-default',
-    transform: [{rotate: '90deg'}, {translateY: 3}, {translateX: 12}],
   },
 });
