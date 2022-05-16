@@ -1,8 +1,9 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Avatar, ListItem, ListItemProps, Text} from '@ui-kitten/components';
-import {formattedDate, MessageType} from './conversation/Message';
+import {MessageType} from './conversation/Message';
 import {MessageDataItem, ProfilePics} from './data';
+import {formattedDate} from './utils';
 
 type MessageItemProps = ListItemProps & {
   message: MessageDataItem;
@@ -17,7 +18,7 @@ export default function MessageListItem(
   const renderMessageDate = () => (
     <View style={styles.dateContainer}>
       <Text style={styles.dateText} appearance="hint" category="c1">
-        {formattedDate(mostRecentMessage.timestamp)}
+        {formattedDate(mostRecentMessage.timestamp, true)}
       </Text>
     </View>
   );
@@ -53,7 +54,8 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     tintColor: null,
-    marginRight: 10,
+    marginRight: 5,
+    marginLeft: 8,
   },
   dateContainer: {
     flexDirection: 'row',

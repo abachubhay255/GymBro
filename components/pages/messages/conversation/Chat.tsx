@@ -1,30 +1,23 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {ListRenderItemInfo, StyleSheet} from 'react-native';
-import {List, ListProps, StyleType} from '@ui-kitten/components';
-import {ChatMessageContent} from './extra/chat-message-content.component';
+import {List, ListProps} from '@ui-kitten/components';
 import Message, {MessageType} from './Message';
-
-export interface ChatProps extends Omit<ListProps, 'renderItem'> {
+interface ChatProps extends Omit<ListProps, 'renderItem'> {
   data: MessageType[];
   followEnd: boolean;
 }
 
-export default function Chat(props: ChatProps): React.ReactElement {
-  const listRef: React.RefObject<any> = React.useRef();
+export default function Chat({
+  followEnd,
+  contentContainerStyle,
+  data,
+  ...listProps
+}: ChatProps): React.ReactElement {
+  const listRef = useRef<any>();
   let contentHeight: number = 0;
-
-  const {followEnd, contentContainerStyle, data, ...listProps} = props;
-
-  const shouldShowMessageIndicator = (message: MessageType): boolean => {
-    return !!message.text;
-  };
 
   const scrollToEnd = (params: any): void => {
     scrollToOffset({offset: contentHeight, ...params});
-  };
-
-  const scrollToIndex = (params: any): void => {
-    listRef.current.scrollToIndex(params);
   };
 
   const scrollToOffset = (params: any): void => {
@@ -34,26 +27,15 @@ export default function Chat(props: ChatProps): React.ReactElement {
   const onContentSizeChange = (width: number, height: number): void => {
     contentHeight = height;
 
-    props.followEnd && setTimeout(scrollToEnd, 0);
+    followEnd && setTimeout(scrollToEnd, 0);
 
     listProps.onContentSizeChange &&
       listProps.onContentSizeChange(width, height);
   };
 
-  const renderMessageContent = (
-    message: MessageType,
-    style: StyleType,
-  ): React.ReactElement => (
-    <ChatMessageContent style={style.container}>{message}</ChatMessageContent>
-  );
-
   const renderMessage = (
     info: ListRenderItemInfo<MessageType>,
-  ): React.ReactElement => (
-    <Message style={styles.message} message={info.item}>
-      {renderMessageContent}
-    </Message>
-  );
+  ): React.ReactElement => <Message message={info.item}></Message>;
 
   return (
     <List
@@ -70,8 +52,5 @@ export default function Chat(props: ChatProps): React.ReactElement {
 const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: 'flex-end',
-  },
-  message: {
-    marginVertical: 4,
   },
 });

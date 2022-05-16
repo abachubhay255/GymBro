@@ -6,11 +6,25 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { Button, Divider, IndexPath, Layout, List, Menu, MenuItem, MenuItemElement } from '@ui-kitten/components';
-import { CameraIcon, FileIcon, ImageIcon, PeopleIcon, PinIcon } from './icons';
+import {
+  Button,
+  Divider,
+  IndexPath,
+  Layout,
+  List,
+  Menu,
+  MenuItem,
+  MenuItemElement,
+} from '@ui-kitten/components';
+import {
+  CameraIcon,
+  FileIcon,
+  ImageIcon,
+  PeopleIcon,
+  PinIcon,
+} from './Icons';
 
-export interface AttachmentsMenuProps {
-  attachments: ImageSourcePropType[];
+type AttachmentsMenuProps = {
   onSelectPhoto: () => void;
   onSelectFile: () => void;
   onSelectLocation: () => void;
@@ -18,19 +32,27 @@ export interface AttachmentsMenuProps {
   onCameraPress: () => void;
   onAttachmentSelect: (index: number) => void;
   onDismiss: () => void;
-}
+};
 
 export type AttachmentsMenuElement = React.ReactElement<AttachmentsMenuProps>;
 
 const menu = [
-  { title: 'Photo or Video', accessory: ImageIcon },
-  { title: 'File', accessory: FileIcon },
-  { title: 'Location', accessory: PinIcon },
-  { title: 'Contact', accessory: PeopleIcon },
+  {title: 'Photo or Video', accessory: ImageIcon},
+  {title: 'File', accessory: FileIcon},
+  {title: 'Location', accessory: PinIcon},
+  {title: 'Contact', accessory: PeopleIcon},
 ];
 
-export const AttachmentsMenu = (props: AttachmentsMenuProps): React.ReactElement => {
+const galleryAttachments: ImageSourcePropType[] = [
+  require('./assets/image-attachment-1.png'),
+  require('./assets/image-attachment-2.jpg'),
+  require('./assets/image-attachment-1.png'),
+  require('./assets/image-attachment-2.jpg'),
+];
 
+export default function AttachmentsMenu(
+  props: AttachmentsMenuProps,
+): React.ReactElement {
   const onAttachmentsMenuItemSelect = (index: IndexPath): void => {
     switch (index.row) {
       case 0: {
@@ -55,55 +77,52 @@ export const AttachmentsMenu = (props: AttachmentsMenuProps): React.ReactElement
   const renderMenuData = (): MenuItemElement => (
     <>
       {menu.map((el, index) => (
-        <MenuItem key={index} title={el.title} accessoryLeft={el.accessory} />
+        <MenuItem
+          key={index}
+          title={el.title}
+          accessoryLeft={el.accessory as any}
+        />
       ))}
     </>
-  )
+  );
 
   const renderActionAttachment = (): React.ReactElement => (
     <Button
       style={styles.attachmentsAction}
-      appearance='outline'
-      accessoryLeft={CameraIcon}
+      appearance="outline"
+      accessoryLeft={CameraIcon as any}
       onPress={props.onCameraPress}
     />
   );
 
-  const renderAttachment = (info: ListRenderItemInfo<ImageSourcePropType>): React.ReactElement => (
+  const renderAttachment = (
+    info: ListRenderItemInfo<ImageSourcePropType>,
+  ): React.ReactElement => (
     <TouchableOpacity onPress={() => props.onAttachmentSelect(info.index)}>
-      <Image
-        style={styles.attachmentItem}
-        source={info.item}
-      />
+      <Image style={styles.attachmentItem} source={info.item} />
     </TouchableOpacity>
   );
 
   return (
-    <Layout level='1'>
-      <Divider style={styles.divider}/>
+    <Layout level="1">
+      <Divider style={styles.divider} />
       <List
         style={styles.attachmentsContainer}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        data={props.attachments}
+        data={galleryAttachments}
         renderItem={renderAttachment}
         ListHeaderComponent={renderActionAttachment}
       />
-      <Menu
-        scrollEnabled={false}
-        onSelect={onAttachmentsMenuItemSelect}
-      >
+      <Menu scrollEnabled={false} onSelect={onAttachmentsMenuItemSelect}>
         {renderMenuData()}
       </Menu>
-      <Button
-        appearance='ghost'
-        size='giant'
-        onPress={props.onDismiss}>
+      <Button appearance="ghost" size="giant" onPress={props.onDismiss}>
         CANCEL
       </Button>
     </Layout>
   );
-};
+}
 
 const styles = StyleSheet.create({
   divider: {

@@ -1,27 +1,18 @@
 import React, {useContext, useState} from 'react';
-import {ImageSourcePropType, Keyboard, Platform, View} from 'react-native';
+import {ImageSourcePropType, Keyboard, View} from 'react-native';
 import {
   Button,
   Input,
   StyleService,
   useStyleSheet,
 } from '@ui-kitten/components';
-import {AttachmentsMenu} from './extra/attachments-menu.component';
-import {MicIcon, PaperPlaneIcon, PlusIcon} from './extra/icons';
-import {Message} from './extra/data';
+import {MicIcon, PaperPlaneIcon, PlusIcon} from './Icons';
 import Chat from './Chat';
-import {MessageType} from './Message';
 import {User, UserContext} from '../../../../App';
 import {StackScreenProps} from '@react-navigation/stack';
 import {MessagesParamList} from '../MessagesNavigator';
 import {MessageData} from '../data';
-
-const galleryAttachments: ImageSourcePropType[] = [
-  require('./assets/image-attachment-1.png'),
-  require('./assets/image-attachment-2.jpg'),
-  require('./assets/image-attachment-1.png'),
-  require('./assets/image-attachment-2.jpg'),
-];
+import AttachmentsMenu from './AttachmentsMenu';
 
 type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
 export default function Conversation({route, navigation}: Props) {
@@ -52,7 +43,6 @@ export default function Conversation({route, navigation}: Props) {
 
   const renderAttachmentsMenu = (): React.ReactElement => (
     <AttachmentsMenu
-      attachments={galleryAttachments}
       onSelectPhoto={toggleAttachmentsMenu}
       onSelectFile={toggleAttachmentsMenu}
       onSelectLocation={toggleAttachmentsMenu}
@@ -64,7 +54,7 @@ export default function Conversation({route, navigation}: Props) {
   );
 
   return (
-    <React.Fragment>
+    <>
       <Chat
         style={styles.list}
         contentContainerStyle={styles.listContent}
@@ -93,7 +83,7 @@ export default function Conversation({route, navigation}: Props) {
         />
       </View>
       {attachmentsMenuVisible && renderAttachmentsMenu()}
-    </React.Fragment>
+    </>
   );
 }
 

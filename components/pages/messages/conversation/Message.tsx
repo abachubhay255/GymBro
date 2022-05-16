@@ -1,14 +1,10 @@
 import React, {useContext} from 'react';
-import {View, ViewProps} from 'react-native';
-import {
-  StyleService,
-  StyleType,
-  Text,
-  TextElement,
-  useStyleSheet,
-} from '@ui-kitten/components';
+import {View} from 'react-native';
+import {StyleService, Text, useStyleSheet} from '@ui-kitten/components';
 import {User, UserContext} from '../../../../App';
-import {format, isSameWeek, isSameDay, isYesterday} from 'date-fns';
+
+import {formattedDate} from '../utils';
+import MessageContent from './MessageContent';
 
 export type MessageType = {
   text?: string;
@@ -17,57 +13,29 @@ export type MessageType = {
   attachment?: string;
 };
 
-// @ts-ignore
-export interface ChatMessageProps extends ViewProps {
+type MessageProps = {
   message: MessageType;
-  children: (message: MessageType, style: StyleType) => React.ReactElement;
-}
-
-export const formattedDate = (date: Date): string => {
-  const now = new Date();
-  if (isSameDay(date, now)) {
-    return format(date, 'h:mm a');
-  }
-  if (isYesterday(date)) {
-    return 'Yesterday, ' + format(date, 'h:mm a');
-  }
-  if (isSameWeek(date, now)) {
-    return format(date, 'eeee, h:mm a');
-  }
-  return format(date, 'M/d/yy, h:mm a');
 };
 
-export type ChatMessageElement = React.ReactElement<ChatMessageProps>;
-export default function Message(props: ChatMessageProps) {
+export default function Message({message}: MessageProps) {
   const styles = useStyleSheet(themedStyles);
   const {user} = useContext(UserContext) as {user: User};
 
-  const {style, message, children, ...viewProps} = props;
-
-  const renderDateElement = (): TextElement => (
-    <Text style={styles.date} appearance="hint" category="c2">
-      {formattedDate(message.timestamp)}
-    </Text>
-  );
-
   const isMine = message.username === user.username;
-
-  const renderContentElement = (): React.ReactElement => {
-    return children(message, {
-      container: [isMine ? styles.contentOut : styles.contentIn],
-    });
-  };
 
   return (
     <View
-      {...viewProps}
       style={[
         isMine ? styles.containerOut : styles.containerIn,
         styles.container,
-        style,
+        styles.message,
       ]}>
-      {renderContentElement()}
-      {renderDateElement()}
+      <MessageContent style={isMine ? styles.contentOut : styles.contentIn}>
+        {message}
+      </MessageContent>
+      <Text style={styles.date} appearance="hint" category="c2">
+        {formattedDate(message.timestamp)}
+      </Text>
     </View>
   );
 }
@@ -90,5 +58,8 @@ const themedStyles = StyleService.create({
   },
   date: {
     marginHorizontal: 18,
+  },
+  message: {
+    marginVertical: 5,
   },
 });

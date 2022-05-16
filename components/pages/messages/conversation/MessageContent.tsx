@@ -1,20 +1,16 @@
 import React from 'react';
 import {Image, StyleSheet, View, ViewProps} from 'react-native';
 import {Text} from '@ui-kitten/components';
-import {MessageType} from '../Message';
+import {MessageType} from './Message';
 // @ts-ignore
-export interface ChatMessageContentProps extends ViewProps {
+interface MessageContentProps extends ViewProps {
   children: MessageType;
 }
-
-export type ChatMessageContentElement =
-  React.ReactElement<ChatMessageContentProps>;
-
-export const ChatMessageContent = (
-  props: ChatMessageContentProps,
-): React.ReactElement => {
-  const {style, children, ...viewProps} = props;
-
+export default function MessageContent({
+  style,
+  children,
+  ...viewProps
+}: MessageContentProps): React.ReactElement {
   const renderAttachment = (): React.ReactElement => (
     <Image
       style={styles.attachmentImage}
@@ -34,7 +30,7 @@ export const ChatMessageContent = (
       {children.attachment && renderAttachment()}
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

@@ -32,7 +32,7 @@ export const MessageData: MessageDataItem[] = [
       {
         text: 'I am Ironman',
         username: 'Tony Stark',
-        timestamp: new Date(),
+        timestamp: new Date('May 15, 2022 5:15:30'),
         attachment: 'pic.png',
       },
     ],
@@ -68,7 +68,7 @@ export const MessageData: MessageDataItem[] = [
       {
         text: 'No, Ned.',
         username: 'spiderman',
-        timestamp: new Date(),
+        timestamp: new Date('May 14, 2022 5:15:30'),
       },
     ],
   },
@@ -93,7 +93,7 @@ export const MessageData: MessageDataItem[] = [
       {
         text: "For the record, I never wanted to lie to you. But how can you tell someone that you're Spider-Man?",
         username: 'spiderman',
-        timestamp: new Date(),
+        timestamp: new Date('August 19, 1975 23:15:30'),
       },
     ],
   },
