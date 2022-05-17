@@ -1,10 +1,16 @@
-import React, {useContext} from 'react';
-import {View} from 'react-native';
-import {StyleService, Text, useStyleSheet} from '@ui-kitten/components';
+import React, {useContext, useState} from 'react';
+import {
+  ImageBackground,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import {Avatar, Text, useStyleSheet} from '@ui-kitten/components';
 import {User, UserContext} from '../../../../App';
 
 import {formattedDate} from '../utils';
 import MessageContent from './MessageContent';
+import {ProfilePics} from '../data';
 
 export type MessageType = {
   text?: string;
@@ -20,27 +26,45 @@ type MessageProps = {
 export default function Message({message}: MessageProps) {
   const styles = useStyleSheet(themedStyles);
   const {user} = useContext(UserContext) as {user: User};
+  const [showReceipt, setShowReceipt] = useState(false);
 
   const isMine = message.username === user.username;
 
   return (
-    <View
-      style={[
-        isMine ? styles.containerOut : styles.containerIn,
-        styles.container,
-        styles.message,
-      ]}>
-      <MessageContent style={isMine ? styles.contentOut : styles.contentIn}>
-        {message}
-      </MessageContent>
-      <Text style={styles.date} appearance="hint" category="c2">
-        {formattedDate(message.timestamp)}
-      </Text>
+    <View style={styles.messageWithReceipt}>
+      <View
+        style={[
+          isMine ? styles.containerOut : styles.containerIn,
+          styles.container,
+        ]}>
+        {!isMine && (
+          <Avatar
+            style={styles.avatar as any}
+            source={{
+              uri: ProfilePics.get(message.username),
+            }}
+            ImageComponent={ImageBackground}
+          />
+        )}
+        <TouchableWithoutFeedback onPress={() => setShowReceipt(!showReceipt)}>
+          <MessageContent style={isMine ? styles.contentOut : styles.contentIn}>
+            {message}
+          </MessageContent>
+        </TouchableWithoutFeedback>
+      </View>
+      {showReceipt && (
+        <Text
+          style={isMine ? styles.myDate : styles.date}
+          appearance="hint"
+          category="c2">
+          {formattedDate(message.timestamp)}
+        </Text>
+      )}
     </View>
   );
 }
 
-const themedStyles = StyleService.create({
+const themedStyles = StyleSheet.create({
   container: {
     alignItems: 'center',
   },
@@ -56,10 +80,18 @@ const themedStyles = StyleService.create({
   contentOut: {
     backgroundColor: 'color-primary-default',
   },
-  date: {
-    marginHorizontal: 18,
-  },
-  message: {
+  messageWithReceipt: {
+    flexDirection: 'column',
     marginVertical: 5,
+  },
+  date: {
+    marginHorizontal: 70,
+  },
+  myDate: {
+    marginLeft: 'auto',
+    marginHorizontal: 20,
+  },
+  avatar: {
+    marginRight: 10,
   },
 });
