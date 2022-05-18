@@ -42,7 +42,7 @@ export default function MessageListItem(
       {...listItemProps}
       onPress={onPress}
       title={message.username}
-      description={getFormattedText(mostRecentMessage.text ?? '')}
+      description={getFormattedText(mostRecentMessage.text ?? 'Sent a message')}
       accessoryLeft={renderProfileAvatar}
       accessoryRight={renderMessageDate}
     />

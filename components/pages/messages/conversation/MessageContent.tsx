@@ -12,10 +12,7 @@ export default function MessageContent({
   ...viewProps
 }: MessageContentProps): React.ReactElement {
   const renderAttachment = (): React.ReactElement => (
-    <Image
-      style={styles.attachmentImage}
-      source={{uri: 'https://i.ytimg.com/vi/Ddk9ci6geSs/maxresdefault.jpg'}}
-    />
+    <Image style={styles.attachmentImage} source={{uri: children.attachment}} />
   );
 
   const renderText = (): React.ReactElement => (
@@ -25,7 +22,13 @@ export default function MessageContent({
   );
 
   return (
-    <View {...viewProps} style={[styles.container, style]}>
+    <View
+      {...viewProps}
+      style={[
+        styles.container,
+        style,
+        children.attachment ? styles.attachmentContainer : styles.textContainer,
+      ]}>
       {children.text && renderText()}
       {children.attachment && renderAttachment()}
     </View>
@@ -41,7 +44,12 @@ const styles = StyleSheet.create({
     minHeight: 48,
     minWidth: 48,
     maxWidth: 276,
+  },
+  textContainer: {
     borderRadius: 100,
+  },
+  attachmentContainer: {
+    borderRadius: 10,
   },
   text: {
     marginVertical: 12,

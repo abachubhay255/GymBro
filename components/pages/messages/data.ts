@@ -26,14 +26,9 @@ export const MessageData: MessageDataItem[] = [
       },
       {
         username: 'Tony Stark',
-        timestamp: new Date(),
-        attachment: 'pic.png',
-      },
-      {
-        text: 'I am Ironman',
-        username: 'Tony Stark',
-        timestamp: new Date('May 15, 2022 5:15:30'),
-        attachment: 'pic.png',
+        timestamp: new Date('May 16, 2022 5:15:30'),
+        attachment:
+          'https://comicattractions.com/wp-content/uploads/2019/04/robert-downey-jr-spider-man-homecoming.jpg',
       },
     ],
   },
