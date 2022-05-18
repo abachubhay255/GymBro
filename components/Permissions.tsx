@@ -9,6 +9,5 @@ export async function hasAndroidPermission() {
   }
 
   const status = await PermissionsAndroid.request(permission);
-  console.log(status)
   return status === 'granted';
 }
