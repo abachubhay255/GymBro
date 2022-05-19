@@ -10,11 +10,16 @@ import {
 
 type Props = {
   photos: any[];
+  selectedPhotos: string[];
+  setSelectedPhotos: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-export default function GalleryView({photos}: Props) {
+export default function GalleryView({
+  photos,
+  selectedPhotos,
+  setSelectedPhotos,
+}: Props) {
   const styles = useStyleSheet(themedStyles);
-  const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
 
   const renderItem = ({item, index, separators}: ListRenderItemInfo<any>) => {
     const image: string = item.node.image.uri;
@@ -46,17 +51,10 @@ export default function GalleryView({photos}: Props) {
       </Pressable>
     );
   };
-  return (
-    <Layout style={styles.gallery}>
-      <FlatList data={photos} renderItem={renderItem} numColumns={3} />
-    </Layout>
-  );
+  return <FlatList data={photos} renderItem={renderItem} numColumns={3} />;
 }
 
 const themedStyles = StyleService.create({
-  gallery: {
-    height: '50%',
-  },
   imageBackground: {
     width: 125,
     height: 125,

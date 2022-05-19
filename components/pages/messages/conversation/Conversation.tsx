@@ -1,9 +1,17 @@
 import React, {useContext, useState} from 'react';
-import {ImageSourcePropType, Keyboard, Platform, View} from 'react-native';
+import {
+  ImageSourcePropType,
+  Keyboard,
+  Platform,
+  Pressable,
+  View,
+} from 'react-native';
 import CameraRoll from '@react-native-community/cameraroll';
 import {
   Button,
   Input,
+  Layout,
+  Popover,
   StyleService,
   useStyleSheet,
 } from '@ui-kitten/components';
@@ -15,6 +23,7 @@ import {MessagesParamList} from '../MessagesNavigator';
 import {MessageData} from '../data';
 import GalleryView from './GalleryView';
 import {hasAndroidPermission} from '../../../Permissions';
+import {MessageType} from './Message';
 
 type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
 export default function Conversation({route, navigation}: Props) {
@@ -29,6 +38,7 @@ export default function Conversation({route, navigation}: Props) {
   const [messages, setMessages] = useState(loadedMessages);
   const [messageText, setMessageText] = useState('');
   const [showGallery, setShowGallery] = useState(false);
+  const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
 
   async function LoadImages() {
     if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
@@ -48,17 +58,27 @@ export default function Conversation({route, navigation}: Props) {
   }
 
   const onSendButtonPress = (): void => {
-    setMessages([
-      ...messages,
-      {text: messageText, username: user.username, timestamp: new Date()},
-    ]);
-    setMessageText('');
-    Keyboard.dismiss();
-  };
-
-  const renderGalleryView = (): React.ReactElement => {
-    LoadImages();
-    return <GalleryView photos={photos} />;
+    if (selectedPhotos.length > 0) {
+      const newMessages: MessageType[] = [];
+      for (const photo of selectedPhotos) {
+        const newMessage = {
+          username: user.username,
+          timestamp: new Date(),
+          attachment: photo,
+        };
+        newMessages.push(newMessage);
+      }
+      setMessages([...messages, ...newMessages]);
+      setSelectedPhotos([]);
+      setShowGallery(false);
+    } else {
+      setMessages([
+        ...messages,
+        {text: messageText, username: user.username, timestamp: new Date()},
+      ]);
+      setMessageText('');
+      Keyboard.dismiss();
+    }
   };
 
   return (
@@ -70,18 +90,38 @@ export default function Conversation({route, navigation}: Props) {
         data={messages}
       />
       <View style={styles.messageInputContainer}>
+        <Popover
+          backdropStyle={styles.backdrop}
+          visible={showGallery}
+          anchor={() => <View style={styles.anchor} />}
+          onBackdropPress={() => setShowGallery(false)}>
+          <Layout style={styles.gallery}>
+            <Button
+              accessoryLeft={PaperPlaneIcon as any}
+              disabled={selectedPhotos.length === 0}
+              onPress={onSendButtonPress}
+            />
+            <GalleryView
+              photos={photos}
+              selectedPhotos={selectedPhotos}
+              setSelectedPhotos={setSelectedPhotos}
+            />
+          </Layout>
+        </Popover>
         <Button
           style={[styles.iconButton, styles.attachButton]}
           appearance="outline"
           accessoryLeft={GalleryIcon as any}
-          onPress={() => setShowGallery(!showGallery)}
+          onPress={() => {
+            LoadImages();
+            setShowGallery(!showGallery);
+          }}
         />
         <Input
           style={styles.messageInput}
           placeholder="Message..."
           value={messageText}
           onChangeText={setMessageText}
-          accessoryRight={MicIcon as any}
         />
         <Button
           appearance="ghost"
@@ -91,12 +131,21 @@ export default function Conversation({route, navigation}: Props) {
           onPress={onSendButtonPress}
         />
       </View>
-      {showGallery && renderGalleryView()}
     </>
   );
 }
 
 const themedStyles = StyleService.create({
+  anchor: {
+    position: 'absolute',
+    bottom: 0,
+  },
+  gallery: {
+    height: 400,
+  },
+  backdrop: {
+    backgroundColor: 'rgba(0, 0, 0, 0.33)',
+  },
   container: {
     flex: 1,
   },
