@@ -4,11 +4,13 @@ import {
   Keyboard,
   Platform,
   Pressable,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import CameraRoll from '@react-native-community/cameraroll';
 import {
   Button,
+  Icon,
   Input,
   Layout,
   Popover,
@@ -81,6 +83,16 @@ export default function Conversation({route, navigation}: Props) {
     }
   };
 
+  const renderGalleryIcon = (props: any) => (
+    <TouchableWithoutFeedback
+      onPress={() => {
+        LoadImages();
+        setShowGallery(!showGallery);
+      }}>
+      <Icon {...props} name="image-outline" />
+    </TouchableWithoutFeedback>
+  );
+
   return (
     <>
       <Chat
@@ -108,23 +120,16 @@ export default function Conversation({route, navigation}: Props) {
             />
           </Layout>
         </Popover>
-        <Button
-          style={[styles.iconButton, styles.attachButton]}
-          appearance="outline"
-          accessoryLeft={GalleryIcon as any}
-          onPress={() => {
-            LoadImages();
-            setShowGallery(!showGallery);
-          }}
-        />
+
         <Input
           style={styles.messageInput}
+          status="control"
+          accessoryRight={renderGalleryIcon}
           placeholder="Message..."
           value={messageText}
           onChangeText={setMessageText}
         />
         <Button
-          appearance="ghost"
           style={[styles.iconButton, styles.sendButton]}
           accessoryLeft={PaperPlaneIcon as any}
           disabled={!(messageText && messageText.length > 0)}
@@ -179,6 +184,10 @@ const themedStyles = StyleService.create({
     marginRight: 4,
   },
   iconButton: {
+    width: 24,
+    height: 24,
+  },
+  galleryIcon: {
     width: 24,
     height: 24,
   },
