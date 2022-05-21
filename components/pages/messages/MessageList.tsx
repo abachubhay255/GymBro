@@ -45,6 +45,10 @@ export default function MessageList({navigation}: Props) {
     navigation && navigation.navigate('Conversation', {username: username});
   };
 
+  const onProfilePress = (username: string): void => {
+    navigation && navigation.navigate('Profile', {username: username});
+  };
+
   const renderItem = (
     info: ListRenderItemInfo<MessageDataItem>,
   ): React.ReactElement => (
@@ -52,6 +56,7 @@ export default function MessageList({navigation}: Props) {
       style={styles.item}
       messageData={info.item}
       onPress={() => onItemPress(info.item.username)}
+      onProfilePress={() => onProfilePress(info.item.username)}
     />
   );
 

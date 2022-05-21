@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {GestureResponderEvent, Pressable, StyleSheet, View} from 'react-native';
 import {Avatar, ListItem, ListItemProps, Text} from '@ui-kitten/components';
 import {MessageDataItem} from '../../data/messages';
 import {formattedDate} from './utils';
@@ -7,12 +7,13 @@ import {useUser} from '../../hooks/useUser';
 
 type MessageItemProps = ListItemProps & {
   messageData: MessageDataItem;
+  onProfilePress: ((event: GestureResponderEvent) => void) | undefined;
 };
 
 export default function MessageListItem(
   props: MessageItemProps,
 ): React.ReactElement {
-  const {messageData, onPress, ...listItemProps} = props;
+  const {messageData, onProfilePress, onPress, ...listItemProps} = props;
   const mostRecentMessage =
     messageData.messages[messageData.messages.length - 1];
   const User = useUser(messageData.username);
@@ -26,12 +27,14 @@ export default function MessageListItem(
   );
 
   const renderProfileAvatar = (): React.ReactElement => (
-    <Avatar
-      style={styles.avatar as any}
-      source={{
-        uri: User.data.profilePic,
-      }}
-    />
+    <Pressable onPress={onProfilePress}>
+      <Avatar
+        style={styles.avatar as any}
+        source={{
+          uri: User.data.profilePic,
+        }}
+      />
+    </Pressable>
   );
 
   const getFormattedText = (text: string): string => {

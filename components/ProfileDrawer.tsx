@@ -14,7 +14,7 @@ import {StyleSheet, View} from 'react-native';
 import {UserContext} from '../App';
 import {useUser} from './hooks/useUser';
 import Page from './pages/Page';
-import Profile from './pages/Profile';
+import Profile from './pages/profile/Profile';
 import Settings from './pages/Settings';
 
 export default function ProfileDrawer() {
