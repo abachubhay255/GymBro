@@ -10,7 +10,7 @@ import {User, UserContext} from '../../../../App';
 
 import {formattedDate} from '../utils';
 import MessageContent from './MessageContent';
-import {ProfilePics} from '../data';
+import {useUser} from '../../../hooks/useUser';
 
 export type MessageType = {
   text?: string;
@@ -30,6 +30,8 @@ export default function Message({message}: MessageProps) {
 
   const isMine = message.username === user.username;
 
+  const messageProfilePic = useUser(message.username).data.profilePic;
+
   return (
     <View style={styles.messageWithReceipt}>
       <View
@@ -41,7 +43,7 @@ export default function Message({message}: MessageProps) {
           <Avatar
             style={styles.avatar as any}
             source={{
-              uri: ProfilePics.get(message.username),
+              uri: messageProfilePic,
             }}
             ImageComponent={ImageBackground}
           />

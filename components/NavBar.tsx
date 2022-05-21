@@ -1,33 +1,15 @@
 import React, {ReactElement, useContext} from 'react';
 import {
   Avatar,
-  AvatarProps,
   Divider,
   Icon,
   TopNavigation,
   TopNavigationAction,
 } from '@ui-kitten/components';
-import {DrawerHeaderProps} from '@react-navigation/drawer';
-import {BottomTabHeaderProps} from '@react-navigation/bottom-tabs';
+import {useUser} from './hooks/useUser';
+import {UserContext} from '../App';
 
 const SettingsIcon = <Icon name="settings-outline" />;
-
-export const ProfilePic = (props: any) => (
-  <Avatar
-    {...props}
-    source={{
-      uri: 'https://yt3.ggpht.com/uiFj7wHnDE-2Ezn93eQ8lNM8PFKK2_NJnkOIS4Q9lJ0IOId4INAmelmuqBUaU4SsWsBTSrrgoRU=s88-c-k-c0x00ffffff-no-rj',
-    }}
-  />
-);
-
-const ProfileIcon = () => (
-  <Avatar
-    source={{
-      uri: 'https://yt3.ggpht.com/uiFj7wHnDE-2Ezn93eQ8lNM8PFKK2_NJnkOIS4Q9lJ0IOId4INAmelmuqBUaU4SsWsBTSrrgoRU=s88-c-k-c0x00ffffff-no-rj',
-    }}
-  />
-);
 
 type Props = {
   drawerNavigation: any;
@@ -40,6 +22,16 @@ export default function NavBar({
   tabRoute,
   titleElement,
 }: Props) {
+  const {user} = useContext(UserContext);
+  const User = useUser(user?.username ?? '');
+
+  const ProfileIcon = () => (
+    <Avatar
+      source={{
+        uri: User.data.profilePic,
+      }}
+    />
+  );
   const renderProfileAction = () => (
     <TopNavigationAction
       icon={ProfileIcon}

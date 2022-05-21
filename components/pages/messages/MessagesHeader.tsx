@@ -8,16 +8,17 @@ import {
 } from '@ui-kitten/components';
 import React from 'react';
 import {ImageBackground} from 'react-native';
-import {ProfilePics} from './data';
+import {useUser} from '../../hooks/useUser';
 
 export default function MessagesHeader({navigation, route}: StackHeaderProps) {
   const {username} = route.params as {username: string};
+  const User = useUser(username);
   const renderProfileAction = () => (
     <TopNavigationAction
       icon={() => (
         <Avatar
           source={{
-            uri: ProfilePics.get(username),
+            uri: User.data.profilePic,
           }}
           ImageComponent={ImageBackground}
         />
@@ -35,8 +36,8 @@ export default function MessagesHeader({navigation, route}: StackHeaderProps) {
   return (
     <>
       <TopNavigation
-        title={username}
-        subtitle="Last seen just now"
+        title={User.firstName + ' ' + User.lastName}
+        subtitle={'@' + username}
         accessoryLeft={renderBackAction}
         accessoryRight={renderProfileAction}
         alignment="center"

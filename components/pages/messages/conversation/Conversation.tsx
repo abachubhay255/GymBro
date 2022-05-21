@@ -1,12 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {
-  ImageSourcePropType,
-  Keyboard,
-  Platform,
-  Pressable,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import {Keyboard, Platform, TouchableWithoutFeedback, View} from 'react-native';
 import CameraRoll from '@react-native-community/cameraroll';
 import {
   Button,
@@ -17,24 +10,26 @@ import {
   StyleService,
   useStyleSheet,
 } from '@ui-kitten/components';
-import {MicIcon, PaperPlaneIcon, GalleryIcon} from './Icons';
+import {PaperPlaneIcon} from './Icons';
 import Chat from './Chat';
 import {User, UserContext} from '../../../../App';
 import {StackScreenProps} from '@react-navigation/stack';
 import {MessagesParamList} from '../MessagesNavigator';
-import {MessageData} from '../data';
+import {SpidermanMessageData} from '../../../data/messages';
 import GalleryView from './GalleryView';
 import {hasAndroidPermission} from '../../../Permissions';
 import {MessageType} from './Message';
+import {useUser} from '../../../hooks/useUser';
 
 type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
 export default function Conversation({route, navigation}: Props) {
   const styles = useStyleSheet(themedStyles);
   const {user} = useContext(UserContext) as {user: User};
+  const User = useUser(user.username);
   const [photos, setPhotos] = useState<any[]>([]);
 
   const loadedMessages =
-    MessageData.find(data => data.username === route.params.username)
+    User.data.messages.find(data => data.username === route.params.username)
       ?.messages ?? [];
 
   const [messages, setMessages] = useState(loadedMessages);

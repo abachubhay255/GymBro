@@ -6,6 +6,8 @@ import {PersonIcon} from './extra/icons';
 import {UserContext} from '../../App';
 import {AuthParamList} from './AuthNavigator';
 import {StackScreenProps} from '@react-navigation/stack';
+import {Users} from '../data/users';
+import {useUser} from '../hooks/useUser';
 
 type Props = StackScreenProps<AuthParamList, 'SignIn'>;
 
@@ -14,9 +16,20 @@ export default function SignIn({navigation}: Props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [invalidMessage, setInvalidMessage] = useState('');
 
   const onSignInButtonPress = (): void => {
-    setUser({username: username, password: password});
+    const user = useUser(username);
+    if (user) {
+      if (user.password === password) {
+        setInvalidMessage('');
+        setUser({username: username, password: password});
+      } else {
+        setInvalidMessage('password is incorrect');
+      }
+    } else {
+      setInvalidMessage('username does not exist');
+    }
   };
 
   const onSignUpButtonPress = (): void => {
@@ -49,9 +62,16 @@ export default function SignIn({navigation}: Props) {
         <Text category="h1" status="control">
           GymBro
         </Text>
-        <Text style={styles.signInLabel} category="s1" status="control">
-          Sign in to continue
-        </Text>
+
+        {invalidMessage !== '' ? (
+          <Text style={styles.signInLabel} category="s1" status="danger">
+            {invalidMessage}
+          </Text>
+        ) : (
+          <Text style={styles.signInLabel} category="s1" status="control">
+            Sign in to continue
+          </Text>
+        )}
       </View>
       <View style={styles.formContainer}>
         <Input

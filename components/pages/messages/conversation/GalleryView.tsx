@@ -1,5 +1,5 @@
-import {Layout, StyleService, Text, useStyleSheet} from '@ui-kitten/components';
-import React, {useState} from 'react';
+import {StyleService, Text, useStyleSheet} from '@ui-kitten/components';
+import React from 'react';
 import {
   FlatList,
   ImageBackground,

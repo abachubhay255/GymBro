@@ -2,7 +2,6 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import {
   Avatar,
-  Card,
   Divider,
   Drawer,
   DrawerItem,
@@ -10,25 +9,31 @@ import {
   Layout,
   Text,
 } from '@ui-kitten/components';
-import React, {createContext, useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {UserContext} from '../App';
-import NavBar, {ProfilePic} from './NavBar';
+import {useUser} from './hooks/useUser';
 import Page from './pages/Page';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 
 export default function ProfileDrawer() {
   const {user} = useContext(UserContext);
+  const User = useUser(user?.username ?? '');
 
   const renderHeader = () => {
     return (
       <>
         <Layout style={styles.header}>
           <View style={styles.heading}>
-            <ProfilePic size="giant" />
+            <Avatar
+              size="giant"
+              source={{
+                uri: User.data.profilePic,
+              }}
+            />
             <View style={styles.user}>
-              <Text category="h6">Peter Parker</Text>
+              <Text category="h6">{User.firstName + ' ' + User.lastName}</Text>
               <Text category="s1" appearance="hint">
                 {'@' + user?.username}
               </Text>

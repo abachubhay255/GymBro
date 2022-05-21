@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {GestureResponderEvent, ListRenderItemInfo} from 'react-native';
+import {ListRenderItemInfo} from 'react-native';
 import {
   Input,
   Layout,
@@ -11,9 +11,10 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {MessagesParamList} from './MessagesNavigator';
 import NavBar from '../../NavBar';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {MessageType} from './conversation/Message';
 import MessageListItem from './MessageListItem';
-import {MessageData, MessageDataItem} from './data';
+import {MessageDataItem} from '../../data/messages';
+import {useUser} from '../../hooks/useUser';
+import {UserContext} from '../../../App';
 
 type Props = StackScreenProps<MessagesParamList, 'MessageList'>;
 
@@ -21,15 +22,22 @@ export default function MessageList({navigation}: Props) {
   const styles = useStyleSheet(themedStyles);
   const drawerNav = useNavigation().getParent()?.getParent();
   const tabRoute = useRoute();
+  const {user} = useContext(UserContext);
+  const User = useUser(user?.username ?? '');
+  const MessageData = User.data.messages;
   const [searchedMessages, setSearchedMessages] = useState(MessageData);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const normalizedQuery = searchQuery.toLowerCase();
     setSearchedMessages(
-      MessageData.filter(message =>
-        message.username.toLowerCase().includes(normalizedQuery),
-      ),
+      MessageData.filter(message => {
+        const messageUser = useUser(message.username);
+        return (
+          messageUser.firstName.toLowerCase().includes(normalizedQuery) ||
+          messageUser.lastName.toLowerCase().includes(normalizedQuery)
+        );
+      }),
     );
   }, [searchQuery]);
 
@@ -42,7 +50,7 @@ export default function MessageList({navigation}: Props) {
   ): React.ReactElement => (
     <MessageListItem
       style={styles.item}
-      message={info.item}
+      messageData={info.item}
       onPress={() => onItemPress(info.item.username)}
     />
   );
