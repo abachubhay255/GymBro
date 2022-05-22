@@ -1,6 +1,6 @@
 import React from 'react';
-import ProfileDrawer from './ProfileDrawer';
+import AppDrawer from './AppDrawer';
 
 export default function Main() {
-  return <ProfileDrawer />;
+  return <AppDrawer />;
 }

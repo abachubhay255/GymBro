@@ -28,6 +28,7 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import {useUser} from '../../hooks/useUser';
+import {getFormattedFollowers} from './utils';
 
 const profile: OldProfile = OldProfile.helenKuper();
 
@@ -126,12 +127,12 @@ export default function Profile() {
             <ProfileSocial
               style={styles.profileSocial}
               hint="Followers"
-              value={`${profile.followers}`}
+              value={`${getFormattedFollowers(User.data.followers)}`}
             />
             <ProfileSocial
               style={styles.profileSocial}
               hint="Following"
-              value={`${profile.following}`}
+              value={`${getFormattedFollowers(User.data.following)}`}
             />
             <ProfileSocial
               style={styles.profileSocial}
@@ -149,7 +150,12 @@ export default function Profile() {
         <Text style={styles.sectionLabel} category="s1">
           Posts
         </Text>
-        <List data={posts} numColumns={3} renderItem={renderPostItem} />
+        <List
+          data={posts}
+          numColumns={3}
+          style={{margin: 5}}
+          renderItem={renderPostItem}
+        />
       </ScrollView>
     </Layout>
   );
@@ -217,6 +223,7 @@ const themedStyles = StyleService.create({
   },
   postItem: {
     flex: 1,
+    margin: 2,
     aspectRatio: 1.0,
   },
 });

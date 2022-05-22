@@ -17,7 +17,7 @@ import Page from './pages/Page';
 import Profile from './pages/profile/Profile';
 import Settings from './pages/Settings';
 
-export default function ProfileDrawer() {
+export default function AppDrawer() {
   const {user} = useContext(UserContext);
   const User = useUser(user?.username ?? '');
 
@@ -42,10 +42,10 @@ export default function ProfileDrawer() {
 
           <View style={styles.follow}>
             <Text style={styles.following} category="s1" appearance="hint">
-              <Text>100</Text> Following
+              <Text>{User.data.following}</Text> Following
             </Text>
             <Text style={styles.follower} category="s1" appearance="hint">
-              <Text>100</Text> Followers
+              <Text>{User.data.followers}</Text> Followers
             </Text>
           </View>
         </Layout>
