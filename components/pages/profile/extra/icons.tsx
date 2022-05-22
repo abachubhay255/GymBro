@@ -10,3 +10,11 @@ export const PersonAddIcon = (style: ImageStyle): IconElement => (
   <Icon {...style} name="person-add" />
 );
 export const BackIcon = props => <Icon {...props} name="arrow-back" />;
+
+export const AddIcon = (style: ImageStyle): IconElement => (
+  <Icon {...style} name="plus-circle" />
+);
+
+export const EditIcon = (style: ImageStyle): IconElement => (
+  <Icon {...style} name="edit" />
+);

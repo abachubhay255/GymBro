@@ -1,4 +1,7 @@
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {
+  createDrawerNavigator,
+  DrawerHeaderProps,
+} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import {
   Avatar,
@@ -10,28 +13,35 @@ import {
   Text,
 } from '@ui-kitten/components';
 import React, {useContext} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {UserContext} from '../App';
 import {useUser} from './hooks/useUser';
 import Page from './pages/Page';
 import Profile from './pages/profile/Profile';
+import ProfileSettings from './pages/profile/profilesettings/ProfileSettings';
+import {getFormattedFollowers} from './pages/profile/utils';
 import Settings from './pages/Settings';
 
 export default function AppDrawer() {
   const {user} = useContext(UserContext);
   const User = useUser(user?.username ?? '');
 
-  const renderHeader = () => {
+  const renderHeader = (navigation: any) => {
     return (
       <>
         <Layout style={styles.header}>
           <View style={styles.heading}>
-            <Avatar
-              size="giant"
-              source={{
-                uri: User.data.profilePic,
-              }}
-            />
+            <Pressable
+              onPress={() =>
+                navigation.navigate('Profile', {username: User.username})
+              }>
+              <Avatar
+                size="giant"
+                source={{
+                  uri: User.data.profilePic,
+                }}
+              />
+            </Pressable>
             <View style={styles.user}>
               <Text category="h6">{User.firstName + ' ' + User.lastName}</Text>
               <Text category="s1" appearance="hint">
@@ -42,10 +52,12 @@ export default function AppDrawer() {
 
           <View style={styles.follow}>
             <Text style={styles.following} category="s1" appearance="hint">
-              <Text>{User.data.following}</Text> Following
+              <Text>{getFormattedFollowers(User.data.following)}</Text>{' '}
+              Following
             </Text>
             <Text style={styles.follower} category="s1" appearance="hint">
-              <Text>{User.data.followers}</Text> Followers
+              <Text>{getFormattedFollowers(User.data.followers)}</Text>{' '}
+              Followers
             </Text>
           </View>
         </Layout>
@@ -56,11 +68,13 @@ export default function AppDrawer() {
 
   const renderDrawer = ({navigation}: any) => {
     return (
-      <Drawer header={renderHeader}>
+      <Drawer header={() => renderHeader(navigation)}>
         <DrawerItem
           title="Profile"
           accessoryLeft={<Icon name="person-outline" />}
-          onPress={() => navigation.navigate('Profile')}
+          onPress={() =>
+            navigation.navigate('Profile', {username: User.username})
+          }
         />
         <DrawerItem
           title="Settings"
@@ -76,13 +90,18 @@ export default function AppDrawer() {
   return (
     <NavigationContainer>
       <NavDrawer.Navigator
-        initialRouteName="Page"
+        backBehavior="history"
         drawerContent={renderDrawer}
         screenOptions={{headerShown: false}}>
         <NavDrawer.Screen name="Page" component={Page} />
         <NavDrawer.Screen
           name="Profile"
           component={Profile}
+          options={{headerShown: false}}
+        />
+        <NavDrawer.Screen
+          name="ProfileSettings"
+          component={ProfileSettings}
           options={{headerShown: false}}
         />
         <NavDrawer.Screen

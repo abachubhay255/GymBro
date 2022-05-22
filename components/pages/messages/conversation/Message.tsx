@@ -1,6 +1,7 @@
 import React, {useContext, useState} from 'react';
 import {
   ImageBackground,
+  Pressable,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
@@ -11,6 +12,9 @@ import {User, UserContext} from '../../../../App';
 import {formattedDate} from '../utils';
 import MessageContent from './MessageContent';
 import {useUser} from '../../../hooks/useUser';
+import {useNavigation} from '@react-navigation/native';
+import {MessagesParamList} from '../MessagesNavigator';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 export type MessageType = {
   text?: string;
@@ -27,6 +31,7 @@ export default function Message({message}: MessageProps) {
   const styles = useStyleSheet(themedStyles);
   const {user} = useContext(UserContext) as {user: User};
   const [showReceipt, setShowReceipt] = useState(false);
+  const navigation = useNavigation<StackNavigationProp<MessagesParamList>>();
 
   const isMine = message.username === user.username;
 
@@ -40,13 +45,18 @@ export default function Message({message}: MessageProps) {
           styles.container,
         ]}>
         {!isMine && (
-          <Avatar
-            style={styles.avatar as any}
-            source={{
-              uri: messageProfilePic,
-            }}
-            ImageComponent={ImageBackground}
-          />
+          <Pressable
+            onPress={() =>
+              navigation.navigate('Profile', {username: message.username})
+            }>
+            <Avatar
+              style={styles.avatar as any}
+              source={{
+                uri: messageProfilePic,
+              }}
+              ImageComponent={ImageBackground}
+            />
+          </Pressable>
         )}
         <TouchableWithoutFeedback onPress={() => setShowReceipt(!showReceipt)}>
           <MessageContent style={isMine ? styles.contentOut : styles.contentIn}>

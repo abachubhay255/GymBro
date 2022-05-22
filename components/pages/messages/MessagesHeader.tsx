@@ -23,6 +23,7 @@ export default function MessagesHeader({navigation, route}: StackHeaderProps) {
           ImageComponent={ImageBackground}
         />
       )}
+      onPress={() => navigation.navigate('Profile', {username: username})}
     />
   );
 

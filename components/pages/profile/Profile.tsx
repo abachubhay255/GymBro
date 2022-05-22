@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   ImageBackground,
   ListRenderItemInfo,
   LogBox,
   ScrollView,
+  StyleSheet,
   View,
 } from 'react-native';
 import {
@@ -19,7 +20,13 @@ import {
 } from '@ui-kitten/components';
 import {ImageOverlay} from './extra/image-overlay.component';
 import {ProfileSocial} from './extra/profile-social.component';
-import {BackIcon, MessageCircleIcon, PersonAddIcon} from './extra/icons';
+import {
+  AddIcon,
+  BackIcon,
+  EditIcon,
+  MessageCircleIcon,
+  PersonAddIcon,
+} from './extra/icons';
 import {Post, Profile as OldProfile} from './extra/data';
 import {
   NavigationProp,
@@ -29,6 +36,7 @@ import {
 } from '@react-navigation/native';
 import {useUser} from '../../hooks/useUser';
 import {getFormattedFollowers} from './utils';
+import {UserContext} from '../../../App';
 
 const profile: OldProfile = OldProfile.helenKuper();
 
@@ -59,6 +67,7 @@ const posts: Post[] = [
 export default function Profile() {
   const navigation = useNavigation<NavigationProp<any>>();
   const route = useRoute<RouteProp<any>>();
+  const {user} = useContext(UserContext);
   const User = useUser(route.params?.username);
   const styles = useStyleSheet(themedStyles);
 
@@ -69,6 +78,14 @@ export default function Profile() {
   const onMessageButtonPress = (): void => {
     navigation &&
       navigation.navigate('Conversation', {username: User.username});
+  };
+
+  const onEditButtonPress = (): void => {
+    navigation && navigation.navigate('ProfileSettings');
+  };
+
+  const onNewPostButtonPress = (): void => {
+    navigation && navigation.navigate('NewPost');
   };
 
   const renderPostItem = (
@@ -86,77 +103,98 @@ export default function Profile() {
 
   return (
     <Layout style={styles.container}>
-      <TopNavigation
-        appearance="control"
-        alignment="center"
-        accessoryLeft={BackAction}
-        title="Profile"
-      />
-      <ScrollView>
-        <ImageOverlay
-          style={styles.header as any}
-          source={require('./assets/image-background.jpg')}>
-          <Avatar
-            style={styles.profileAvatar as any}
-            source={{uri: User.data.profilePic}}
-          />
-          <Text style={styles.profileName} category="h5" status="control">
-            {User.firstName + ' ' + User.lastName}
-          </Text>
-          <View style={styles.locationContainer}>
-            <Text style={styles.location} status="control">
-              {'@' + User.username}
+      <ImageBackground
+        imageStyle={{bottom: -200}}
+        source={{uri: User.data.profileBanner}}
+        resizeMode="cover">
+        <TopNavigation accessoryLeft={BackAction} appearance="control" />
+      </ImageBackground>
+      <List
+        ListHeaderComponent={
+          <>
+            <ImageOverlay
+              style={styles.header as any}
+              source={{uri: User.data.profileBanner}}>
+              <Avatar
+                style={styles.profileAvatar as any}
+                source={{uri: User.data.profilePic}}
+              />
+              <Text style={styles.profileName} category="h5" status="control">
+                {User.firstName + ' ' + User.lastName}
+              </Text>
+              <View style={styles.locationContainer}>
+                <Text style={styles.location} status="control">
+                  {'@' + User.username}
+                </Text>
+              </View>
+              <View style={styles.profileButtonsContainer}>
+                {user?.username === User.username ? (
+                  <>
+                    <Button
+                      style={styles.profileButton}
+                      accessoryRight={AddIcon as any}
+                      onPress={onNewPostButtonPress}>
+                      NEW POST
+                    </Button>
+                    <Button
+                      style={styles.profileButton}
+                      status="control"
+                      accessoryRight={EditIcon as any}
+                      onPress={onEditButtonPress}>
+                      EDIT
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      style={styles.profileButton}
+                      accessoryLeft={PersonAddIcon as any}
+                      onPress={onBackButtonPress}>
+                      FOLLOW
+                    </Button>
+                    <Button
+                      style={styles.profileButton}
+                      status="control"
+                      accessoryLeft={MessageCircleIcon as any}
+                      onPress={onMessageButtonPress}>
+                      MESSAGE
+                    </Button>
+                  </>
+                )}
+              </View>
+              <View style={styles.socialsContainer}>
+                <ProfileSocial
+                  style={styles.profileSocial}
+                  hint="Followers"
+                  value={`${getFormattedFollowers(User.data.followers)}`}
+                />
+                <ProfileSocial
+                  style={styles.profileSocial}
+                  hint="Following"
+                  value={`${getFormattedFollowers(User.data.following)}`}
+                />
+                <ProfileSocial
+                  style={styles.profileSocial}
+                  hint="Posts"
+                  value={`${profile.posts}`}
+                />
+              </View>
+            </ImageOverlay>
+            <Text style={styles.sectionLabel} category="s1">
+              Bio
             </Text>
-          </View>
-          <View style={styles.profileButtonsContainer}>
-            <Button
-              style={styles.profileButton}
-              accessoryLeft={PersonAddIcon as any}
-              onPress={onBackButtonPress}>
-              FOLLOW
-            </Button>
-            <Button
-              style={styles.profileButton}
-              status="control"
-              accessoryLeft={MessageCircleIcon as any}
-              onPress={onMessageButtonPress}>
-              MESSAGE
-            </Button>
-          </View>
-          <View style={styles.socialsContainer}>
-            <ProfileSocial
-              style={styles.profileSocial}
-              hint="Followers"
-              value={`${getFormattedFollowers(User.data.followers)}`}
-            />
-            <ProfileSocial
-              style={styles.profileSocial}
-              hint="Following"
-              value={`${getFormattedFollowers(User.data.following)}`}
-            />
-            <ProfileSocial
-              style={styles.profileSocial}
-              hint="Posts"
-              value={`${profile.posts}`}
-            />
-          </View>
-        </ImageOverlay>
-        <Text style={styles.sectionLabel} category="s1">
-          Bio
-        </Text>
-        <Text style={styles.profileDescription} appearance="hint">
-          {profile.description}
-        </Text>
-        <Text style={styles.sectionLabel} category="s1">
-          Posts
-        </Text>
-        <List
-          data={posts}
-          numColumns={3}
-          style={{margin: 5}}
-          renderItem={renderPostItem}
-        />
-      </ScrollView>
+            <Text style={styles.profileDescription} appearance="hint">
+              {profile.description}
+            </Text>
+            <Text style={styles.sectionLabel} category="s1">
+              Posts
+            </Text>
+          </>
+        }
+        data={posts}
+        numColumns={3}
+        renderItem={renderPostItem}
+      />
     </Layout>
   );
 }
