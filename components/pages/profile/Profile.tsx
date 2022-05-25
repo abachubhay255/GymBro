@@ -1,5 +1,6 @@
-import React, {useContext} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {
+  Animated,
   ImageBackground,
   ListRenderItemInfo,
   LogBox,
@@ -70,6 +71,14 @@ export default function Profile() {
   const {user} = useContext(UserContext);
   const User = useUser(route.params?.username);
   const styles = useStyleSheet(themedStyles);
+  const [showScrollHeader, setShowScrollHeader] = useState(false);
+
+  const scrolling = useRef(new Animated.Value(0)).current;
+  const translation = scrolling.interpolate({
+    inputRange: [0, 50],
+    outputRange: [0, 50],
+    extrapolate: 'clamp',
+  });
 
   const onBackButtonPress = (): void => {
     navigation && navigation.goBack();
@@ -103,81 +112,79 @@ export default function Profile() {
 
   return (
     <Layout style={styles.container}>
-      <ImageBackground
-        imageStyle={{bottom: -200}}
-        source={{uri: User.data.profileBanner}}
-        resizeMode="cover">
+      <Animated.View style={{height: translation}}>
         <TopNavigation accessoryLeft={BackAction} appearance="control" />
-      </ImageBackground>
+      </Animated.View>
       <List
         ListHeaderComponent={
           <>
-            <ImageOverlay
-              style={styles.header as any}
-              source={{uri: User.data.profileBanner}}>
-              <Avatar
-                style={styles.profileAvatar as any}
-                source={{uri: User.data.profilePic}}
-              />
-              <Text style={styles.profileName} category="h5" status="control">
-                {User.firstName + ' ' + User.lastName}
-              </Text>
-              <View style={styles.locationContainer}>
-                <Text style={styles.location} status="control">
-                  {'@' + User.username}
+            <ImageOverlay style={{}} source={{uri: User.data.profileBanner}}>
+              <TopNavigation accessoryLeft={BackAction} appearance="control" />
+              <View style={styles.header as any}>
+                <Avatar
+                  style={styles.profileAvatar as any}
+                  source={{uri: User.data.profilePic}}
+                />
+                <Text style={styles.profileName} category="h5" status="control">
+                  {User.firstName + ' ' + User.lastName}
                 </Text>
-              </View>
-              <View style={styles.profileButtonsContainer}>
-                {user?.username === User.username ? (
-                  <>
-                    <Button
-                      style={styles.profileButton}
-                      accessoryRight={AddIcon as any}
-                      onPress={onNewPostButtonPress}>
-                      NEW POST
-                    </Button>
-                    <Button
-                      style={styles.profileButton}
-                      status="control"
-                      accessoryRight={EditIcon as any}
-                      onPress={onEditButtonPress}>
-                      EDIT
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      style={styles.profileButton}
-                      accessoryLeft={PersonAddIcon as any}
-                      onPress={onBackButtonPress}>
-                      FOLLOW
-                    </Button>
-                    <Button
-                      style={styles.profileButton}
-                      status="control"
-                      accessoryLeft={MessageCircleIcon as any}
-                      onPress={onMessageButtonPress}>
-                      MESSAGE
-                    </Button>
-                  </>
-                )}
-              </View>
-              <View style={styles.socialsContainer}>
-                <ProfileSocial
-                  style={styles.profileSocial}
-                  hint="Followers"
-                  value={`${getFormattedFollowers(User.data.followers)}`}
-                />
-                <ProfileSocial
-                  style={styles.profileSocial}
-                  hint="Following"
-                  value={`${getFormattedFollowers(User.data.following)}`}
-                />
-                <ProfileSocial
-                  style={styles.profileSocial}
-                  hint="Posts"
-                  value={`${profile.posts}`}
-                />
+                <View style={styles.locationContainer}>
+                  <Text style={styles.location} status="control">
+                    {'@' + User.username}
+                  </Text>
+                </View>
+                <View style={styles.profileButtonsContainer}>
+                  {user?.username === User.username ? (
+                    <>
+                      <Button
+                        style={styles.profileButton}
+                        accessoryRight={AddIcon as any}
+                        onPress={onNewPostButtonPress}>
+                        NEW POST
+                      </Button>
+                      <Button
+                        style={styles.profileButton}
+                        status="control"
+                        accessoryRight={EditIcon as any}
+                        onPress={onEditButtonPress}>
+                        EDIT
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        style={styles.profileButton}
+                        accessoryLeft={PersonAddIcon as any}
+                        onPress={onBackButtonPress}>
+                        FOLLOW
+                      </Button>
+                      <Button
+                        style={styles.profileButton}
+                        status="control"
+                        accessoryLeft={MessageCircleIcon as any}
+                        onPress={onMessageButtonPress}>
+                        MESSAGE
+                      </Button>
+                    </>
+                  )}
+                </View>
+                <View style={styles.socialsContainer}>
+                  <ProfileSocial
+                    style={styles.profileSocial}
+                    hint="Followers"
+                    value={`${getFormattedFollowers(User.data.followers)}`}
+                  />
+                  <ProfileSocial
+                    style={styles.profileSocial}
+                    hint="Following"
+                    value={`${getFormattedFollowers(User.data.following)}`}
+                  />
+                  <ProfileSocial
+                    style={styles.profileSocial}
+                    hint="Posts"
+                    value={`${profile.posts}`}
+                  />
+                </View>
               </View>
             </ImageOverlay>
             <Text style={styles.sectionLabel} category="s1">
@@ -194,6 +201,18 @@ export default function Profile() {
         data={posts}
         numColumns={3}
         renderItem={renderPostItem}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: {
+                  y: scrolling,
+                },
+              },
+            },
+          ],
+          {useNativeDriver: false},
+        )}
       />
     </Layout>
   );
