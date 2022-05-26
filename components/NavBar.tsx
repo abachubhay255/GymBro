@@ -3,6 +3,7 @@ import {
   Avatar,
   Divider,
   Icon,
+  Text,
   TopNavigation,
   TopNavigationAction,
 } from '@ui-kitten/components';
@@ -46,7 +47,11 @@ export default function NavBar({
   return (
     <>
       <TopNavigation
-        title={titleElement ? titleElement : tabRoute.name}
+        title={
+          titleElement
+            ? titleElement
+            : () => <Text style={{fontWeight: 'bold'}}>{tabRoute.name}</Text>
+        }
         accessoryLeft={renderProfileAction}
         accessoryRight={renderSettingsAction}
         alignment="center"

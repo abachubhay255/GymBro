@@ -6,6 +6,7 @@ import {
   Icon,
   Text,
   TranslationWidth,
+  useTheme,
 } from '@ui-kitten/components';
 import React from 'react';
 import {
@@ -18,6 +19,7 @@ import {
 } from 'react-native';
 import {useUser} from '../../hooks/useUser';
 import {formattedDate} from '../messages/utils';
+import {getFormattedFollowers} from '../profile/utils';
 
 export type PostType = {
   username: string;
@@ -37,6 +39,7 @@ type Props = {
 export default function Post({post}: Props) {
   const navigation = useNavigation<NavigationProp<any>>();
   const postOwner = useUser(post.username);
+  const theme = useTheme();
   const Header = (props: ViewProps | undefined) => (
     <View {...props} style={styles.heading}>
       <Pressable
@@ -50,7 +53,9 @@ export default function Post({post}: Props) {
         />
       </Pressable>
       <View style={styles.user}>
-        <Text category="p1">{postOwner.username}</Text>
+        <Text category="p1" style={styles.mainText}>
+          {postOwner.username}
+        </Text>
         {post.location && (
           <Text category="p2" appearance="hint">
             {post.location}
@@ -63,34 +68,35 @@ export default function Post({post}: Props) {
   const Footer = (props: ViewProps | undefined) => (
     <View style={styles.footerContainer}>
       <View {...props} style={styles.rows}>
-        <Button
+        <Icon
           style={styles.icon}
-          appearance="ghost"
-          status="control"
-          accessoryLeft={<Icon name="heart-outline" />}
+          fill={theme['text-basic-color']}
+          name="heart-outline"
         />
-        <Button
-          style={styles.icon}
-          appearance="ghost"
-          status="control"
-          accessoryLeft={<Icon name="message-circle-outline" />}
+        <Icon
+          style={[styles.icon, {marginHorizontal: 15}]}
+          fill={theme['text-basic-color']}
+          name="message-circle-outline"
         />
-        <Button
+        <Icon
           style={styles.icon}
-          appearance="ghost"
-          status="control"
-          accessoryLeft={<Icon name="paper-plane-outline" />}
+          fill={theme['text-basic-color']}
+          name="paper-plane-outline"
         />
       </View>
-      <Text category="s1">{post.likes + ' likes'}</Text>
+      <Text category="p1" style={styles.mainText}>
+        {post.likes.toLocaleString() + ' likes'}
+      </Text>
       <View style={styles.rows}>
-        <Text category="p1">{post.username}</Text>
-        <Text style={{paddingHorizontal: 10}} category="p2">
+        <Text category="p1" style={styles.mainText}>
+          {post.username}
+        </Text>
+        <Text style={{paddingHorizontal: 5}} category="p2">
           {post.caption}
         </Text>
       </View>
       <Text category="p2" appearance="hint">
-        {'View all ' + post.comments + ' comments'}
+        {'View all ' + post.comments.toLocaleString() + ' comments'}
       </Text>
       <Text category="c1" appearance="hint">
         {formattedDate(post.timestamp)}
@@ -118,7 +124,7 @@ export default function Post({post}: Props) {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    margin: 1,
+    margin: -1,
     height: 625,
     width: 390,
   },
@@ -150,7 +156,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   icon: {
-    width: 32,
-    height: 32,
+    width: 24,
+    height: 24,
+    marginVertical: 10,
+  },
+  mainText: {
+    fontWeight: 'bold',
   },
 });
