@@ -28,7 +28,6 @@ import {
   MessageCircleIcon,
   PersonAddIcon,
 } from './extra/icons';
-import {Post, Profile as OldProfile} from './extra/data';
 import {
   NavigationProp,
   RouteProp,
@@ -38,32 +37,7 @@ import {
 import {useUser} from '../../hooks/useUser';
 import {getFormattedFollowers} from './utils';
 import {UserContext} from '../../../App';
-
-const profile: OldProfile = OldProfile.helenKuper();
-
-const posts: Post[] = [
-  Post.plant1(),
-  Post.travel1(),
-  Post.style1(),
-  Post.style1(),
-  Post.plant1(),
-  Post.travel1(),
-  Post.travel1(),
-  Post.style1(),
-  Post.plant1(),
-  Post.plant1(),
-  Post.plant1(),
-  Post.plant1(),
-  Post.plant1(),
-  Post.plant1(),
-  Post.plant1(),
-  Post.plant1(),
-  Post.plant1(),
-  Post.plant1(),
-  Post.plant1(),
-  Post.plant1(),
-  Post.plant1(),
-];
+import {PostType} from '../home/Post';
 
 export default function Profile() {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -74,7 +48,7 @@ export default function Profile() {
   const [showScrollHeader, setShowScrollHeader] = useState(false);
 
   const scrolling = useRef(new Animated.Value(0)).current;
-  const translation = scrolling.interpolate({
+  const navbarHeight = scrolling.interpolate({
     inputRange: [0, 50],
     outputRange: [0, 50],
     extrapolate: 'clamp',
@@ -98,11 +72,11 @@ export default function Profile() {
   };
 
   const renderPostItem = (
-    info: ListRenderItemInfo<Post>,
+    info: ListRenderItemInfo<PostType>,
   ): React.ReactElement => (
     <ImageBackground
       style={styles.postItem}
-      source={{uri: User.data.profilePic}}
+      source={{uri: info.item.photos[0]}}
     />
   );
 
@@ -112,7 +86,7 @@ export default function Profile() {
 
   return (
     <Layout style={styles.container}>
-      <Animated.View style={{height: translation}}>
+      <Animated.View style={{height: navbarHeight}}>
         <TopNavigation accessoryLeft={BackAction} appearance="control" />
       </Animated.View>
       <List
@@ -182,7 +156,7 @@ export default function Profile() {
                   <ProfileSocial
                     style={styles.profileSocial}
                     hint="Posts"
-                    value={`${profile.posts}`}
+                    value={`${User.data.posts.length}`}
                   />
                 </View>
               </View>
@@ -191,14 +165,14 @@ export default function Profile() {
               Bio
             </Text>
             <Text style={styles.profileDescription} appearance="hint">
-              {profile.description}
+              {User.data.bio}
             </Text>
             <Text style={styles.sectionLabel} category="s1">
               Posts
             </Text>
           </>
         }
-        data={posts}
+        data={User.data.posts}
         numColumns={3}
         renderItem={renderPostItem}
         onScroll={Animated.event(
