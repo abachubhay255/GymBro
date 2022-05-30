@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useReducer, useState} from 'react';
 import {Keyboard, Platform, TouchableWithoutFeedback, View} from 'react-native';
 import CameraRoll from '@react-native-community/cameraroll';
 import {
@@ -20,6 +20,7 @@ import GalleryView from './GalleryView';
 import {hasAndroidPermission} from '../../../Permissions';
 import {MessageType} from './Message';
 import {useUser} from '../../../hooks/useUser';
+import MessagesHeader from '../MessagesHeader';
 
 type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
 export default function Conversation({route, navigation}: Props) {
@@ -90,6 +91,7 @@ export default function Conversation({route, navigation}: Props) {
 
   return (
     <>
+      <MessagesHeader username={route.params.username} />
       <Chat
         style={styles.list}
         contentContainerStyle={styles.listContent}

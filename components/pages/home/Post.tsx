@@ -21,6 +21,8 @@ import {useUser} from '../../hooks/useUser';
 import {formattedDate} from '../messages/utils';
 import {getFormattedFollowers} from '../profile/utils';
 
+export const POST_HEIGHT = 625;
+
 export type PostType = {
   username: string;
   timestamp: Date;
@@ -44,7 +46,10 @@ export default function Post({post}: Props) {
     <View {...props} style={styles.heading}>
       <Pressable
         onPress={() =>
-          navigation.navigate('Profile', {username: postOwner.username})
+          navigation.navigate('Profile', {
+            screen: 'ProfileHome',
+            params: {username: postOwner.username},
+          })
         }>
         <Avatar
           source={{
@@ -125,7 +130,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     margin: -1,
-    height: 625,
+    height: POST_HEIGHT,
     width: 390,
   },
   heading: {

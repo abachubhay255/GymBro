@@ -4,6 +4,7 @@ import {
   ImageBackground,
   ListRenderItemInfo,
   LogBox,
+  Pressable,
   ScrollView,
   StyleSheet,
   View,
@@ -28,20 +29,16 @@ import {
   MessageCircleIcon,
   PersonAddIcon,
 } from './extra/icons';
-import {
-  NavigationProp,
-  RouteProp,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
 import {useUser} from '../../hooks/useUser';
 import {getFormattedFollowers} from './utils';
 import {UserContext} from '../../../App';
 import {PostType} from '../home/Post';
+import {ProfileParamList} from './ProfileNavigator';
+import {StackScreenProps} from '@react-navigation/stack';
 
-export default function Profile() {
-  const navigation = useNavigation<NavigationProp<any>>();
-  const route = useRoute<RouteProp<any>>();
+type Props = StackScreenProps<ProfileParamList, 'ProfileHome'>;
+
+export default function Profile({route, navigation}: Props) {
   const {user} = useContext(UserContext);
   const User = useUser(route.params?.username);
   const styles = useStyleSheet(themedStyles);
@@ -71,13 +68,25 @@ export default function Profile() {
     navigation && navigation.navigate('NewPost');
   };
 
+  const onPostPress = (postIndex: number): void => {
+    navigation &&
+      navigation.navigate('Posts', {
+        username: User.username,
+        postIndex: postIndex,
+      });
+  };
+
   const renderPostItem = (
     info: ListRenderItemInfo<PostType>,
   ): React.ReactElement => (
-    <ImageBackground
-      style={styles.postItem}
-      source={{uri: info.item.photos[0]}}
-    />
+    <Pressable
+      style={styles.postContainer}
+      onPress={() => onPostPress(info.index)}>
+      <ImageBackground
+        style={styles.postItem}
+        source={{uri: info.item.photos[0]}}
+      />
+    </Pressable>
   );
 
   const BackAction = () => (
@@ -87,7 +96,7 @@ export default function Profile() {
   return (
     <Layout style={styles.container}>
       <Animated.View style={{height: navbarHeight}}>
-        <TopNavigation accessoryLeft={BackAction} appearance="control" />
+        <TopNavigation accessoryLeft={BackAction} />
       </Animated.View>
       <List
         ListHeaderComponent={
@@ -252,9 +261,11 @@ const themedStyles = StyleService.create({
   friendName: {
     marginTop: 8,
   },
-  postItem: {
+  postContainer: {
     flex: 1,
     margin: 2,
+  },
+  postItem: {
     aspectRatio: 1.0,
   },
 });

@@ -1,11 +1,9 @@
 import React from 'react';
 import {Button, Layout, Text} from '@ui-kitten/components';
-import {StackScreenProps} from '@react-navigation/stack';
-import {HomeParamList} from './HomeNavigator';
+import {useNavigation} from '@react-navigation/native';
 
-type Props = StackScreenProps<HomeParamList, 'NewPost'>;
-
-export default function NewPost({navigation}: Props) {
+export default function NewPost() {
+  const navigation = useNavigation();
   return (
     <Layout>
       <Text>New Post</Text>

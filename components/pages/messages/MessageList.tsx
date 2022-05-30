@@ -7,10 +7,14 @@ import {
   StyleService,
   useStyleSheet,
 } from '@ui-kitten/components';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import {MessagesParamList} from './MessagesNavigator';
 import NavBar from '../../NavBar';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import MessageListItem from './MessageListItem';
 import {MessageDataItem} from '../../data/messages';
 import {useUser} from '../../hooks/useUser';
@@ -46,7 +50,12 @@ export default function MessageList({navigation}: Props) {
   };
 
   const onProfilePress = (username: string): void => {
-    navigation && navigation.navigate('Profile', {username: username});
+    const nav = navigation as unknown as NavigationProp<any>;
+    nav &&
+      nav.navigate('Profile', {
+        screen: 'ProfileHome',
+        params: {username: username},
+      });
   };
 
   const renderItem = (

@@ -18,6 +18,7 @@ import {UserContext} from '../App';
 import {useUser} from './hooks/useUser';
 import Page from './pages/Page';
 import Profile from './pages/profile/Profile';
+import ProfileNavigator from './pages/profile/ProfileNavigator';
 import ProfileSettings from './pages/profile/profilesettings/ProfileSettings';
 import {getFormattedFollowers} from './pages/profile/utils';
 import Settings from './pages/Settings';
@@ -33,7 +34,10 @@ export default function AppDrawer() {
           <View style={styles.heading}>
             <Pressable
               onPress={() =>
-                navigation.navigate('Profile', {username: User.username})
+                navigation.navigate('Profile', {
+                  screen: 'ProfileHome',
+                  params: {username: User.username},
+                })
               }>
               <Avatar
                 size="giant"
@@ -73,7 +77,10 @@ export default function AppDrawer() {
           title="Profile"
           accessoryLeft={<Icon name="person-outline" />}
           onPress={() =>
-            navigation.navigate('Profile', {username: User.username})
+            navigation.navigate('Profile', {
+              screen: 'ProfileHome',
+              params: {username: User.username},
+            })
           }
         />
         <DrawerItem
@@ -96,12 +103,7 @@ export default function AppDrawer() {
         <NavDrawer.Screen name="Page" component={Page} />
         <NavDrawer.Screen
           name="Profile"
-          component={Profile}
-          options={{headerShown: false}}
-        />
-        <NavDrawer.Screen
-          name="ProfileSettings"
-          component={ProfileSettings}
+          component={ProfileNavigator}
           options={{headerShown: false}}
         />
         <NavDrawer.Screen

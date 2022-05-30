@@ -12,7 +12,7 @@ import {User, UserContext} from '../../../../App';
 import {formattedDate} from '../utils';
 import MessageContent from './MessageContent';
 import {useUser} from '../../../hooks/useUser';
-import {useNavigation} from '@react-navigation/native';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {MessagesParamList} from '../MessagesNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
 
@@ -46,9 +46,13 @@ export default function Message({message}: MessageProps) {
         ]}>
         {!isMine && (
           <Pressable
-            onPress={() =>
-              navigation.navigate('Profile', {username: message.username})
-            }>
+            onPress={() => {
+              const nav = navigation as unknown as NavigationProp<any>;
+              nav.navigate('Profile', {
+                screen: 'ProfileHome',
+                params: {username: message.username},
+              });
+            }}>
             <Avatar
               style={styles.avatar as any}
               source={{
