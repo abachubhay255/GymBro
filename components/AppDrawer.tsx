@@ -17,7 +17,7 @@ import {Pressable, StyleSheet, View} from 'react-native';
 import {UserContext} from '../App';
 import {useUser} from './hooks/useUser';
 import Page from './pages/Page';
-import Profile from './pages/profile/Profile';
+import ProfileHome from './pages/profile/ProfileHome';
 import ProfileNavigator from './pages/profile/ProfileNavigator';
 import ProfileSettings from './pages/profile/profilesettings/ProfileSettings';
 import {getFormattedFollowers} from './pages/profile/utils';
@@ -97,7 +97,6 @@ export default function AppDrawer() {
   return (
     <NavigationContainer>
       <NavDrawer.Navigator
-        backBehavior="history"
         drawerContent={renderDrawer}
         screenOptions={{headerShown: false}}>
         <NavDrawer.Screen name="Page" component={Page} />

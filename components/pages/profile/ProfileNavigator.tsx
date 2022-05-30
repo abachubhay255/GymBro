@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import Profile from './Profile';
+import ProfileHome from './ProfileHome';
 import ProfileSettings from './profilesettings/ProfileSettings';
 import Posts from './Posts';
 import NewPost from '../home/NewPost';
@@ -19,7 +19,7 @@ const {Navigator, Screen} = createStackNavigator();
 export default function ProfileNavigator() {
   return (
     <Navigator screenOptions={{headerShown: false}}>
-      <Screen name="ProfileHome" component={Profile} />
+      <Screen name="ProfileHome" component={ProfileHome} />
       <Screen name="ProfileSettings" component={ProfileSettings} />
       <Screen name="Posts" component={Posts} />
       <Screen name="NewPost" component={NewPost} />

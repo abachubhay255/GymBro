@@ -42,32 +42,35 @@ export default function Post({post}: Props) {
   const navigation = useNavigation<NavigationProp<any>>();
   const postOwner = useUser(post.username);
   const theme = useTheme();
+
+  const goToProfile = () => {
+    navigation &&
+      navigation.navigate('Profile', {
+        screen: 'ProfileHome',
+        params: {username: postOwner.username},
+      });
+  };
   const Header = (props: ViewProps | undefined) => (
-    <View {...props} style={styles.heading}>
-      <Pressable
-        onPress={() =>
-          navigation.navigate('Profile', {
-            screen: 'ProfileHome',
-            params: {username: postOwner.username},
-          })
-        }>
+    <Pressable onPress={goToProfile}>
+      <View {...props} style={styles.heading}>
         <Avatar
           source={{
             uri: postOwner.data.profilePic,
           }}
         />
-      </Pressable>
-      <View style={styles.user}>
-        <Text category="p1" style={styles.mainText}>
-          {postOwner.username}
-        </Text>
-        {post.location && (
-          <Text category="p2" appearance="hint">
-            {post.location}
+
+        <View style={styles.user}>
+          <Text category="p1" style={styles.mainText}>
+            {postOwner.username}
           </Text>
-        )}
+          {post.location && (
+            <Text category="p2" appearance="hint">
+              {post.location}
+            </Text>
+          )}
+        </View>
       </View>
-    </View>
+    </Pressable>
   );
 
   const Footer = (props: ViewProps | undefined) => (
@@ -93,7 +96,7 @@ export default function Post({post}: Props) {
         {post.likes.toLocaleString() + ' likes'}
       </Text>
       <View style={styles.rows}>
-        <Text category="p1" style={styles.mainText}>
+        <Text onPress={goToProfile} category="p1" style={styles.mainText}>
           {post.username}
         </Text>
         <Text style={{paddingHorizontal: 5}} category="p2">
@@ -129,7 +132,6 @@ export default function Post({post}: Props) {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    margin: -1,
     height: POST_HEIGHT,
     width: 390,
   },

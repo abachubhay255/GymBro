@@ -38,11 +38,10 @@ import {StackScreenProps} from '@react-navigation/stack';
 
 type Props = StackScreenProps<ProfileParamList, 'ProfileHome'>;
 
-export default function Profile({route, navigation}: Props) {
+export default function ProfileHome({route, navigation}: Props) {
   const {user} = useContext(UserContext);
   const User = useUser(route.params?.username);
   const styles = useStyleSheet(themedStyles);
-  const [showScrollHeader, setShowScrollHeader] = useState(false);
 
   const scrolling = useRef(new Animated.Value(0)).current;
   const navbarHeight = scrolling.interpolate({

@@ -4,9 +4,11 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import {StackScreenProps} from '@react-navigation/stack';
 import {
   Layout,
   List,
+  Text,
   TopNavigation,
   TopNavigationAction,
 } from '@ui-kitten/components';
@@ -17,9 +19,9 @@ import Post, {PostType, POST_HEIGHT} from '../home/Post';
 import {BackIcon} from './extra/icons';
 import {ProfileParamList} from './ProfileNavigator';
 
-export default function Posts() {
-  const navigation = useNavigation<NavigationProp<ProfileParamList>>();
-  const route = useRoute<RouteProp<ProfileParamList>>();
+type Props = StackScreenProps<ProfileParamList, 'Posts'>;
+
+export default function Posts({route, navigation}: Props) {
   const posts = useUser(route.params?.username ?? '').data.posts;
   const postIndex = route.params?.postIndex ?? 0;
   const renderPostItem = ({
@@ -35,18 +37,24 @@ export default function Posts() {
   );
 
   return (
-    <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <TopNavigation accessoryLeft={BackAction} />
-      <List
-        getItemLayout={(data, index) => ({
-          length: POST_HEIGHT,
-          offset: POST_HEIGHT * index,
-          index,
-        })}
-        initialScrollIndex={postIndex}
-        data={posts}
-        renderItem={renderPostItem}
+    <>
+      <TopNavigation
+        accessoryLeft={BackAction}
+        title={() => <Text style={{fontWeight: 'bold'}}>Posts</Text>}
+        alignment="center"
       />
-    </Layout>
+      <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <List
+          getItemLayout={(_, index) => ({
+            length: POST_HEIGHT,
+            offset: POST_HEIGHT * index,
+            index,
+          })}
+          initialScrollIndex={postIndex}
+          data={posts}
+          renderItem={renderPostItem}
+        />
+      </Layout>
+    </>
   );
 }
