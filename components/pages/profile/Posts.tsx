@@ -15,7 +15,7 @@ import {
 import React from 'react';
 import {ListRenderItemInfo} from 'react-native';
 import {useUser} from '../../hooks/useUser';
-import Post, {PostType, POST_HEIGHT} from '../home/Post';
+import Post, {PostType, POST_HEIGHT} from '../post/Post';
 import {BackIcon} from './extra/icons';
 import {ProfileParamList} from './ProfileNavigator';
 

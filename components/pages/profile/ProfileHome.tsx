@@ -32,7 +32,7 @@ import {
 import {useUser} from '../../hooks/useUser';
 import {getFormattedFollowers} from './utils';
 import {UserContext} from '../../../App';
-import {PostType} from '../home/Post';
+import {PostType} from '../post/Post';
 import {ProfileParamList} from './ProfileNavigator';
 import {StackScreenProps} from '@react-navigation/stack';
 

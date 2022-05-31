@@ -28,12 +28,17 @@ import {getFormattedFollowers} from '../profile/utils';
 
 export const POST_HEIGHT = 625;
 
+export type Comment = {
+  username: string;
+  text: string;
+};
+
 export type PostType = {
   username: string;
   timestamp: Date;
   caption: string;
-  likes: number;
-  comments: number;
+  likes: string[];
+  comments: Comment[];
   photos: string[];
   location?: string;
   tags?: string[];
@@ -59,6 +64,15 @@ export default function Post({post}: Props) {
       } else {
         navigation.push('ProfileHome', {username: post.username});
       }
+    }
+  };
+
+  const goToLikes = () => {
+    if (navigation) {
+      navigation.push('Likes', {
+        username: post.username,
+        postId: postOwner.data.posts.findIndex(p => p === post),
+      });
     }
   };
   const Header = (props: ViewProps | undefined) => (
@@ -103,8 +117,8 @@ export default function Post({post}: Props) {
           name="paper-plane-outline"
         />
       </View>
-      <Text category="p1" style={styles.mainText}>
-        {post.likes.toLocaleString() + ' likes'}
+      <Text category="p1" style={styles.mainText} onPress={goToLikes}>
+        {post.likes.length.toLocaleString() + ' likes'}
       </Text>
       <View style={styles.rows}>
         <Text onPress={goToProfile} category="p1" style={styles.mainText}>
@@ -115,7 +129,7 @@ export default function Post({post}: Props) {
         </Text>
       </View>
       <Text category="p2" appearance="hint">
-        {'View all ' + post.comments.toLocaleString() + ' comments'}
+        {'View all ' + post.comments.length.toLocaleString() + ' comments'}
       </Text>
       <Text category="c1" appearance="hint">
         {formattedDate(post.timestamp)}

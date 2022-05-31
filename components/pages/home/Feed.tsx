@@ -5,7 +5,7 @@ import {ListRenderItemInfo, Pressable} from 'react-native';
 import {Users} from '../../data/users';
 import NavBar from '../../NavBar';
 import {HomeParamList} from './HomeNavigator';
-import Post, {PostType} from './Post';
+import Post, {PostType} from '../post/Post';
 
 type Props = StackScreenProps<HomeParamList, 'Feed'>;
 

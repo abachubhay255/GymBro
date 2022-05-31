@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import ProfileHome from './ProfileHome';
 import ProfileSettings from './profilesettings/ProfileSettings';
 import Posts from './Posts';
-import NewPost from '../home/NewPost';
+import NewPost from '../post/NewPost';
 import Conversation from '../messages/conversation/Conversation';
 
 export type ProfileParamList = {

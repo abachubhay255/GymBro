@@ -1,4 +1,12 @@
-import {PostType} from '../pages/home/Post';
+import {PostType} from '../pages/post/Post';
+
+const likes = ['ironman', 'nedleeds', 'mjwatson'];
+
+const comments = [
+  {username: 'ironman', text: 'Nice work kid!'},
+  {username: 'nedleeds', text: 'So awesome!'},
+  {username: 'mjwatson', text: 'cool.'},
+];
 
 export const SpidermanPosts: PostType[] = [
   {
@@ -9,8 +17,8 @@ export const SpidermanPosts: PostType[] = [
       'https://arc-anglerfish-eu-central-1-prod-leparisien.s3.amazonaws.com/public/ULY2ETUEU4OLRWIR3LD7GHPKYE.jpg',
     ],
     location: 'New York City',
-    likes: 5,
-    comments: 5,
+    likes: likes.concat(likes),
+    comments: comments,
   },
   {
     username: 'spiderman',
@@ -19,8 +27,8 @@ export const SpidermanPosts: PostType[] = [
     photos: ['https://thedirect.s3.amazonaws.com/media/photos/smtrio1.jpg'],
     location: 'Sanctum Sanctorum',
     tags: ['nedleeds', 'mjwatson'],
-    likes: 1000,
-    comments: 1000,
+    likes: likes,
+    comments: comments,
   },
   {
     username: 'spiderman',
@@ -30,8 +38,8 @@ export const SpidermanPosts: PostType[] = [
       'https://w0.peakpx.com/wallpaper/641/559/HD-wallpaper-peter-and-tony-avengers-iron-man-mcu-peter-parker-robert-downey-jr-spiderman-stark-industries-tom-holland-tony-stark.jpg',
     ],
     tags: ['ironman'],
-    likes: 12345,
-    comments: 12345,
+    likes: likes,
+    comments: comments,
   },
 ];
 
@@ -45,8 +53,8 @@ export const IronmanPosts: PostType[] = [
     ],
     location: 'Avengers Campus',
     tags: ['spiderman'],
-    likes: 654321,
-    comments: 654321,
+    likes: likes,
+    comments: comments,
   },
 ];
 
@@ -59,8 +67,8 @@ export const NedleedsPosts: PostType[] = [
       'https://www.looper.com/img/gallery/the-ned-line-in-spider-man-no-way-home-with-more-meaning-than-you-think/ned-insists-he-wont-become-a-villain-1639844509.jpg',
     ],
     location: 'New York City',
-    likes: 1234567,
-    comments: 1234567,
+    likes: likes,
+    comments: comments,
   },
 ];
 
@@ -73,7 +81,7 @@ export const MjwatsonPosts: PostType[] = [
       'https://static.wikia.nocookie.net/disney/images/8/8c/Michelle_closeup.jpg/revision/latest?cb=20191226173442',
     ],
     location: 'Midtown High',
-    likes: 12345678,
-    comments: 12345678,
+    likes: likes,
+    comments: comments,
   },
 ];

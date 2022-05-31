@@ -1,4 +1,4 @@
-import {PostType} from '../pages/home/Post';
+import {PostType} from '../pages/post/Post';
 import {
   IronmanMessageData,
   MessageDataItem,
