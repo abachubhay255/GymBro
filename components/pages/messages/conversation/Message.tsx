@@ -12,7 +12,11 @@ import {User, UserContext} from '../../../../App';
 import {formattedDate} from '../utils';
 import MessageContent from './MessageContent';
 import {useUser} from '../../../hooks/useUser';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {MessagesParamList} from '../MessagesNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
 
@@ -31,11 +35,25 @@ export default function Message({message}: MessageProps) {
   const styles = useStyleSheet(themedStyles);
   const {user} = useContext(UserContext) as {user: User};
   const [showReceipt, setShowReceipt] = useState(false);
-  const navigation = useNavigation<StackNavigationProp<MessagesParamList>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
+  const route = useRoute();
 
   const isMine = message.username === user.username;
 
   const messageProfilePic = useUser(message.username).data.profilePic;
+
+  const goToProfile = () => {
+    if (navigation) {
+      if (route.name === 'Conversation') {
+        navigation.navigate('Profile', {
+          screen: 'ProfileHome',
+          params: {username: message.username},
+        });
+      } else {
+        navigation.push('ProfileHome', {username: message.username});
+      }
+    }
+  };
 
   return (
     <View style={styles.messageWithReceipt}>
@@ -45,14 +63,7 @@ export default function Message({message}: MessageProps) {
           styles.container,
         ]}>
         {!isMine && (
-          <Pressable
-            onPress={() => {
-              const nav = navigation as unknown as NavigationProp<any>;
-              nav.navigate('Profile', {
-                screen: 'ProfileHome',
-                params: {username: message.username},
-              });
-            }}>
+          <Pressable onPress={goToProfile}>
             <Avatar
               style={styles.avatar as any}
               source={{

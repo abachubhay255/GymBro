@@ -55,8 +55,7 @@ export default function ProfileHome({route, navigation}: Props) {
   };
 
   const onMessageButtonPress = (): void => {
-    navigation &&
-      navigation.navigate('Conversation', {username: User.username});
+    navigation && navigation.push('Message', {username: User.username});
   };
 
   const onEditButtonPress = (): void => {
@@ -69,7 +68,7 @@ export default function ProfileHome({route, navigation}: Props) {
 
   const onPostPress = (postIndex: number): void => {
     navigation &&
-      navigation.navigate('Posts', {
+      navigation.push('Posts', {
         username: User.username,
         postIndex: postIndex,
       });

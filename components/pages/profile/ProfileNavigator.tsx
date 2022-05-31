@@ -11,7 +11,7 @@ export type ProfileParamList = {
   ProfileSettings: undefined;
   Posts: {username: string; postIndex: number};
   NewPost: undefined;
-  Conversation: {username: string};
+  Message: {username: string};
 };
 
 const {Navigator, Screen} = createStackNavigator();
@@ -23,7 +23,7 @@ export default function ProfileNavigator() {
       <Screen name="ProfileSettings" component={ProfileSettings} />
       <Screen name="Posts" component={Posts} />
       <Screen name="NewPost" component={NewPost} />
-      <Screen name="Conversation" component={Conversation} />
+      <Screen name="Message" component={Conversation} />
     </Navigator>
   );
 }

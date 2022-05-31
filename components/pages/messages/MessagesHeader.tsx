@@ -1,5 +1,10 @@
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {StackHeaderProps} from '@react-navigation/stack';
+import {
+  NavigationProp,
+  useNavigation,
+  useNavigationState,
+  useRoute,
+} from '@react-navigation/native';
+import {StackHeaderProps, StackNavigationProp} from '@react-navigation/stack';
 import {
   TopNavigationAction,
   TopNavigation,
@@ -12,12 +17,27 @@ import {ImageBackground} from 'react-native';
 import {useUser} from '../../hooks/useUser';
 
 type Props = {
-  username: string
-}
+  username: string;
+};
 
 export default function MessagesHeader({username}: Props) {
-  const navigation = useNavigation<NavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
+  const route = useRoute();
   const User = useUser(username);
+
+  const goToProfile = () => {
+    if (navigation) {
+      if (route.name === 'Conversation') {
+        navigation.navigate('Profile', {
+          screen: 'ProfileHome',
+          params: {username: username},
+        });
+      } else {
+        navigation.push('ProfileHome', {username: username});
+      }
+    }
+  };
+
   const renderProfileAction = () => (
     <TopNavigationAction
       icon={() => (
@@ -28,12 +48,7 @@ export default function MessagesHeader({username}: Props) {
           ImageComponent={ImageBackground}
         />
       )}
-      onPress={() =>
-        navigation.navigate('Profile', {
-          screen: 'ProfileHome',
-          params: {username: username},
-        })
-      }
+      onPress={goToProfile}
     />
   );
 

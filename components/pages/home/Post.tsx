@@ -1,4 +1,9 @@
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {
   Avatar,
   Button,
@@ -39,16 +44,22 @@ type Props = {
 };
 
 export default function Post({post}: Props) {
-  const navigation = useNavigation<NavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
+  const route = useRoute();
   const postOwner = useUser(post.username);
   const theme = useTheme();
 
   const goToProfile = () => {
-    navigation &&
-      navigation.navigate('Profile', {
-        screen: 'ProfileHome',
-        params: {username: postOwner.username},
-      });
+    if (navigation) {
+      if (route.name === 'Feed') {
+        navigation.navigate('Profile', {
+          screen: 'ProfileHome',
+          params: {username: post.username},
+        });
+      } else {
+        navigation.push('ProfileHome', {username: post.username});
+      }
+    }
   };
   const Header = (props: ViewProps | undefined) => (
     <Pressable onPress={goToProfile}>
