@@ -13,7 +13,7 @@ import {
   TranslationWidth,
   useTheme,
 } from '@ui-kitten/components';
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -22,6 +22,7 @@ import {
   View,
   ViewProps,
 } from 'react-native';
+import {User, UserContext} from '../../../App';
 import {useUser} from '../../hooks/useUser';
 import {formattedDate} from '../messages/utils';
 import {getFormattedFollowers} from '../profile/utils';
@@ -51,6 +52,7 @@ type Props = {
 export default function Post({post}: Props) {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const route = useRoute();
+  const user = useContext(UserContext).user as User;
   const postOwner = useUser(post.username);
   const theme = useTheme();
 
@@ -98,44 +100,58 @@ export default function Post({post}: Props) {
     </Pressable>
   );
 
-  const Footer = (props: ViewProps | undefined) => (
-    <View style={styles.footerContainer}>
-      <View {...props} style={styles.rows}>
-        <Icon
-          style={styles.icon}
-          fill={theme['text-basic-color']}
-          name="heart-outline"
-        />
-        <Icon
-          style={[styles.icon, {marginHorizontal: 15}]}
-          fill={theme['text-basic-color']}
-          name="message-circle-outline"
-        />
-        <Icon
-          style={styles.icon}
-          fill={theme['text-basic-color']}
-          name="paper-plane-outline"
-        />
-      </View>
-      <Text category="p1" style={styles.mainText} onPress={goToLikes}>
-        {post.likes.length.toLocaleString() + ' likes'}
-      </Text>
-      <View style={styles.rows}>
-        <Text onPress={goToProfile} category="p1" style={styles.mainText}>
-          {post.username}
+  const Footer = (props: ViewProps | undefined) => {
+    const [likes, setLikes] = useState(post.likes);
+    const likedByMe = likes.includes(user?.username);
+
+    return (
+      <View style={styles.footerContainer}>
+        <View {...props} style={styles.rows}>
+          <Pressable
+            onPress={() =>
+              setLikes(
+                likedByMe
+                  ? likes.filter(l => l !== user.username)
+                  : [...likes, user.username],
+              )
+            }>
+            <Icon
+              style={styles.icon}
+              fill={likedByMe ? '#ED4956' : theme['text-basic-color']}
+              name={likedByMe ? 'heart' : 'heart-outline'}
+            />
+          </Pressable>
+          <Icon
+            style={[styles.icon, {marginHorizontal: 15}]}
+            fill={theme['text-basic-color']}
+            name="message-circle-outline"
+          />
+          <Icon
+            style={styles.icon}
+            fill={theme['text-basic-color']}
+            name="paper-plane-outline"
+          />
+        </View>
+        <Text category="p1" style={styles.mainText} onPress={goToLikes}>
+          {likes.length.toLocaleString() + ' likes'}
         </Text>
-        <Text style={{paddingHorizontal: 5}} category="p2">
-          {post.caption}
+        <View style={styles.rows}>
+          <Text onPress={goToProfile} category="p1" style={styles.mainText}>
+            {post.username}
+          </Text>
+          <Text style={{paddingHorizontal: 5}} category="p2">
+            {post.caption}
+          </Text>
+        </View>
+        <Text category="p2" appearance="hint">
+          {'View all ' + post.comments.length.toLocaleString() + ' comments'}
+        </Text>
+        <Text category="c1" appearance="hint">
+          {formattedDate(post.timestamp)}
         </Text>
       </View>
-      <Text category="p2" appearance="hint">
-        {'View all ' + post.comments.length.toLocaleString() + ' comments'}
-      </Text>
-      <Text category="c1" appearance="hint">
-        {formattedDate(post.timestamp)}
-      </Text>
-    </View>
-  );
+    );
+  };
 
   return (
     <Card

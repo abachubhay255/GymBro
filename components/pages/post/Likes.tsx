@@ -5,14 +5,16 @@ import {
   Button,
   Divider,
   Icon,
+  Input,
+  Layout,
   List,
   ListItem,
   Text,
   TopNavigation,
   TopNavigationAction,
 } from '@ui-kitten/components';
-import React from 'react';
-import {ListRenderItemInfo} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ListRenderItemInfo, StyleSheet} from 'react-native';
 import {useUser} from '../../hooks/useUser';
 import {HomeParamList} from '../home/HomeNavigator';
 import {BackIcon} from '../profile/extra/icons';
@@ -24,6 +26,24 @@ export default function Likes({navigation, route}: Props) {
   const User = useUser(route.params.username);
   const postId = route.params.postId;
   const likes = User.data.posts[postId].likes;
+
+  const [searchedLikes, setSearchedLikes] = useState(likes);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const normalizedQuery = searchQuery.toLowerCase();
+    setSearchedLikes(
+      likes.filter(username => {
+        const User = useUser(username);
+        return (
+          User.firstName.toLowerCase().includes(normalizedQuery) ||
+          User.lastName.toLowerCase().includes(normalizedQuery) ||
+          username.toLowerCase().includes(normalizedQuery)
+        );
+      }),
+    );
+  }, [searchQuery]);
+
   const renderItemAccessory = (props: any) => (
     <Button size="small">FOLLOW</Button>
   );
@@ -67,7 +87,25 @@ export default function Likes({navigation, route}: Props) {
         title={() => <Text style={{fontWeight: 'bold'}}>Likes</Text>}
         alignment="center"
       />
-      <List data={likes} renderItem={renderLikeItem} />
+      <Layout>
+        <Input
+          style={styles.searchBar}
+          status="control"
+          size="small"
+          placeholder="Search"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+      </Layout>
+      <List data={searchedLikes} renderItem={renderLikeItem} />
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  searchBar: {
+    marginHorizontal: 10,
+    marginVertical: 10,
+    borderRadius: 10,
+  },
+});

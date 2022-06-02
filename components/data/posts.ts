@@ -1,6 +1,6 @@
 import {PostType} from '../pages/post/Post';
 
-const likes = ['ironman', 'nedleeds', 'mjwatson'];
+const likes = ['ironman', 'nedleeds', 'mjwatson', 'spiderman'];
 
 const comments = [
   {username: 'ironman', text: 'Nice work kid!'},
@@ -17,7 +17,7 @@ export const SpidermanPosts: PostType[] = [
       'https://arc-anglerfish-eu-central-1-prod-leparisien.s3.amazonaws.com/public/ULY2ETUEU4OLRWIR3LD7GHPKYE.jpg',
     ],
     location: 'New York City',
-    likes: likes.concat(likes),
+    likes: likes,
     comments: comments,
   },
   {
