@@ -19,8 +19,9 @@ import {useUser} from '../../hooks/useUser';
 import {HomeParamList} from '../home/HomeNavigator';
 import {BackIcon} from '../profile/extra/icons';
 import {POST_HEIGHT} from './Post';
+import {PostParamList} from './PostNavigator';
 
-type Props = StackScreenProps<HomeParamList, 'Likes'>;
+type Props = StackScreenProps<PostParamList, 'Likes'>;
 
 export default function Likes({navigation, route}: Props) {
   const User = useUser(route.params.username);
@@ -49,14 +50,11 @@ export default function Likes({navigation, route}: Props) {
   );
   const renderItemIcon = (source: string) => <Avatar source={{uri: source}} />;
   const goToProfile = (username: string) => {
-    if (navigation) {
-      (navigation as any).navigate('Profile', {
-        screen: 'ProfileHome',
-        params: {
-          username: username,
-        },
+    navigation &&
+      navigation.push('UserProfile', {
+        screen: 'Profile',
+        params: {username: username},
       });
-    }
   };
   const renderLikeItem = ({
     item,

@@ -1,31 +1,14 @@
-import {
-  NavigationProp,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {
-  Avatar,
-  Button,
-  Card,
-  Icon,
-  Text,
-  TranslationWidth,
-  useTheme,
-} from '@ui-kitten/components';
+import {Avatar, Card, Icon, Text, useTheme} from '@ui-kitten/components';
 import React, {useContext, useState} from 'react';
-import {
-  Image,
-  ImageBackground,
-  Pressable,
-  StyleSheet,
-  View,
-  ViewProps,
-} from 'react-native';
+import {Image, Pressable, StyleSheet, View, ViewProps} from 'react-native';
 import {User, UserContext} from '../../../App';
 import {useUser} from '../../hooks/useUser';
+import {HomeParamList} from '../home/HomeNavigator';
 import {formattedDate} from '../messages/utils';
-import {getFormattedFollowers} from '../profile/utils';
+import {ProfileParamList} from '../profile/ProfileNavigator';
+import {PostParamList} from './PostNavigator';
 
 export const POST_HEIGHT = 625;
 
@@ -50,32 +33,29 @@ type Props = {
 };
 
 export default function Post({post}: Props) {
-  const navigation = useNavigation<StackNavigationProp<any>>();
-  const route = useRoute();
+  const navigation =
+    useNavigation<StackNavigationProp<HomeParamList | ProfileParamList>>();
   const user = useContext(UserContext).user as User;
   const postOwner = useUser(post.username);
   const theme = useTheme();
 
   const goToProfile = () => {
-    if (navigation) {
-      if (route.name === 'Feed') {
-        navigation.navigate('Profile', {
-          screen: 'ProfileHome',
-          params: {username: post.username},
-        });
-      } else {
-        navigation.push('ProfileHome', {username: post.username});
-      }
-    }
+    navigation &&
+      navigation.push('Post', {
+        screen: 'UserProfile',
+        params: {screen: 'Profile', params: {username: post.username}},
+      });
   };
 
   const goToLikes = () => {
-    if (navigation) {
-      navigation.push('Likes', {
-        username: post.username,
-        postId: postOwner.data.posts.findIndex(p => p === post),
+    navigation &&
+      navigation.push('Post', {
+        screen: 'Likes',
+        params: {
+          username: post.username,
+          postId: postOwner.data.posts.findIndex(p => p === post),
+        },
       });
-    }
   };
   const Header = (props: ViewProps | undefined) => (
     <Pressable onPress={goToProfile}>

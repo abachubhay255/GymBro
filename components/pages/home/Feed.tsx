@@ -18,7 +18,9 @@ export default function Feed({route, navigation}: Props) {
   const NewPostButton = () => (
     <Button
       accessoryRight={<Icon name="plus-circle" />}
-      onPress={() => navigation.navigate('NewPost')}>
+      onPress={() =>
+        navigation && navigation.push('Post', {screen: 'NewPost'})
+      }>
       New Post
     </Button>
   );

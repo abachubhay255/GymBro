@@ -1,13 +1,11 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Feed from './Feed';
-import NewPost from '../post/NewPost';
-import Likes from '../post/Likes';
+import PostNavigator from '../post/PostNavigator';
 
 export type HomeParamList = {
   Feed: undefined;
-  NewPost: undefined;
-  Likes: {username: string; postId: number};
+  Post: {screen: string; params?: Record<string, any>};
 };
 
 const {Navigator, Screen} = createStackNavigator();
@@ -16,8 +14,7 @@ export default function HomeNavigator() {
   return (
     <Navigator screenOptions={{headerShown: false}}>
       <Screen name="Feed" component={Feed} />
-      <Screen name="Likes" component={Likes} />
-      <Screen name="NewPost" component={NewPost} />
+      <Screen name="Post" component={PostNavigator} />
     </Navigator>
   );
 }

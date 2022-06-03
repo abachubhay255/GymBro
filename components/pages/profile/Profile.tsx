@@ -36,9 +36,9 @@ import {PostType} from '../post/Post';
 import {ProfileParamList} from './ProfileNavigator';
 import {StackScreenProps} from '@react-navigation/stack';
 
-type Props = StackScreenProps<ProfileParamList, 'ProfileHome'>;
+type Props = StackScreenProps<ProfileParamList, 'Profile'>;
 
-export default function ProfileHome({route, navigation}: Props) {
+export default function Profile({route, navigation}: Props) {
   const {user} = useContext(UserContext);
   const User = useUser(route.params?.username);
   const styles = useStyleSheet(themedStyles);
@@ -55,7 +55,11 @@ export default function ProfileHome({route, navigation}: Props) {
   };
 
   const onMessageButtonPress = (): void => {
-    navigation && navigation.push('Message', {username: User.username});
+    navigation &&
+      navigation.push('Message', {
+        screen: 'Conversation',
+        params: {username: User.username},
+      });
   };
 
   const onEditButtonPress = (): void => {
@@ -63,7 +67,10 @@ export default function ProfileHome({route, navigation}: Props) {
   };
 
   const onNewPostButtonPress = (): void => {
-    navigation && navigation.navigate('NewPost');
+    navigation &&
+      navigation.push('Post', {
+        screen: 'NewPost',
+      });
   };
 
   const onPostPress = (postIndex: number): void => {

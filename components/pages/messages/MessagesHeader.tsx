@@ -15,27 +15,24 @@ import {
 import React from 'react';
 import {ImageBackground} from 'react-native';
 import {useUser} from '../../hooks/useUser';
+import {MessagesParamList} from './MessagesNavigator';
 
 type Props = {
   username: string;
 };
 
 export default function MessagesHeader({username}: Props) {
-  const navigation = useNavigation<StackNavigationProp<any>>();
+  const navigation =
+    useNavigation<StackNavigationProp<MessagesParamList, 'Conversation'>>();
   const route = useRoute();
   const User = useUser(username);
 
   const goToProfile = () => {
-    if (navigation) {
-      if (route.name === 'Conversation') {
-        navigation.navigate('Profile', {
-          screen: 'ProfileHome',
-          params: {username: username},
-        });
-      } else {
-        navigation.push('ProfileHome', {username: username});
-      }
-    }
+    navigation &&
+      navigation.push('UserProfile', {
+        screen: 'Profile',
+        params: {username: username},
+      });
   };
 
   const renderProfileAction = () => (

@@ -50,10 +50,9 @@ export default function MessageList({navigation}: Props) {
   };
 
   const onProfilePress = (username: string): void => {
-    const nav = navigation as unknown as NavigationProp<any>;
-    nav &&
-      nav.navigate('Profile', {
-        screen: 'ProfileHome',
+    navigation &&
+      navigation.push('UserProfile', {
+        screen: 'Profile',
         params: {username: username},
       });
   };

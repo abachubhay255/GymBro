@@ -43,16 +43,11 @@ export default function Message({message}: MessageProps) {
   const messageProfilePic = useUser(message.username).data.profilePic;
 
   const goToProfile = () => {
-    if (navigation) {
-      if (route.name === 'Conversation') {
-        navigation.navigate('Profile', {
-          screen: 'ProfileHome',
-          params: {username: message.username},
-        });
-      } else {
-        navigation.push('ProfileHome', {username: message.username});
-      }
-    }
+    navigation &&
+      navigation.push('UserProfile', {
+        screen: 'Profile',
+        params: {username: message.username},
+      });
   };
 
   return (
