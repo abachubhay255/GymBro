@@ -14,13 +14,13 @@ import {PaperPlaneIcon} from './Icons';
 import Chat from './Chat';
 import {User, UserContext} from '../../../../App';
 import {StackScreenProps} from '@react-navigation/stack';
-import {MessagesParamList} from '../MessagesNavigator';
 import {SpidermanMessageData} from '../../../data/messages';
 import GalleryView from './GalleryView';
 import {hasAndroidPermission} from '../../../Permissions';
 import {MessageType} from './Message';
 import {useUser} from '../../../hooks/useUser';
 import MessagesHeader from '../MessagesHeader';
+import { MessagesParamList } from '../../Navigation';
 
 type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
 export default function Conversation({route, navigation}: Props) {

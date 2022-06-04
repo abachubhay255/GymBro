@@ -33,8 +33,8 @@ import {useUser} from '../../hooks/useUser';
 import {getFormattedFollowers} from './utils';
 import {UserContext} from '../../../App';
 import {PostType} from '../post/Post';
-import {ProfileParamList} from './ProfileNavigator';
 import {StackScreenProps} from '@react-navigation/stack';
+import { ProfileParamList } from '../Navigation';
 
 type Props = StackScreenProps<ProfileParamList, 'Profile'>;
 

@@ -5,15 +5,14 @@ import React, {useContext, useState} from 'react';
 import {Image, Pressable, StyleSheet, View, ViewProps} from 'react-native';
 import {User, UserContext} from '../../../App';
 import {useUser} from '../../hooks/useUser';
-import {HomeParamList} from '../home/HomeNavigator';
 import {formattedDate} from '../messages/utils';
-import {ProfileParamList} from '../profile/ProfileNavigator';
-import {PostParamList} from './PostNavigator';
+import {HomeParamList, ProfileParamList} from '../Navigation';
 
 export const POST_HEIGHT = 625;
 
 export type Comment = {
   username: string;
+  timestamp: Date;
   text: string;
 };
 
@@ -57,6 +56,18 @@ export default function Post({post}: Props) {
         },
       });
   };
+
+  const goToComments = () => {
+    navigation &&
+      navigation.push('Post', {
+        screen: 'Comments',
+        params: {
+          username: post.username,
+          postId: postOwner.data.posts.findIndex(p => p === post),
+        },
+      });
+  };
+
   const Header = (props: ViewProps | undefined) => (
     <Pressable onPress={goToProfile}>
       <View {...props} style={styles.heading}>
@@ -115,15 +126,14 @@ export default function Post({post}: Props) {
         <Text category="p1" style={styles.mainText} onPress={goToLikes}>
           {likes.length.toLocaleString() + ' likes'}
         </Text>
-        <View style={styles.rows}>
-          <Text onPress={goToProfile} category="p1" style={styles.mainText}>
-            {post.username}
+        <Text>
+          <Text style={styles.mainText} onPress={goToProfile}>
+            {post.username + ' '}
           </Text>
-          <Text style={{paddingHorizontal: 5}} category="p2">
-            {post.caption}
-          </Text>
-        </View>
-        <Text category="p2" appearance="hint">
+          <Text>{post.caption}</Text>
+        </Text>
+
+        <Text onPress={goToComments} category="p2" appearance="hint">
           {'View all ' + post.comments.length.toLocaleString() + ' comments'}
         </Text>
         <Text category="c1" appearance="hint">

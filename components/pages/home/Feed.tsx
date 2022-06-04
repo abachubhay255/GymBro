@@ -4,7 +4,7 @@ import React, {LegacyRef, RefObject, useRef} from 'react';
 import {ListRenderItemInfo, Pressable} from 'react-native';
 import {Users} from '../../data/users';
 import NavBar from '../../NavBar';
-import {HomeParamList} from './HomeNavigator';
+import { HomeParamList } from '../Navigation';
 import Post, {PostType} from '../post/Post';
 
 type Props = StackScreenProps<HomeParamList, 'Feed'>;

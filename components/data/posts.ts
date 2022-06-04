@@ -3,15 +3,19 @@ import {PostType} from '../pages/post/Post';
 const likes = ['ironman', 'nedleeds', 'mjwatson', 'spiderman'];
 
 const comments = [
-  {username: 'ironman', text: 'Nice work kid!'},
-  {username: 'nedleeds', text: 'So awesome!'},
-  {username: 'mjwatson', text: 'cool.'},
+  {username: 'ironman', timestamp: new Date(), text: 'Nice work kid!'},
+  {username: 'nedleeds', timestamp: new Date(), text: 'So awesome!'},
+  {
+    username: 'mjwatson',
+    timestamp: new Date(),
+    text: 'cool.cool.cool.cool.cool.cool.cool.cool.cool.cool.cool.cool.cool.cool.cool.cool',
+  },
 ];
 
 export const SpidermanPosts: PostType[] = [
   {
     username: 'spiderman',
-    timestamp: new Date(),
+    timestamp: new Date('May 16, 2022 5:15:30'),
     caption: 'With great power...',
     photos: [
       'https://arc-anglerfish-eu-central-1-prod-leparisien.s3.amazonaws.com/public/ULY2ETUEU4OLRWIR3LD7GHPKYE.jpg',

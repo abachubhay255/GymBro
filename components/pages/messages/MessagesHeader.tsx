@@ -15,7 +15,7 @@ import {
 import React from 'react';
 import {ImageBackground} from 'react-native';
 import {useUser} from '../../hooks/useUser';
-import {MessagesParamList} from './MessagesNavigator';
+import { MessagesParamList } from '../Navigation';
 
 type Props = {
   username: string;

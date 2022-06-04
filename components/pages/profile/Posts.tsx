@@ -1,9 +1,3 @@
-import {
-  NavigationProp,
-  RouteProp,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {
   Layout,
@@ -15,9 +9,9 @@ import {
 import React from 'react';
 import {ListRenderItemInfo} from 'react-native';
 import {useUser} from '../../hooks/useUser';
+import {ProfileParamList} from '../Navigation';
 import Post, {PostType, POST_HEIGHT} from '../post/Post';
 import {BackIcon} from './extra/icons';
-import {ProfileParamList} from './ProfileNavigator';
 
 type Props = StackScreenProps<ProfileParamList, 'Posts'>;
 

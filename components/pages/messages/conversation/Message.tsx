@@ -17,7 +17,6 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import {MessagesParamList} from '../MessagesNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 export type MessageType = {

@@ -8,7 +8,6 @@ import {
   useStyleSheet,
 } from '@ui-kitten/components';
 import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
-import {MessagesParamList} from './MessagesNavigator';
 import NavBar from '../../NavBar';
 import {
   NavigationProp,
@@ -19,6 +18,7 @@ import MessageListItem from './MessageListItem';
 import {MessageDataItem} from '../../data/messages';
 import {useUser} from '../../hooks/useUser';
 import {UserContext} from '../../../App';
+import { MessagesParamList } from '../Navigation';
 
 type Props = StackScreenProps<MessagesParamList, 'MessageList'>;
 

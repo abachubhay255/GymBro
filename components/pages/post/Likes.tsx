@@ -16,10 +16,9 @@ import {
 import React, {useEffect, useState} from 'react';
 import {ListRenderItemInfo, StyleSheet} from 'react-native';
 import {useUser} from '../../hooks/useUser';
-import {HomeParamList} from '../home/HomeNavigator';
+import { PostParamList } from '../Navigation';
 import {BackIcon} from '../profile/extra/icons';
 import {POST_HEIGHT} from './Post';
-import {PostParamList} from './PostNavigator';
 
 type Props = StackScreenProps<PostParamList, 'Likes'>;
 

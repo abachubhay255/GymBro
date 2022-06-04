@@ -1,14 +1,13 @@
 import React from 'react';
 import BottomTabs from '../BottomTabs';
 import Feed from './home/Feed';
-import MessagesNavigator from './messages/MessagesNavigator';
 import NotificationsList from './notifications/NotificationsList';
 import ExploreWorkouts from './workouts/ExploreWorkouts';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {getTabBar} from '../utils/getTabBar';
-import HomeNavigator from './home/HomeNavigator';
 import WorkoutsNavigator from './workouts/WorkoutsNavigator';
 import NotificationsNavigator from './notifications/NotificationsNavigator';
+import { HomeNavigator, MessagesNavigator } from './Navigation';
 
 export default function Page() {
   const Tab = createBottomTabNavigator();
