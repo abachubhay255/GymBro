@@ -112,11 +112,14 @@ export default function Post({post}: Props) {
               name={likedByMe ? 'heart' : 'heart-outline'}
             />
           </Pressable>
-          <Icon
-            style={[styles.icon, {marginHorizontal: 15}]}
-            fill={theme['text-basic-color']}
-            name="message-circle-outline"
-          />
+          <Pressable onPress={goToComments}>
+            <Icon
+              style={[styles.icon, {marginHorizontal: 15}]}
+              fill={theme['text-basic-color']}
+              name="message-circle-outline"
+            />
+          </Pressable>
+
           <Icon
             style={styles.icon}
             fill={theme['text-basic-color']}
