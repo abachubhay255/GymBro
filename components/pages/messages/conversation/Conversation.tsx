@@ -21,6 +21,7 @@ import {MessageType} from './Message';
 import {useUser} from '../../../hooks/useUser';
 import MessagesHeader from '../MessagesHeader';
 import {MessagesParamList} from '../../Navigation';
+import {MessagesContext} from '../../../Main';
 
 type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
 export default function Conversation({route, navigation}: Props) {
@@ -29,11 +30,20 @@ export default function Conversation({route, navigation}: Props) {
   const User = useUser(user.username);
   const [photos, setPhotos] = useState<any[]>([]);
 
-  const loadedMessages =
-    User.data.messages.find(data => data.username === route.params.username)
+  const {messageData, setMessageData} = useContext(MessagesContext);
+
+  const messages =
+    messageData.find(data => data.username === route.params.username)
       ?.messages ?? [];
 
-  const [messages, setMessages] = useState(loadedMessages);
+  const setMessages = (messages: MessageType[]) => {
+    setMessageData(
+      messageData.map(mData =>
+        mData.username === route.params.username ? {...mData, messages} : mData,
+      ),
+    );
+  };
+
   const [messageText, setMessageText] = useState('');
   const [showGallery, setShowGallery] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);

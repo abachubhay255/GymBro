@@ -18,7 +18,8 @@ import MessageListItem from './MessageListItem';
 import {MessageDataItem} from '../../data/messages';
 import {useUser} from '../../hooks/useUser';
 import {UserContext} from '../../../App';
-import { MessagesParamList } from '../Navigation';
+import {MessagesParamList} from '../Navigation';
+import {MessagesContext} from '../../Main';
 
 type Props = StackScreenProps<MessagesParamList, 'MessageList'>;
 
@@ -28,14 +29,14 @@ export default function MessageList({navigation}: Props) {
   const tabRoute = useRoute();
   const {user} = useContext(UserContext);
   const User = useUser(user?.username ?? '');
-  const MessageData = User.data.messages;
-  const [searchedMessages, setSearchedMessages] = useState(MessageData);
+  const {messageData} = useContext(MessagesContext);
+  const [searchedMessages, setSearchedMessages] = useState(messageData);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const normalizedQuery = searchQuery.toLowerCase();
     setSearchedMessages(
-      MessageData.filter(message => {
+      messageData.filter(message => {
         const messageUser = useUser(message.username);
         return (
           messageUser.firstName.toLowerCase().includes(normalizedQuery) ||
@@ -43,7 +44,7 @@ export default function MessageList({navigation}: Props) {
         );
       }),
     );
-  }, [searchQuery]);
+  }, [searchQuery, messageData]);
 
   const onItemPress = (username: string): void => {
     navigation && navigation.navigate('Conversation', {username: username});
