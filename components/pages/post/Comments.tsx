@@ -9,25 +9,46 @@ import {
   Layout,
   List,
   ListItem,
+  StyleService,
   Text,
   TopNavigation,
   TopNavigationAction,
+  useStyleSheet,
 } from '@ui-kitten/components';
-import React, {useEffect, useState} from 'react';
-import {ListRenderItemInfo, StyleSheet, View} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  Keyboard,
+  ListRenderItemInfo,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
+import {UserContext} from '../../../App';
+import {Users} from '../../data/users';
 import {useUser} from '../../hooks/useUser';
+import {CurrentUserContext} from '../../Main';
+import {PaperPlaneIcon} from '../messages/conversation/Icons';
 import {formattedDate} from '../messages/utils';
 import {PostParamList} from '../Navigation';
 import {BackIcon} from '../profile/extra/icons';
-import {Comment, POST_HEIGHT} from './Post';
+import {POST_HEIGHT} from './Post';
 
-type Props = StackScreenProps<PostParamList, 'Likes'>;
+export type Comment = {
+  username: string;
+  timestamp: Date;
+  text: string;
+};
+
+type Props = StackScreenProps<PostParamList, 'Comments'>;
 
 export default function Comments({navigation, route}: Props) {
+  const styles = useStyleSheet(themedStyles);
+  const {currentUser} = useContext(CurrentUserContext);
   const User = useUser(route.params.username);
   const postId = route.params.postId;
   const post = User.data.posts[postId];
-  const comments = User.data.posts[postId].comments;
+  const [comments, setComments] = useState(User.data.posts[postId].comments);
+  const [commentText, setCommentText] = useState('');
   const caption = {
     username: User.username,
     timestamp: post.timestamp,
@@ -46,7 +67,9 @@ export default function Comments({navigation, route}: Props) {
     const User = useUser(comment.username);
     return (
       <View style={styles.commentContainer}>
-        <Avatar source={{uri: User.data.profilePic}} />
+        <Pressable onPress={() => goToProfile(User.username)}>
+          <Avatar source={{uri: User.data.profilePic}} />
+        </Pressable>
         <View style={styles.textContainer}>
           <Text>
             <Text
@@ -71,6 +94,19 @@ export default function Comments({navigation, route}: Props) {
     navigation && navigation.goBack();
   };
 
+  const onSendButtonPress = (): void => {
+    setComments([
+      {
+        text: commentText,
+        username: currentUser.username,
+        timestamp: new Date(),
+      },
+      ...comments,
+    ]);
+    setCommentText('');
+    Keyboard.dismiss();
+  };
+
   const BackAction = () => (
     <TopNavigationAction icon={BackIcon} onPress={onBackButtonPress} />
   );
@@ -92,11 +128,26 @@ export default function Comments({navigation, route}: Props) {
         data={comments}
         renderItem={renderCommentItem}
       />
+      <View style={styles.commentInputContainer}>
+        <Input
+          style={styles.commentInput}
+          status="control"
+          placeholder="Add a comment..."
+          value={commentText}
+          onChangeText={setCommentText}
+        />
+        <Button
+          style={styles.iconButton}
+          accessoryLeft={PaperPlaneIcon as any}
+          disabled={!(commentText && commentText.length > 0)}
+          onPress={onSendButtonPress}
+        />
+      </View>
     </>
   );
 }
 
-const styles = StyleSheet.create({
+const themedStyles = StyleService.create({
   username: {
     fontWeight: 'bold',
   },
@@ -109,5 +160,19 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     paddingHorizontal: 5,
+  },
+  commentInput: {
+    flex: 1,
+  },
+  iconButton: {
+    width: 24,
+    height: 24,
+    marginHorizontal: 5,
+  },
+  commentInputContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    paddingVertical: 16,
+    backgroundColor: 'background-basic-color-1',
   },
 });

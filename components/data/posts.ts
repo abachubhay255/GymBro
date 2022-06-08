@@ -1,8 +1,9 @@
+import {Comment} from '../pages/post/Comments';
 import {PostType} from '../pages/post/Post';
 
 const likes = ['ironman', 'nedleeds', 'mjwatson', 'spiderman'];
 
-const comments = [
+const comments: Comment[] = [
   {username: 'ironman', timestamp: new Date(), text: 'Nice work kid!'},
   {username: 'nedleeds', timestamp: new Date(), text: 'So awesome!'},
   {

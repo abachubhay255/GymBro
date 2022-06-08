@@ -20,7 +20,7 @@ import {hasAndroidPermission} from '../../../Permissions';
 import {MessageType} from './Message';
 import {useUser} from '../../../hooks/useUser';
 import MessagesHeader from '../MessagesHeader';
-import { MessagesParamList } from '../../Navigation';
+import {MessagesParamList} from '../../Navigation';
 
 type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
 export default function Conversation({route, navigation}: Props) {
@@ -95,8 +95,8 @@ export default function Conversation({route, navigation}: Props) {
       <Chat
         style={styles.list}
         contentContainerStyle={styles.listContent}
-        followEnd={true}
-        data={messages}
+        data={[...messages].reverse()}
+        inverted
       />
       <View style={styles.messageInputContainer}>
         <Popover

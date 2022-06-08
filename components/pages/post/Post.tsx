@@ -7,14 +7,10 @@ import {User, UserContext} from '../../../App';
 import {useUser} from '../../hooks/useUser';
 import {formattedDate} from '../messages/utils';
 import {HomeParamList, ProfileParamList} from '../Navigation';
+import { Comment } from './Comments';
 
 export const POST_HEIGHT = 625;
 
-export type Comment = {
-  username: string;
-  timestamp: Date;
-  text: string;
-};
 
 export type PostType = {
   username: string;
