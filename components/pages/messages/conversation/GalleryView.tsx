@@ -7,6 +7,7 @@ import {
   Pressable,
   View,
 } from 'react-native';
+import {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 
 type Props = {
   photos: any[];
@@ -51,7 +52,13 @@ export default function GalleryView({
       </Pressable>
     );
   };
-  return <FlatList data={photos} renderItem={renderItem} numColumns={3} />;
+  return (
+    <BottomSheetFlatList
+      data={photos}
+      renderItem={renderItem}
+      numColumns={3}
+    />
+  );
 }
 
 const themedStyles = StyleService.create({

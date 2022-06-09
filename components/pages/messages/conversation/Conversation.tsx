@@ -1,5 +1,18 @@
-import React, {useContext, useReducer, useState} from 'react';
-import {Keyboard, Platform, TouchableWithoutFeedback, View} from 'react-native';
+import React, {
+  useCallback,
+  useContext,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
+import {
+  Keyboard,
+  Platform,
+  Pressable,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import CameraRoll from '@react-native-community/cameraroll';
 import {
   Button,
@@ -8,6 +21,7 @@ import {
   Layout,
   Popover,
   StyleService,
+  Text,
   useStyleSheet,
 } from '@ui-kitten/components';
 import {PaperPlaneIcon} from './Icons';
@@ -22,6 +36,12 @@ import {useUser} from '../../../hooks/useUser';
 import MessagesHeader from '../MessagesHeader';
 import {MessagesParamList} from '../../Navigation';
 import {MessagesContext} from '../../../Main';
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetBackdrop,
+} from '@gorhom/bottom-sheet';
+import {BottomSheetDefaultBackdropProps} from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 
 type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
 export default function Conversation({route, navigation}: Props) {
@@ -45,7 +65,6 @@ export default function Conversation({route, navigation}: Props) {
   };
 
   const [messageText, setMessageText] = useState('');
-  const [showGallery, setShowGallery] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
 
   async function LoadImages() {
@@ -65,6 +84,17 @@ export default function Conversation({route, navigation}: Props) {
       });
   }
 
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['75%', '100%'], []);
+
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    LoadImages();
+    bottomSheetModalRef.current?.present();
+  }, []);
+
   const onSendButtonPress = (): void => {
     if (selectedPhotos.length > 0) {
       const newMessages: MessageType[] = [];
@@ -78,7 +108,7 @@ export default function Conversation({route, navigation}: Props) {
       }
       setMessages([...messages, ...newMessages]);
       setSelectedPhotos([]);
-      setShowGallery(false);
+      bottomSheetModalRef.current?.close();
     } else {
       setMessages([
         ...messages,
@@ -90,59 +120,68 @@ export default function Conversation({route, navigation}: Props) {
   };
 
   const renderGalleryIcon = (props: any) => (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        LoadImages();
-        setShowGallery(!showGallery);
-      }}>
+    <Pressable onPress={handlePresentModalPress}>
       <Icon {...props} name="image-outline" />
-    </TouchableWithoutFeedback>
+    </Pressable>
+  );
+
+  const renderBackdrop = useCallback(
+    (props: BottomSheetDefaultBackdropProps) => (
+      <BottomSheetBackdrop
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        {...props}
+      />
+    ),
+    [],
   );
 
   return (
     <>
       <MessagesHeader username={route.params.username} />
-      <Chat
-        style={styles.list}
-        contentContainerStyle={styles.listContent}
-        data={[...messages].reverse()}
-        inverted
-      />
-      <View style={styles.messageInputContainer}>
-        <Popover
-          backdropStyle={styles.backdrop}
-          visible={showGallery}
-          anchor={() => <View style={styles.anchor} />}
-          onBackdropPress={() => setShowGallery(false)}>
-          <Layout style={styles.gallery}>
-            <Button
-              accessoryLeft={PaperPlaneIcon as any}
-              disabled={selectedPhotos.length === 0}
-              onPress={onSendButtonPress}
-            />
-            <GalleryView
-              photos={photos}
-              selectedPhotos={selectedPhotos}
-              setSelectedPhotos={setSelectedPhotos}
-            />
-          </Layout>
-        </Popover>
-
-        <Input
-          style={styles.messageInput}
-          status="control"
-          accessoryRight={renderGalleryIcon}
-          placeholder="Message..."
-          value={messageText}
-          onChangeText={setMessageText}
+      <BottomSheetModalProvider>
+        <Chat
+          style={styles.list}
+          contentContainerStyle={styles.listContent}
+          data={[...messages].reverse()}
+          inverted
         />
-        <Button
-          style={[styles.iconButton, styles.sendButton]}
-          accessoryLeft={PaperPlaneIcon as any}
-          disabled={!(messageText && messageText.length > 0)}
-          onPress={onSendButtonPress}
-        />
-      </View>
+        <View style={styles.messageInputContainer}>
+          <Input
+            style={styles.messageInput}
+            status="control"
+            accessoryRight={renderGalleryIcon}
+            placeholder="Message..."
+            value={messageText}
+            onChangeText={setMessageText}
+          />
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            snapPoints={snapPoints}
+            backdropComponent={renderBackdrop}
+            handleStyle={styles.handle}
+            handleIndicatorStyle={styles.handleIndicator}>
+            <Layout style={styles.gallery}>
+              <Button
+                accessoryLeft={PaperPlaneIcon as any}
+                disabled={selectedPhotos.length === 0}
+                onPress={onSendButtonPress}
+              />
+              <GalleryView
+                photos={photos}
+                selectedPhotos={selectedPhotos}
+                setSelectedPhotos={setSelectedPhotos}
+              />
+            </Layout>
+          </BottomSheetModal>
+          <Button
+            style={[styles.iconButton, styles.sendButton]}
+            accessoryLeft={PaperPlaneIcon as any}
+            disabled={!(messageText && messageText.length > 0)}
+            onPress={onSendButtonPress}
+          />
+        </View>
+      </BottomSheetModalProvider>
     </>
   );
 }
@@ -153,7 +192,13 @@ const themedStyles = StyleService.create({
     bottom: 0,
   },
   gallery: {
-    height: 400,
+    flex: 1,
+  },
+  handle: {
+    backgroundColor: 'color-basic-700',
+  },
+  handleIndicator: {
+    backgroundColor: 'color-primary-default',
   },
   backdrop: {
     backgroundColor: 'rgba(0, 0, 0, 0.33)',
