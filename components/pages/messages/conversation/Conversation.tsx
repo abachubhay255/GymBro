@@ -86,13 +86,15 @@ export default function Conversation({route, navigation}: Props) {
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-  // variables
   const snapPoints = useMemo(() => ['75%', '100%'], []);
 
-  // callbacks
-  const handlePresentModalPress = useCallback(() => {
+  const openModal = useCallback(() => {
     LoadImages();
     bottomSheetModalRef.current?.present();
+  }, []);
+
+  const closeModal = useCallback(() => {
+    bottomSheetModalRef.current?.close();
   }, []);
 
   const onSendButtonPress = (): void => {
@@ -108,7 +110,7 @@ export default function Conversation({route, navigation}: Props) {
       }
       setMessages([...messages, ...newMessages]);
       setSelectedPhotos([]);
-      bottomSheetModalRef.current?.close();
+      closeModal();
     } else {
       setMessages([
         ...messages,
@@ -120,7 +122,7 @@ export default function Conversation({route, navigation}: Props) {
   };
 
   const renderGalleryIcon = (props: any) => (
-    <Pressable onPress={handlePresentModalPress}>
+    <Pressable onPress={openModal}>
       <Icon {...props} name="image-outline" />
     </Pressable>
   );
@@ -139,49 +141,47 @@ export default function Conversation({route, navigation}: Props) {
   return (
     <>
       <MessagesHeader username={route.params.username} />
-      <BottomSheetModalProvider>
-        <Chat
-          style={styles.list}
-          contentContainerStyle={styles.listContent}
-          data={[...messages].reverse()}
-          inverted
+      <Chat
+        style={styles.list}
+        contentContainerStyle={styles.listContent}
+        data={[...messages].reverse()}
+        inverted
+      />
+      <View style={styles.messageInputContainer}>
+        <Input
+          style={styles.messageInput}
+          status="control"
+          accessoryRight={renderGalleryIcon}
+          placeholder="Message..."
+          value={messageText}
+          onChangeText={setMessageText}
         />
-        <View style={styles.messageInputContainer}>
-          <Input
-            style={styles.messageInput}
-            status="control"
-            accessoryRight={renderGalleryIcon}
-            placeholder="Message..."
-            value={messageText}
-            onChangeText={setMessageText}
-          />
-          <BottomSheetModal
-            ref={bottomSheetModalRef}
-            snapPoints={snapPoints}
-            backdropComponent={renderBackdrop}
-            handleStyle={styles.handle}
-            handleIndicatorStyle={styles.handleIndicator}>
-            <Layout style={styles.gallery}>
-              <Button
-                accessoryLeft={PaperPlaneIcon as any}
-                disabled={selectedPhotos.length === 0}
-                onPress={onSendButtonPress}
-              />
-              <GalleryView
-                photos={photos}
-                selectedPhotos={selectedPhotos}
-                setSelectedPhotos={setSelectedPhotos}
-              />
-            </Layout>
-          </BottomSheetModal>
-          <Button
-            style={[styles.iconButton, styles.sendButton]}
-            accessoryLeft={PaperPlaneIcon as any}
-            disabled={!(messageText && messageText.length > 0)}
-            onPress={onSendButtonPress}
-          />
-        </View>
-      </BottomSheetModalProvider>
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          snapPoints={snapPoints}
+          backdropComponent={renderBackdrop}
+          handleStyle={styles.handle}
+          handleIndicatorStyle={styles.handleIndicator}>
+          <Layout style={styles.gallery}>
+            <Button
+              accessoryLeft={PaperPlaneIcon as any}
+              disabled={selectedPhotos.length === 0}
+              onPress={onSendButtonPress}
+            />
+            <GalleryView
+              photos={photos}
+              selectedPhotos={selectedPhotos}
+              setSelectedPhotos={setSelectedPhotos}
+            />
+          </Layout>
+        </BottomSheetModal>
+        <Button
+          style={[styles.iconButton, styles.sendButton]}
+          accessoryLeft={PaperPlaneIcon as any}
+          disabled={!(messageText && messageText.length > 0)}
+          onPress={onSendButtonPress}
+        />
+      </View>
     </>
   );
 }

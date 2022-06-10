@@ -1,3 +1,4 @@
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Avatar, Card, Icon, Text, useTheme} from '@ui-kitten/components';
@@ -7,10 +8,10 @@ import {User, UserContext} from '../../../App';
 import {useUser} from '../../hooks/useUser';
 import {formattedDate} from '../messages/utils';
 import {HomeParamList, ProfileParamList} from '../Navigation';
-import { Comment } from './Comments';
+import {Comment} from './Comments';
+import SendPost from './SendPost';
 
 export const POST_HEIGHT = 625;
-
 
 export type PostType = {
   username: string;
@@ -115,12 +116,7 @@ export default function Post({post}: Props) {
               name="message-circle-outline"
             />
           </Pressable>
-
-          <Icon
-            style={styles.icon}
-            fill={theme['text-basic-color']}
-            name="paper-plane-outline"
-          />
+          <SendPost />
         </View>
         <Text category="p1" style={styles.mainText} onPress={goToLikes}>
           {likes.length.toLocaleString() + ' likes'}

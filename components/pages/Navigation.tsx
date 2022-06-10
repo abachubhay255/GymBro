@@ -9,6 +9,7 @@ import Posts from './profile/Posts';
 import Profile from './profile/Profile';
 import ProfileSettings from './profile/profilesettings/ProfileSettings';
 import Comments from './post/Comments';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
 export type ProfileParamList = {
   Profile: {username: string};
@@ -21,13 +22,15 @@ export type ProfileParamList = {
 export function ProfileNavigator() {
   const {Navigator, Screen} = createStackNavigator();
   return (
-    <Navigator screenOptions={{headerShown: false}}>
-      <Screen name="Profile" component={Profile} />
-      <Screen name="ProfileSettings" component={ProfileSettings} />
-      <Screen name="Message" component={MessagesNavigator} />
-      <Screen name="Posts" component={Posts} />
-      <Screen name="Post" component={PostNavigator} />
-    </Navigator>
+    <BottomSheetModalProvider>
+      <Navigator screenOptions={{headerShown: false}}>
+        <Screen name="Profile" component={Profile} />
+        <Screen name="ProfileSettings" component={ProfileSettings} />
+        <Screen name="Message" component={MessagesNavigator} />
+        <Screen name="Posts" component={Posts} />
+        <Screen name="Post" component={PostNavigator} />
+      </Navigator>
+    </BottomSheetModalProvider>
   );
 }
 
