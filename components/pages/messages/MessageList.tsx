@@ -92,6 +92,7 @@ export default function MessageList({navigation}: Props) {
         style={styles.list}
         data={searchedMessages}
         renderItem={renderItem}
+        keyboardShouldPersistTaps="handled"
       />
     </>
   );

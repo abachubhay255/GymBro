@@ -20,6 +20,7 @@ import {
 } from '@ui-kitten/components';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
+  Keyboard,
   KeyboardAvoidingView,
   ListRenderItemInfo,
   Platform,
@@ -102,23 +103,25 @@ export default function SendPost() {
     item,
   }: ListRenderItemInfo<UserType>): React.ReactElement => {
     const isSelected = selectedUsers.includes(item.username);
+    const selectUser = () => {
+      isSelected
+        ? setSelectedUsers(selectedUsers.filter(u => u !== item.username))
+        : setSelectedUsers([...selectedUsers, item.username]);
+    };
     return (
       <ListItem
         title={item.firstName + ' ' + item.lastName}
         description={`@${item.username}`}
         accessoryLeft={() => renderProfilePic(item.data.profilePic)}
         accessoryRight={() => renderSelectButton(isSelected)}
-        onPress={() =>
-          isSelected
-            ? setSelectedUsers(selectedUsers.filter(u => u !== item.username))
-            : setSelectedUsers([...selectedUsers, item.username])
-        }
+        onPress={selectUser}
       />
     );
   };
 
   const onSendButtonPress = () => {
     setSelectedUsers([]);
+    Keyboard.dismiss();
     closeModal();
   };
 
@@ -154,21 +157,22 @@ export default function SendPost() {
         backgroundStyle={styles.background}
         handleStyle={styles.handle}
         handleIndicatorStyle={styles.handleIndicator}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <BottomSheetTextInput
-            style={styles.searchBar}
-            placeholder="Search"
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          <Button
-            disabled={selectedUsers.length === 0}
-            onPress={onSendButtonPress}>
-            {sendButtonText}
-          </Button>
-        </KeyboardAvoidingView>
-        <BottomSheetFlatList data={searchedUsers} renderItem={renderUserItem} />
+        <BottomSheetTextInput
+          style={styles.searchBar}
+          placeholder="Search"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+        <Button
+          disabled={selectedUsers.length === 0}
+          onPress={onSendButtonPress}>
+          {sendButtonText}
+        </Button>
+        <BottomSheetFlatList
+          keyboardShouldPersistTaps="handled"
+          data={searchedUsers}
+          renderItem={renderUserItem}
+        />
       </BottomSheetModal>
     </>
   );
