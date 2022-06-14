@@ -8,6 +8,7 @@ import {AuthParamList} from './AuthNavigator';
 import {StackScreenProps} from '@react-navigation/stack';
 import {Users} from '../data/users';
 import {useUser} from '../hooks/useUser';
+import {ScrollView} from 'react-native-gesture-handler';
 
 type Props = StackScreenProps<AuthParamList, 'SignIn'>;
 
@@ -58,62 +59,64 @@ export default function SignIn({navigation}: Props) {
       source={{
         uri: 'https://images.unsplash.com/photo-1590487988256-9ed24133863e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=728&q=80',
       }}>
-      <View style={styles.headerContainer}>
-        <Text category="h1" status="control">
-          GymBro
-        </Text>
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <View style={styles.headerContainer}>
+          <Text category="h1" status="control">
+            GymBro
+          </Text>
 
-        {invalidMessage !== '' ? (
-          <Text style={styles.signInLabel} category="s1" status="danger">
-            {invalidMessage}
-          </Text>
-        ) : (
-          <Text style={styles.signInLabel} category="s1" status="control">
-            Sign in to continue
-          </Text>
-        )}
-      </View>
-      <View style={styles.formContainer}>
-        <Input
-          status="control"
-          placeholder="Username"
-          accessoryRight={PersonIcon as any}
-          value={username}
-          onChangeText={setUsername}
-        />
-        <Input
-          style={styles.passwordInput}
-          status="control"
-          placeholder="Password"
-          accessoryRight={renderPasswordIcon}
-          value={password}
-          secureTextEntry={!passwordVisible}
-          onChangeText={setPassword}
-        />
-        <View style={styles.forgotPasswordContainer}>
-          <Button
-            style={styles.forgotPasswordButton}
-            appearance="ghost"
-            status="control"
-            onPress={onForgotPasswordButtonPress}>
-            Forgot your password?
-          </Button>
+          {invalidMessage !== '' ? (
+            <Text style={styles.signInLabel} category="s1" status="danger">
+              {invalidMessage}
+            </Text>
+          ) : (
+            <Text style={styles.signInLabel} category="s1" status="control">
+              Sign in to continue
+            </Text>
+          )}
         </View>
-      </View>
-      <Button
-        style={styles.signInButton}
-        size="giant"
-        disabled={username === '' || password === ''}
-        onPress={onSignInButtonPress}>
-        SIGN IN
-      </Button>
-      <Button
-        style={styles.signUpButton}
-        appearance="ghost"
-        status="control"
-        onPress={onSignUpButtonPress}>
-        Don't have an account? Sign Up
-      </Button>
+        <View style={styles.formContainer}>
+          <Input
+            status="control"
+            placeholder="Username"
+            accessoryRight={PersonIcon as any}
+            value={username}
+            onChangeText={setUsername}
+          />
+          <Input
+            style={styles.passwordInput}
+            status="control"
+            placeholder="Password"
+            accessoryRight={renderPasswordIcon}
+            value={password}
+            secureTextEntry={!passwordVisible}
+            onChangeText={setPassword}
+          />
+          <View style={styles.forgotPasswordContainer}>
+            <Button
+              style={styles.forgotPasswordButton}
+              appearance="ghost"
+              status="control"
+              onPress={onForgotPasswordButtonPress}>
+              Forgot your password?
+            </Button>
+          </View>
+        </View>
+        <Button
+          style={styles.signInButton}
+          size="giant"
+          disabled={username === '' || password === ''}
+          onPress={onSignInButtonPress}>
+          SIGN IN
+        </Button>
+        <Button
+          style={styles.signUpButton}
+          appearance="ghost"
+          status="control"
+          onPress={onSignUpButtonPress}>
+          Don't have an account? Sign Up
+        </Button>
+      </ScrollView>
     </ImageOverlay>
   );
 }
