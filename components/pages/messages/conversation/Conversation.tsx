@@ -45,6 +45,7 @@ import {
 } from '@gorhom/bottom-sheet';
 import {BottomSheetDefaultBackdropProps} from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {ScrollView} from 'react-native-gesture-handler';
 
 type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
 export default function Conversation({route, navigation}: Props) {
@@ -142,55 +143,58 @@ export default function Conversation({route, navigation}: Props) {
   );
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={-40}
-      style={styles.container}>
-      <MessagesHeader username={route.params.username} />
-      <Chat
-        style={styles.list}
-        contentContainerStyle={styles.listContent}
-        data={[...messages].reverse()}
-        inverted
-        keyboardShouldPersistTaps="handled"
-      />
+    <Layout style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={-65}
+        style={styles.keyboard}>
+        <MessagesHeader username={route.params.username} />
+        <Chat
+          style={styles.list}
+          contentContainerStyle={styles.listContent}
+          data={[...messages].reverse()}
+          inverted
+          keyboardShouldPersistTaps="handled"
+        />
 
-      <View style={styles.messageInputContainer}>
-        <Input
-          style={styles.messageInput}
-          status="control"
-          accessoryRight={renderGalleryIcon}
-          placeholder="Message..."
-          value={messageText}
-          onChangeText={setMessageText}
-        />
-        <BottomSheetModal
-          ref={bottomSheetModalRef}
-          snapPoints={snapPoints}
-          backdropComponent={renderBackdrop}
-          handleStyle={styles.handle}
-          handleIndicatorStyle={styles.handleIndicator}>
-          <Layout style={styles.gallery}>
-            <Button
-              accessoryLeft={PaperPlaneIcon as any}
-              disabled={selectedPhotos.length === 0}
-              onPress={onSendButtonPress}
-            />
-            <GalleryView
-              photos={photos}
-              selectedPhotos={selectedPhotos}
-              setSelectedPhotos={setSelectedPhotos}
-            />
-          </Layout>
-        </BottomSheetModal>
-        <Button
-          style={[styles.iconButton, styles.sendButton]}
-          accessoryLeft={PaperPlaneIcon as any}
-          disabled={!(messageText && messageText.length > 0)}
-          onPress={onSendButtonPress}
-        />
-      </View>
-    </KeyboardAvoidingView>
+        <View style={styles.messageInputContainer}>
+          <Input
+            style={styles.messageInput}
+            status="control"
+            accessoryRight={renderGalleryIcon}
+            placeholder="Message..."
+            value={messageText}
+            onChangeText={setMessageText}
+            onSubmitEditing={onSendButtonPress}
+          />
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            snapPoints={snapPoints}
+            backdropComponent={renderBackdrop}
+            handleStyle={styles.handle}
+            handleIndicatorStyle={styles.handleIndicator}>
+            <Layout style={styles.gallery}>
+              <Button
+                accessoryLeft={PaperPlaneIcon as any}
+                disabled={selectedPhotos.length === 0}
+                onPress={onSendButtonPress}
+              />
+              <GalleryView
+                photos={photos}
+                selectedPhotos={selectedPhotos}
+                setSelectedPhotos={setSelectedPhotos}
+              />
+            </Layout>
+          </BottomSheetModal>
+          <Button
+            style={[styles.iconButton, styles.sendButton]}
+            accessoryLeft={PaperPlaneIcon as any}
+            disabled={!(messageText && messageText.length > 0)}
+            onPress={onSendButtonPress}
+          />
+        </View>
+      </KeyboardAvoidingView>
+    </Layout>
   );
 }
 
@@ -208,6 +212,10 @@ const themedStyles = StyleService.create({
     backgroundColor: 'rgba(0, 0, 0, 0.33)',
   },
   container: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  keyboard: {
     flex: 1,
   },
   list: {
