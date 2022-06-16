@@ -8,8 +8,10 @@ import React, {
 } from 'react';
 import {
   Keyboard,
+  KeyboardAvoidingView,
   Platform,
   Pressable,
+  SafeAreaView,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -42,6 +44,7 @@ import {
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 import {BottomSheetDefaultBackdropProps} from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
 export default function Conversation({route, navigation}: Props) {
@@ -139,14 +142,19 @@ export default function Conversation({route, navigation}: Props) {
   );
 
   return (
-    <>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={-40}
+      style={styles.container}>
       <MessagesHeader username={route.params.username} />
       <Chat
         style={styles.list}
         contentContainerStyle={styles.listContent}
         data={[...messages].reverse()}
         inverted
+        keyboardShouldPersistTaps="handled"
       />
+
       <View style={styles.messageInputContainer}>
         <Input
           style={styles.messageInput}
@@ -182,15 +190,11 @@ export default function Conversation({route, navigation}: Props) {
           onPress={onSendButtonPress}
         />
       </View>
-    </>
+    </KeyboardAvoidingView>
   );
 }
 
 const themedStyles = StyleService.create({
-  anchor: {
-    position: 'absolute',
-    bottom: 0,
-  },
   gallery: {
     flex: 1,
   },
@@ -212,12 +216,6 @@ const themedStyles = StyleService.create({
   listContent: {
     paddingVertical: 12,
     paddingHorizontal: 8,
-  },
-  footer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
   },
   messageInputContainer: {
     flexDirection: 'row',
