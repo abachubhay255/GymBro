@@ -46,6 +46,7 @@ import {
 import {BottomSheetDefaultBackdropProps} from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {ScrollView} from 'react-native-gesture-handler';
+import KeyboardAwareView from '../../../utils/KeyboardAwareView';
 
 type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
 export default function Conversation({route, navigation}: Props) {
@@ -144,10 +145,7 @@ export default function Conversation({route, navigation}: Props) {
 
   return (
     <Layout style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={-65}
-        style={styles.keyboard}>
+      <KeyboardAwareView>
         <MessagesHeader username={route.params.username} />
         <Chat
           style={styles.list}
@@ -193,7 +191,7 @@ export default function Conversation({route, navigation}: Props) {
             onPress={onSendButtonPress}
           />
         </View>
-      </KeyboardAvoidingView>
+      </KeyboardAwareView>
     </Layout>
   );
 }
