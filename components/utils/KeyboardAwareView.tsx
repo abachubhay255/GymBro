@@ -9,7 +9,6 @@ export default function KeyboardAwareView({children}: Props) {
   const keyboardHeight = useRef(new Animated.Value(0)).current;
 
   const keyboardWillShow = (event: KeyboardEvent) => {
-    console.log('showing kb');
     Animated.timing(keyboardHeight, {
       duration: event.duration,
       toValue: event.endCoordinates.height,
@@ -18,7 +17,6 @@ export default function KeyboardAwareView({children}: Props) {
   };
 
   const keyboardWillHide = (event: KeyboardEvent) => {
-    console.log('hiding kb');
     Animated.timing(keyboardHeight, {
       duration: event.duration,
       toValue: 0,
@@ -40,8 +38,6 @@ export default function KeyboardAwareView({children}: Props) {
       hideSubscription.remove();
     };
   }, []);
-
-  console.log(keyboardHeight);
 
   return (
     <Animated.View style={{flex: 1, paddingBottom: keyboardHeight}}>
