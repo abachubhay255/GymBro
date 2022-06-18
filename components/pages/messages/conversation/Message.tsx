@@ -18,12 +18,14 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {PostType} from '../../post/Post';
 
 export type MessageType = {
   text?: string;
   username: string;
   timestamp: Date;
   attachment?: string;
+  post?: PostType;
 };
 
 type MessageProps = {

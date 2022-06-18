@@ -18,7 +18,14 @@ import {
   useStyleSheet,
   useTheme,
 } from '@ui-kitten/components';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -29,11 +36,20 @@ import {
 } from 'react-native';
 import {Users, UserType} from '../../data/users';
 import {useUser} from '../../hooks/useUser';
+import {CurrentUserContext, MessagesContext} from '../../Main';
+import {CustomBottomSheetTextInput} from '../../utils/CustomBottomSheetTextInput';
 import {PaperPlaneIcon} from '../messages/conversation/Icons';
+import {MessageType} from '../messages/conversation/Message';
+import {PostType} from './Post';
 
-export default function SendPost() {
+type Props = {
+  post: PostType;
+};
+
+export default function SendPost({post}: Props) {
   const styles = useStyleSheet(themedStyles);
   const theme = useTheme();
+  const {currentUser} = useContext(CurrentUserContext);
 
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
@@ -60,20 +76,23 @@ export default function SendPost() {
     [],
   );
 
-  const allUsers = [
-    ...Users,
-    ...Users,
-    ...Users,
-    ...Users,
-    ...Users,
-    ...Users,
-    ...Users,
-    ...Users,
-    ...Users,
-  ];
+  const allUsers = [...Users];
 
   const [searchedUsers, setSearchedUsers] = useState(allUsers);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const {messageData, setMessageData} = useContext(MessagesContext);
+
+  const getMessages = (username: string) =>
+    messageData.find(data => data.username === username)?.messages ?? [];
+
+  const setMessages = (username: string, messages: MessageType[]) => {
+    setMessageData(
+      messageData.map(mData =>
+        mData.username === username ? {...mData, messages} : mData,
+      ),
+    );
+  };
 
   useEffect(() => {
     const normalizedQuery = searchQuery.toLowerCase();
@@ -120,6 +139,16 @@ export default function SendPost() {
   };
 
   const onSendButtonPress = () => {
+    for (const username of selectedUsers) {
+      setMessages(username, [
+        ...getMessages(username),
+        {
+          post: post,
+          username: currentUser.username,
+          timestamp: new Date(),
+        },
+      ]);
+    }
     setSelectedUsers([]);
     Keyboard.dismiss();
     closeModal();
@@ -153,12 +182,15 @@ export default function SendPost() {
         ref={bottomSheetModalRef}
         snapPoints={snapPoints}
         backdropComponent={renderBackdrop}
+        keyboardBehavior="extend"
         android_keyboardInputMode="adjustPan"
         backgroundStyle={styles.background}
         handleStyle={styles.handle}
         handleIndicatorStyle={styles.handleIndicator}>
-        <BottomSheetTextInput
+        <CustomBottomSheetTextInput
           style={styles.searchBar}
+          status="control"
+          size="small"
           placeholder="Search"
           value={searchQuery}
           onChangeText={setSearchQuery}

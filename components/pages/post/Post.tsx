@@ -33,6 +33,7 @@ export default function Post({post}: Props) {
     useNavigation<StackNavigationProp<HomeParamList | ProfileParamList>>();
   const user = useContext(UserContext).user as User;
   const postOwner = useUser(post.username);
+  const postId = postOwner.data.posts.findIndex(p => p === post);
   const theme = useTheme();
 
   const goToProfile = () => {
@@ -49,7 +50,7 @@ export default function Post({post}: Props) {
         screen: 'Likes',
         params: {
           username: post.username,
-          postId: postOwner.data.posts.findIndex(p => p === post),
+          postId: postId,
         },
       });
   };
@@ -60,7 +61,7 @@ export default function Post({post}: Props) {
         screen: 'Comments',
         params: {
           username: post.username,
-          postId: postOwner.data.posts.findIndex(p => p === post),
+          postId: postId,
         },
       });
   };
@@ -116,7 +117,7 @@ export default function Post({post}: Props) {
               name="message-circle-outline"
             />
           </Pressable>
-          <SendPost />
+          <SendPost post={post} />
         </View>
         <Text category="p1" style={styles.mainText} onPress={goToLikes}>
           {likes.length.toLocaleString() + ' likes'}
