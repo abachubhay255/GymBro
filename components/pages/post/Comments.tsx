@@ -27,6 +27,7 @@ import {UserContext} from '../../../App';
 import {Users} from '../../data/users';
 import {useUser} from '../../hooks/useUser';
 import {CurrentUserContext} from '../../Main';
+import KeyboardAwareView from '../../utils/KeyboardAwareView';
 import {PaperPlaneIcon} from '../messages/conversation/Icons';
 import {formattedDate} from '../messages/utils';
 import {PostParamList} from '../Navigation';
@@ -111,7 +112,7 @@ export default function Comments({navigation, route}: Props) {
     <TopNavigationAction icon={BackIcon} onPress={onBackButtonPress} />
   );
   return (
-    <>
+    <KeyboardAwareView>
       <TopNavigation
         accessoryLeft={BackAction}
         title={() => <Text style={{fontWeight: 'bold'}}>Comments</Text>}
@@ -143,7 +144,7 @@ export default function Comments({navigation, route}: Props) {
           onPress={onSendButtonPress}
         />
       </View>
-    </>
+    </KeyboardAwareView>
   );
 }
 

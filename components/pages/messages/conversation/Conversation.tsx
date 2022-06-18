@@ -211,7 +211,6 @@ const themedStyles = StyleService.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'flex-end',
   },
   keyboard: {
     flex: 1,
