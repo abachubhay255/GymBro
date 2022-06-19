@@ -1,4 +1,5 @@
 import {MessageType} from '../pages/messages/conversation/Message';
+import {IronmanPosts} from './posts';
 
 export type MessageDataItem = {
   username: string;
@@ -29,6 +30,11 @@ export const SpidermanMessageData: MessageDataItem[] = [
         timestamp: new Date('May 16, 2022 5:15:30'),
         attachment:
           'https://comicattractions.com/wp-content/uploads/2019/04/robert-downey-jr-spider-man-homecoming.jpg',
+      },
+      {
+        post: IronmanPosts[0],
+        username: 'ironman',
+        timestamp: new Date(),
       },
     ],
   },

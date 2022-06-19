@@ -41,6 +41,8 @@ export default function Message({message}: MessageProps) {
 
   const isMine = message.username === user.username;
 
+  const isGraphic = !!(message.attachment || message.post);
+
   const messageProfilePic = useUser(message.username).data.profilePic;
 
   const goToProfile = () => {
@@ -56,7 +58,7 @@ export default function Message({message}: MessageProps) {
       <View
         style={[
           isMine ? styles.containerOut : styles.containerIn,
-          styles.container,
+          isGraphic ? styles.graphicContainer : styles.textContainer,
         ]}>
         {!isMine && (
           <Pressable onPress={goToProfile}>
@@ -88,8 +90,11 @@ export default function Message({message}: MessageProps) {
 }
 
 const themedStyles = StyleSheet.create({
-  container: {
+  textContainer: {
     alignItems: 'center',
+  },
+  graphicContainer: {
+    alignItems: 'flex-end',
   },
   containerIn: {
     flexDirection: 'row',

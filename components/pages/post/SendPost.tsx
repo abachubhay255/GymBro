@@ -86,11 +86,14 @@ export default function SendPost({post}: Props) {
   const getMessages = (username: string) =>
     messageData.find(data => data.username === username)?.messages ?? [];
 
-  const setMessages = (username: string, messages: MessageType[]) => {
+  const setMessages = (usernames: string[], messagesArray: MessageType[][]) => {
     setMessageData(
-      messageData.map(mData =>
-        mData.username === username ? {...mData, messages} : mData,
-      ),
+      messageData.map(mData => {
+        const index = usernames.indexOf(mData.username);
+        return index !== -1
+          ? {...mData, messages: messagesArray[index]}
+          : mData;
+      }),
     );
   };
 
@@ -139,16 +142,16 @@ export default function SendPost({post}: Props) {
   };
 
   const onSendButtonPress = () => {
-    for (const username of selectedUsers) {
-      setMessages(username, [
-        ...getMessages(username),
-        {
-          post: post,
-          username: currentUser.username,
-          timestamp: new Date(),
-        },
-      ]);
-    }
+    const messagesArray = selectedUsers.map(username => [
+      ...getMessages(username),
+      {
+        post: post,
+        username: currentUser.username,
+        timestamp: new Date(),
+      },
+    ]);
+    setMessages(selectedUsers, messagesArray);
+
     setSelectedUsers([]);
     Keyboard.dismiss();
     closeModal();
