@@ -82,6 +82,7 @@ export default function SendPost({post}: Props) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const {messageData, setMessageData} = useContext(MessagesContext);
+  const [messageText, setMessageText] = useState('');
 
   const getMessages = (username: string) =>
     messageData.find(data => data.username === username)?.messages ?? [];
@@ -142,14 +143,30 @@ export default function SendPost({post}: Props) {
   };
 
   const onSendButtonPress = () => {
-    const messagesArray = selectedUsers.map(username => [
-      ...getMessages(username),
-      {
-        post: post,
-        username: currentUser.username,
-        timestamp: new Date(),
-      },
-    ]);
+    const messagesArray = selectedUsers.map(username =>
+      messageText.length > 0
+        ? [
+            ...getMessages(username),
+            {
+              post: post,
+              username: currentUser.username,
+              timestamp: new Date(),
+            },
+            {
+              text: messageText,
+              username: currentUser.username,
+              timestamp: new Date(),
+            },
+          ]
+        : [
+            ...getMessages(username),
+            {
+              post: post,
+              username: currentUser.username,
+              timestamp: new Date(),
+            },
+          ],
+    );
     setMessages(selectedUsers, messagesArray);
 
     setSelectedUsers([]);
@@ -190,6 +207,13 @@ export default function SendPost({post}: Props) {
         backgroundStyle={styles.background}
         handleStyle={styles.handle}
         handleIndicatorStyle={styles.handleIndicator}>
+        <CustomBottomSheetTextInput
+          style={styles.message}
+          placeholder="Write a message..."
+          value={messageText}
+          onChangeText={setMessageText}
+          onSubmitEditing={onSendButtonPress}
+        />
         <CustomBottomSheetTextInput
           style={styles.searchBar}
           status="control"
@@ -242,5 +266,9 @@ const themedStyles = StyleService.create({
   },
   selectedUser: {
     backgroundColor: 'color-primary-default',
+  },
+  message: {
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
   },
 });
