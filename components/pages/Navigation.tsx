@@ -10,6 +10,7 @@ import Profile from './profile/Profile';
 import ProfileSettings from './profile/profilesettings/ProfileSettings';
 import Comments from './post/Comments';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import SentPost from './messages/conversation/SentPost';
 
 export type ProfileParamList = {
   Profile: {username: string};
@@ -56,7 +57,9 @@ export function PostNavigator() {
 export type MessagesParamList = {
   MessageList: undefined;
   Conversation: {username: string};
+  SentPost: {username: string; postId: number};
   UserProfile: {screen: string; params: {username: string}};
+  Post: {screen: string; params?: Record<string, any>};
 };
 
 export function MessagesNavigator() {
@@ -65,7 +68,9 @@ export function MessagesNavigator() {
     <Navigator screenOptions={{headerShown: false}}>
       <Screen name="MessageList" component={MessageList} />
       <Screen name="Conversation" component={Conversation} />
+      <Screen name="SentPost" component={SentPost} />
       <Screen name="UserProfile" component={ProfileNavigator} />
+      <Screen name="Post" component={PostNavigator} />
     </Navigator>
   );
 }

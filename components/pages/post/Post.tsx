@@ -7,7 +7,11 @@ import {Image, Pressable, StyleSheet, View, ViewProps} from 'react-native';
 import {User, UserContext} from '../../../App';
 import {useUser} from '../../hooks/useUser';
 import {formattedDate} from '../messages/utils';
-import {HomeParamList, ProfileParamList} from '../Navigation';
+import {
+  HomeParamList,
+  MessagesParamList,
+  ProfileParamList,
+} from '../Navigation';
 import {Comment} from './Comments';
 import SendPost from './SendPost';
 
@@ -30,7 +34,9 @@ type Props = {
 
 export default function Post({post}: Props) {
   const navigation =
-    useNavigation<StackNavigationProp<HomeParamList | ProfileParamList>>();
+    useNavigation<
+      StackNavigationProp<HomeParamList | ProfileParamList | MessagesParamList>
+    >();
   const user = useContext(UserContext).user as User;
   const postOwner = useUser(post.username);
   const postId = postOwner.data.posts.findIndex(p => p === post);

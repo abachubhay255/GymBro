@@ -1,9 +1,12 @@
 import React from 'react';
-import {Image, StyleSheet, View, ViewProps} from 'react-native';
+import {Image, Pressable, StyleSheet, View, ViewProps} from 'react-native';
 import {Avatar, Text, useStyleSheet} from '@ui-kitten/components';
 import {MessageType} from './Message';
 import Post from '../../post/Post';
 import {useUser} from '../../../hooks/useUser';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {MessagesParamList} from '../../Navigation';
 // @ts-ignore
 interface MessageContentProps extends ViewProps {
   children: MessageType;
@@ -14,27 +17,40 @@ export default function MessageContent({
   ...viewProps
 }: MessageContentProps) {
   const styles = useStyleSheet(themedStyles);
+  const navigation = useNavigation<StackNavigationProp<MessagesParamList>>();
 
   const renderPost = (): React.ReactElement => {
     if (children.post) {
-      const proPic = useUser(children.post.username).data.profilePic;
+      const post = children.post;
+      const postOwner = useUser(children.post.username);
+      const postId = postOwner.data.posts.findIndex(p => p === post);
+      const proPic = postOwner.data.profilePic;
       return (
-        <View style={[style, styles.postContainer]}>
-          <View style={styles.postHeader}>
-            <Avatar style={styles.postProPic as any} source={{uri: proPic}} />
-            <Text style={styles.mainText} status="control">
-              {children.post.username}
+        <Pressable
+          onPress={() =>
+            navigation &&
+            navigation.push('SentPost', {
+              username: post.username,
+              postId: postId,
+            })
+          }>
+          <View style={[style, styles.postContainer]}>
+            <View style={styles.postHeader}>
+              <Avatar style={styles.postProPic as any} source={{uri: proPic}} />
+              <Text style={styles.mainText} status="control">
+                {post.username}
+              </Text>
+            </View>
+            <Image
+              style={styles.postImage as any}
+              source={{uri: post.photos[0]}}
+            />
+            <Text style={styles.postFooter}>
+              <Text style={styles.mainText}>{post.username + ' '}</Text>
+              <Text>{post.caption}</Text>
             </Text>
           </View>
-          <Image
-            style={styles.postImage as any}
-            source={{uri: children.post.photos[0]}}
-          />
-          <Text style={styles.postFooter}>
-            <Text style={styles.mainText}>{children.post.username + ' '}</Text>
-            <Text>{children.post.caption}</Text>
-          </Text>
-        </View>
+        </Pressable>
       );
     }
     return <Text>Post Unavailable</Text>;

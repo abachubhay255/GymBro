@@ -19,6 +19,7 @@ import {
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {PostType} from '../../post/Post';
+import {MessagesParamList} from '../../Navigation';
 
 export type MessageType = {
   text?: string;
@@ -36,8 +37,7 @@ export default function Message({message}: MessageProps) {
   const styles = useStyleSheet(themedStyles);
   const {user} = useContext(UserContext) as {user: User};
   const [showReceipt, setShowReceipt] = useState(false);
-  const navigation = useNavigation<StackNavigationProp<any>>();
-  const route = useRoute();
+  const navigation = useNavigation<StackNavigationProp<MessagesParamList>>();
 
   const isMine = message.username === user.username;
 
