@@ -16,4 +16,6 @@ LogBox.ignoreLogs([
   'Warning: Using UNSAFE_componentWillMount in strict mode is not recommended and may indicate bugs in your code. See https://reactjs.org/link/unsafe-component-lifecycles for details.',
   'Warning: Using UNSAFE_componentWillReceiveProps in strict mode is not recommended and may indicate bugs in your code. See https://reactjs.org/link/unsafe-component-lifecycles for details.',
   'Warning: findNodeHandle is deprecated in StrictMode. findNodeHandle was passed an instance of AnimatedComponent(View) which is inside StrictMode. Instead, add a ref directly to the element you want to reference. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-find-node',
+  'Warning: findNodeHandle is deprecated in StrictMode. findNodeHandle was passed an instance of FlatList which is inside StrictMode. Instead, add a ref directly to the element you want to reference. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-find-node',
+  'Warning: findNodeHandle is deprecated in StrictMode. findNodeHandle was passed an instance of AnimatedComponent(FlatList) which is inside StrictMode. Instead, add a ref directly to the element you want to reference. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-find-node',
 ]);
