@@ -1,10 +1,11 @@
-import React, {createContext, StrictMode, useState} from 'react';
+import React, {createContext, StrictMode, useEffect, useState} from 'react';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {default as theme} from './theme.json';
 import Main from './components/Main';
 import AuthNavigator from './components/auth/AuthNavigator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type User = {
   username: string;
@@ -21,6 +22,19 @@ export const UserContext = createContext<{
 
 export default function App() {
   const [user, setUser] = useState<User | undefined>();
+
+  const getUser = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('loggedInUser');
+      jsonValue != null && setUser(JSON.parse(jsonValue) as User);
+    } catch (e) {
+      throw new Error('Error readiing async storage');
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   const userValue = {
     user: user,

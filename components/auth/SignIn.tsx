@@ -9,6 +9,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {Users} from '../data/users';
 import {useUser} from '../hooks/useUser';
 import {ScrollView} from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = StackScreenProps<AuthParamList, 'SignIn'>;
 
@@ -19,12 +20,16 @@ export default function SignIn({navigation}: Props) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [invalidMessage, setInvalidMessage] = useState('');
 
-  const onSignInButtonPress = (): void => {
+  const onSignInButtonPress = async () => {
     const user = useUser(username);
     if (user) {
       if (user.password === password) {
         setInvalidMessage('');
         setUser({username: username, password: password});
+        await AsyncStorage.setItem(
+          'loggedInUser',
+          JSON.stringify({username: username, password: password}),
+        );
       } else {
         setInvalidMessage('password is incorrect');
       }
