@@ -19,7 +19,7 @@ import {MessageDataItem} from '../../data/messages';
 import {useUser} from '../../hooks/useUser';
 import {UserContext} from '../../../App';
 import {MessagesParamList} from '../Navigation';
-import {MessagesContext} from '../../Main';
+import { MessagesContext } from '../../DataContext';
 
 type Props = StackScreenProps<MessagesParamList, 'MessageList'>;
 

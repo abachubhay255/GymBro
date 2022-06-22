@@ -35,8 +35,9 @@ import {
   View,
 } from 'react-native';
 import {Users, UserType} from '../../data/users';
+import {MessagesContext} from '../../DataContext';
 import {useUser} from '../../hooks/useUser';
-import {CurrentUserContext, MessagesContext} from '../../Main';
+import {CurrentUserContext} from '../../Main';
 import {CustomBottomSheetTextInput} from '../../utils/CustomBottomSheetTextInput';
 import {PaperPlaneIcon} from '../messages/conversation/Icons';
 import {MessageType} from '../messages/conversation/Message';

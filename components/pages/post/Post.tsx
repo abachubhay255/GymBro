@@ -6,6 +6,7 @@ import React, {useContext, useState} from 'react';
 import {Image, Pressable, StyleSheet, View, ViewProps} from 'react-native';
 import {User, UserContext} from '../../../App';
 import {useUser} from '../../hooks/useUser';
+import {CurrentUserContext} from '../../Main';
 import {formattedDate} from '../messages/utils';
 import {
   HomeParamList,
@@ -13,6 +14,7 @@ import {
   ProfileParamList,
 } from '../Navigation';
 import {Comment} from './Comments';
+import PostMenu from './PostMenu';
 import SendPost from './SendPost';
 
 export const POST_HEIGHT = 625;
@@ -37,7 +39,7 @@ export default function Post({post}: Props) {
     useNavigation<
       StackNavigationProp<HomeParamList | ProfileParamList | MessagesParamList>
     >();
-  const user = useContext(UserContext).user as User;
+  const {currentUser} = useContext(CurrentUserContext);
   const postOwner = useUser(post.username);
   const postId = postOwner.data.posts.findIndex(p => p === post);
   const theme = useTheme();
@@ -91,13 +93,16 @@ export default function Post({post}: Props) {
             </Text>
           )}
         </View>
+        {postOwner.username === currentUser.username && (
+          <PostMenu postId={postId} />
+        )}
       </View>
     </Pressable>
   );
 
   const Footer = (props: ViewProps | undefined) => {
     const [likes, setLikes] = useState(post.likes);
-    const likedByMe = likes.includes(user?.username);
+    const likedByMe = likes.includes(currentUser?.username);
 
     return (
       <View style={styles.footerContainer}>
@@ -106,8 +111,8 @@ export default function Post({post}: Props) {
             onPress={() =>
               setLikes(
                 likedByMe
-                  ? likes.filter(l => l !== user.username)
-                  : [...likes, user.username],
+                  ? likes.filter(l => l !== currentUser.username)
+                  : [...likes, currentUser.username],
               )
             }>
             <Icon
@@ -171,6 +176,7 @@ const styles = StyleSheet.create({
   heading: {
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 5,
   },
   user: {
     marginHorizontal: 10,

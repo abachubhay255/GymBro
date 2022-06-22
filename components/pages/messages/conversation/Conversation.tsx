@@ -37,7 +37,6 @@ import {MessageType} from './Message';
 import {useUser} from '../../../hooks/useUser';
 import MessagesHeader from '../MessagesHeader';
 import {MessagesParamList} from '../../Navigation';
-import {MessagesContext} from '../../../Main';
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
@@ -47,6 +46,7 @@ import {BottomSheetDefaultBackdropProps} from '@gorhom/bottom-sheet/lib/typescri
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {ScrollView} from 'react-native-gesture-handler';
 import KeyboardAwareView from '../../../utils/KeyboardAwareView';
+import { MessagesContext } from '../../../DataContext';
 
 type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
 export default function Conversation({route, navigation}: Props) {

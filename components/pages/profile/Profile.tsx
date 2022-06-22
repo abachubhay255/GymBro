@@ -34,7 +34,8 @@ import {getFormattedFollowers} from './utils';
 import {UserContext} from '../../../App';
 import {PostType} from '../post/Post';
 import {StackScreenProps} from '@react-navigation/stack';
-import { ProfileParamList } from '../Navigation';
+import {ProfileParamList} from '../Navigation';
+import {PostsContext} from '../../DataContext';
 
 type Props = StackScreenProps<ProfileParamList, 'Profile'>;
 
@@ -42,6 +43,8 @@ export default function Profile({route, navigation}: Props) {
   const {user} = useContext(UserContext);
   const User = useUser(route.params?.username);
   const styles = useStyleSheet(themedStyles);
+
+  const {postData: posts} = useContext(PostsContext);
 
   const scrolling = useRef(new Animated.Value(0)).current;
   const navbarHeight = scrolling.interpolate({
@@ -186,7 +189,7 @@ export default function Profile({route, navigation}: Props) {
             </Text>
           </>
         }
-        data={User.data.posts}
+        data={posts}
         numColumns={3}
         renderItem={renderPostItem}
         onScroll={Animated.event(
