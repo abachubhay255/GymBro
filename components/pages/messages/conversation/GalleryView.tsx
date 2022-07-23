@@ -1,4 +1,4 @@
-import {StyleService, Text, useStyleSheet} from '@ui-kitten/components';
+import {List, StyleService, Text, useStyleSheet} from '@ui-kitten/components';
 import React from 'react';
 import {
   FlatList,
@@ -13,12 +13,14 @@ type Props = {
   photos: any[];
   selectedPhotos: string[];
   setSelectedPhotos: React.Dispatch<React.SetStateAction<string[]>>;
+  isBottomSheet?: boolean;
 };
 
 export default function GalleryView({
   photos,
   selectedPhotos,
   setSelectedPhotos,
+  isBottomSheet,
 }: Props) {
   const styles = useStyleSheet(themedStyles);
 
@@ -52,12 +54,10 @@ export default function GalleryView({
       </Pressable>
     );
   };
-  return (
-    <BottomSheetFlatList
-      data={photos}
-      renderItem={renderItem}
-      numColumns={3}
-    />
+  return isBottomSheet ? (
+    <BottomSheetFlatList data={photos} renderItem={renderItem} numColumns={3} />
+  ) : (
+    <List data={photos} renderItem={renderItem} numColumns={3} />
   );
 }
 

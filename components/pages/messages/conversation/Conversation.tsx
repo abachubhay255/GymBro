@@ -46,7 +46,7 @@ import {BottomSheetDefaultBackdropProps} from '@gorhom/bottom-sheet/lib/typescri
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {ScrollView} from 'react-native-gesture-handler';
 import KeyboardAwareView from '../../../utils/KeyboardAwareView';
-import { MessagesContext } from '../../../DataContext';
+import {MessagesContext} from '../../../DataContext';
 
 type Props = StackScreenProps<MessagesParamList, 'Conversation'>;
 export default function Conversation({route, navigation}: Props) {
@@ -181,6 +181,7 @@ export default function Conversation({route, navigation}: Props) {
                 photos={photos}
                 selectedPhotos={selectedPhotos}
                 setSelectedPhotos={setSelectedPhotos}
+                isBottomSheet
               />
             </Layout>
           </BottomSheetModal>

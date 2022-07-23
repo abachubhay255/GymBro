@@ -11,6 +11,8 @@ import ProfileSettings from './profile/profilesettings/ProfileSettings';
 import Comments from './post/Comments';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import SentPost from './messages/conversation/SentPost';
+import NewPostDetails from './post/NewPostDetails';
+import NewPostTagging from './post/NewPostTagging';
 
 export type ProfileParamList = {
   Profile: {username: string};
@@ -37,6 +39,8 @@ export function ProfileNavigator() {
 
 export type PostParamList = {
   NewPost: undefined;
+  NewPostDetails: {photos: string[]; taggedUsers?: string[]};
+  NewPostTagging: {photos: string[]; taggedUsers?: string[]};
   Likes: {username: string; postId: number};
   Comments: {username: string; postId: number};
   UserProfile: {screen: string; params: {username: string}};
@@ -49,6 +53,8 @@ export function PostNavigator() {
       <Screen name="Likes" component={Likes} />
       <Screen name="Comments" component={Comments} />
       <Screen name="NewPost" component={NewPost} />
+      <Screen name="NewPostDetails" component={NewPostDetails} />
+      <Screen name="NewPostTagging" component={NewPostTagging} />
       <Screen name="UserProfile" component={ProfileNavigator} />
     </Navigator>
   );
