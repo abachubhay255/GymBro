@@ -13,7 +13,7 @@ import {
   Button,
   Icon,
 } from '@ui-kitten/components';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Image, ListRenderItemInfo, StyleSheet, View} from 'react-native';
 import {Users} from '../../data/users';
 import {useUser} from '../../hooks/useUser';
@@ -22,12 +22,19 @@ import {BackIcon} from '../profile/extra/icons';
 import {POST_HEIGHT} from './Post';
 import KeyboardAwareView from '../../utils/KeyboardAwareView';
 import {ScrollView} from 'react-native-gesture-handler';
+import {CurrentUserContext} from '../../Main';
+import {PostType} from '../post/Post';
+import {PostsContext} from '../../DataContext';
 
 type Props = StackScreenProps<PostParamList, 'NewPostDetails'>;
 
 export default function NewPostDetails({navigation, route}: Props) {
+  const {currentUser} = useContext(CurrentUserContext);
+  const {postData, setPostData} = useContext(PostsContext);
   const photos = route.params.photos;
   const taggedUsers = route.params.taggedUsers;
+  const [caption, setCaption] = useState('');
+  const [location, setLocation] = useState('');
 
   const renderUserItem = ({
     item,
@@ -50,6 +57,25 @@ export default function NewPostDetails({navigation, route}: Props) {
     <TopNavigationAction icon={BackIcon} onPress={onBackButtonPress} />
   );
 
+  const goToProfile = (username: string) => {
+    navigation && (navigation as any).navigate('Profile', {username: username});
+  };
+
+  const createPost = () => {
+    const post: PostType = {
+      username: currentUser.username,
+      timestamp: new Date(),
+      caption: caption,
+      likes: [],
+      comments: [],
+      photos: photos,
+      location: location === '' ? undefined : location,
+      tags: taggedUsers?.length === 0 ? undefined : taggedUsers,
+    };
+    setPostData([post, ...postData]);
+    goToProfile(currentUser.username);
+  };
+
   return (
     <>
       <TopNavigation
@@ -66,11 +92,15 @@ export default function NewPostDetails({navigation, route}: Props) {
           style={styles.input}
           status="control"
           placeholder="Write a caption"
+          value={caption}
+          onChangeText={setCaption}
         />
         <Input
           style={styles.input}
           status="control"
           placeholder="Add location"
+          value={location}
+          onChangeText={setLocation}
         />
         <Button
           style={styles.button}
@@ -95,7 +125,8 @@ export default function NewPostDetails({navigation, route}: Props) {
           style={styles.button}
           status="primary"
           appearance="filled"
-          accessoryRight={<Icon name="checkmark-circle-2" />}>
+          accessoryRight={<Icon name="checkmark-circle-2" />}
+          onPress={createPost}>
           Post
         </Button>
       </Layout>

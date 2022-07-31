@@ -52,7 +52,7 @@ export const Users: UserType[] = [
         'https://arc-anglerfish-eu-central-1-prod-leparisien.s3.amazonaws.com/public/ULY2ETUEU4OLRWIR3LD7GHPKYE.jpg',
       profileBanner:
         'https://bgr.com/wp-content/uploads/2018/12/Spider-Man.jpg?quality=82&strip=all',
-      bio: 'Your friendly neighbourhood spiderman',
+      bio: 'Your friendly neighborhood spiderman',
       messages: SpidermanMessageData,
       posts: makeMorePosts(SpidermanPosts),
       followers: 66200000,

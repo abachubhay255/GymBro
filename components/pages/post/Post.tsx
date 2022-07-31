@@ -5,6 +5,7 @@ import {Avatar, Card, Icon, Text, useTheme} from '@ui-kitten/components';
 import React, {useContext, useState} from 'react';
 import {Image, Pressable, StyleSheet, View, ViewProps} from 'react-native';
 import {User, UserContext} from '../../../App';
+import {PostsContext} from '../../DataContext';
 import {useUser} from '../../hooks/useUser';
 import {CurrentUserContext} from '../../Main';
 import {formattedDate} from '../messages/utils';
@@ -41,7 +42,11 @@ export default function Post({post}: Props) {
     >();
   const {currentUser} = useContext(CurrentUserContext);
   const postOwner = useUser(post.username);
-  const postId = postOwner.data.posts.findIndex(p => p === post);
+  const {postData} = useContext(PostsContext);
+  const postId =
+    postOwner.username === currentUser.username
+      ? postData.findIndex(p => p === post)
+      : postOwner.data.posts.findIndex(p => p === post);
   const theme = useTheme();
 
   const goToProfile = () => {

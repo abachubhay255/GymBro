@@ -25,6 +25,7 @@ import {
 } from 'react-native';
 import {UserContext} from '../../../App';
 import {Users} from '../../data/users';
+import {PostsContext} from '../../DataContext';
 import {useUser} from '../../hooks/useUser';
 import {CurrentUserContext} from '../../Main';
 import KeyboardAwareView from '../../utils/KeyboardAwareView';
@@ -47,8 +48,12 @@ export default function Comments({navigation, route}: Props) {
   const {currentUser} = useContext(CurrentUserContext);
   const User = useUser(route.params.username);
   const postId = route.params.postId;
-  const post = User.data.posts[postId];
-  const [comments, setComments] = useState(User.data.posts[postId].comments);
+  const {postData} = useContext(PostsContext);
+  const post =
+    User.username === currentUser.username
+      ? postData[postId]
+      : User.data.posts[postId];
+  const [comments, setComments] = useState(post.comments);
   const [commentText, setCommentText] = useState('');
   const caption = {
     username: User.username,

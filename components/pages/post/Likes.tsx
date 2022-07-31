@@ -13,10 +13,12 @@ import {
   TopNavigation,
   TopNavigationAction,
 } from '@ui-kitten/components';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {ListRenderItemInfo, StyleSheet} from 'react-native';
+import {PostsContext} from '../../DataContext';
 import {useUser} from '../../hooks/useUser';
-import { PostParamList } from '../Navigation';
+import {CurrentUserContext} from '../../Main';
+import {PostParamList} from '../Navigation';
 import {BackIcon} from '../profile/extra/icons';
 import {POST_HEIGHT} from './Post';
 
@@ -24,8 +26,13 @@ type Props = StackScreenProps<PostParamList, 'Likes'>;
 
 export default function Likes({navigation, route}: Props) {
   const User = useUser(route.params.username);
+  const {currentUser} = useContext(CurrentUserContext);
   const postId = route.params.postId;
-  const likes = User.data.posts[postId].likes;
+  const {postData} = useContext(PostsContext);
+  const likes =
+    User.username === currentUser.username
+      ? postData[postId].likes
+      : User.data.posts[postId].likes;
 
   const [searchedLikes, setSearchedLikes] = useState(likes);
   const [searchQuery, setSearchQuery] = useState('');

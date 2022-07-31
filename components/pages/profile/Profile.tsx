@@ -71,7 +71,7 @@ export default function Profile({route, navigation}: Props) {
 
   const onNewPostButtonPress = (): void => {
     navigation &&
-      navigation.push('Post', {
+      navigation.navigate('Post', {
         screen: 'NewPost',
       });
   };
